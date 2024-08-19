@@ -1,13 +1,27 @@
 {
   "name": "@commerce/shared",
-  "version": "1.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": ["dist"],
+  "main": "./dist/shared.umd.cjs",
+  "module": "./dist/shared.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/shared.js",
+      "require": "./dist/shared.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "tsc"
+    "dev": "vite build --watch",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "typescript": "^5"
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.0.3"
   }
 }
