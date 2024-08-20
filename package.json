@@ -1,17 +1,25 @@
 {
   "name": "icd01-team05_06-commerce-fe",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "scripts": {
     "dev": "pnpm --parallel run dev",
     "build": "pnpm run build:shared && pnpm run build:apps",
     "build:shared": "pnpm --filter @commerce/shared build",
-    "build:apps": "pnpm --filter \"./apps/**\" build"
+    "build:apps": "pnpm --filter \"./apps/**\" build",
+    "lint": "eslint . fil",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.2.0",
+    "@typescript-eslint/parser": "^8.2.0",
+    "eslint": "^8",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3"
   }
 }
