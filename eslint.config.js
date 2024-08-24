@@ -2,6 +2,7 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tseslintParser from '@typescript-eslint/parser';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import tailwindcss from 'eslint-plugin-tailwindcss';
 
 export default [
   {
@@ -9,6 +10,7 @@ export default [
     plugins: {
       '@typescript-eslint': tseslint,
       prettier: prettierPlugin,
+      tailwindcss: tailwindcss,
     },
     languageOptions: {
       parser: tseslintParser,
@@ -19,6 +21,7 @@ export default [
     },
     rules: {
       ...tseslint.configs['recommended'].rules,
+      ...tailwindcss.configs['recommended'].rules,
       'prettier/prettier': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
