@@ -13,50 +13,40 @@ import {
 
 const mock = [
     {
-        title: "Home",
-        href: "/"
-    },
-    {
         title: "전체 카테고리",
         subMenu: [
             {
-                title: "가전",
+                title: "국내도서",
                 subSubMenu: [
-                    { title: "Sub Menu 1-1", href: "/menu/1-1" },
-                    { title: "Sub Menu 1-2", href: "/menu/1-2" }
+                    { title: "소설", href: "/menu/1-1" },
+                    { title: "시", href: "/menu/1-2" },
+                    { title: "에세이", href: "/menu/1-2" },
+                    { title: "인문", href: "/menu/1-2" },
+                    { title: "역사", href: "/menu/1-2" },
+                    { title: "청소년", href: "/menu/1-2" },
+                    { title: "사회", href: "/menu/1-2" }
                 ]
             },
             {
-                title: "식품",
+                title: "외국도서",
                 subSubMenu: [
                     { title: "Sub Menu 2-1", href: "/menu/2-1" },
                     { title: "Sub Menu 2-2", href: "/menu/2-2" }
                 ]
             },
             {
-                title: "의류",
+                title: "eBook",
                 subSubMenu: [
                     { title: "Sub Menu 3-1", href: "/menu/3-1" },
                     { title: "Sub Menu 3-2", href: "/menu/3-2" }
-                ]
-            },
-            {
-                title: "기타",
-                subSubMenu: [
-                    { title: "Sub Menu 4-1", href: "/menu/4-1" },
-                    { title: "Sub Menu 4-2", href: "/menu/4-2" }
                 ]
             }
         ]
     },
     {
-        title: "베스트",
+        title: "베스트 셀러",
         href: "/menu/2"
     },
-    {
-        title: "세일",
-        href: "/menu/3"
-    }
 ];
 
 const HeaderMenubar: React.FC = () => {
