@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {Button} from "@/components/ui/button";
 
 type Image = {
     src: string;
@@ -17,7 +18,13 @@ const SliderBanner: React.FC<{ images: Image[] }> = ({ images }) => {
     const prevSlide = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            nextSlide();
+        }, 3000); // Change slide every 2 seconds
 
+        return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []);
     return (
         <div className="relative w-full max-w-screen-lg mx-auto overflow-hidden">
             <div
@@ -31,18 +38,18 @@ const SliderBanner: React.FC<{ images: Image[] }> = ({ images }) => {
                 ))}
             </div>
             <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
-                <button
+                <Button
                     onClick={prevSlide}
                     className="px-4 py-2 bg-primary text-white rounded-md"
                 >
                     Prev
-                </button>
-                <button
+                </Button>
+                <Button
                     onClick={nextSlide}
                     className="px-4 py-2 bg-primary text-white rounded-md"
                 >
                     Next
-                </button>
+                </Button>
             </div>
         </div>
     );
