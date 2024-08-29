@@ -37,16 +37,16 @@ const SliderBanner: React.FC<{ images: Image[] }> = ({ images }) => {
                     </div>
                 ))}
             </div>
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
+            <div className="flex justify-between mt-8 gap-x-4">
                 <Button
                     onClick={prevSlide}
-                    className="px-4 py-2 bg-primary text-white rounded-md"
+                    className="text-base flex-1"
                 >
                     Prev
                 </Button>
                 <Button
                     onClick={nextSlide}
-                    className="px-4 py-2 bg-primary text-white rounded-md"
+                    className="text-base flex-1"
                 >
                     Next
                 </Button>

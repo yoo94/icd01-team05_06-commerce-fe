@@ -23,7 +23,7 @@ const Header: React.FC = () => {
                             className="cursor-pointer"
                         />
                     </Link>
-                    <Link href="/" className="md:hidden">
+                    <Link href="/" className="flex md:hidden">
                         <Image
                             src="/logo.svg"
                             alt="이너북스"
@@ -34,27 +34,25 @@ const Header: React.FC = () => {
                     </Link>
                 </div>
 
-                {/* 검색 바 (md 이상에서만 보이도록) */}
-                <div className="hidden md:flex flex-1 justify-start md:ml-6">
-                    <div className="w-full max-w-lg">
-                        <Search />
-                    </div>
+                {/* 검색 바 (모바일에서 숨김) */}
+                <div className="hidden md:flex flex-grow mx-4 max-w-xs md:max-w-md lg:max-w-lg">
+                    <Search />
                 </div>
 
-                {/* 버튼들 (md 이상에서만 보이도록) */}
+                {/* 버튼들 (데스크탑용) */}
                 <div className="hidden md:flex items-center space-x-4">
                     <HeaderButton />
                 </div>
 
-                {/* 모바일용 햄버거 메뉴 (md 이하에서만 보이도록) */}
+                {/* 모바일용 햄버거 메뉴 */}
                 <div className="flex md:hidden">
                     <HamburgerMenu />
                 </div>
             </div>
 
-            {/* 메뉴바 (md 이상에서만 보이도록) */}
-            <div className="hidden md:flex mt-4 border-t pt-2 container mx-auto">
-                <HeaderMenubar/>
+            {/* 메뉴바 (모바일에서 숨김) */}
+            <div className="hidden md:block container mx-auto mt-4">
+                <HeaderMenubar />
             </div>
         </header>
     );

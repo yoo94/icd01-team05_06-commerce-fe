@@ -21,10 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <main>{children}</main>
+        <main className="container justify-center p-4 xs:p-6 md:p-8 lg:p-12 xl:p-[100px]">{children}</main>
         <Footer />
       </body>
     </html>
   );
 }
-

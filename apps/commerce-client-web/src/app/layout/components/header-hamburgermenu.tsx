@@ -67,10 +67,10 @@ const HamburgerMenu: React.FC = () => {
     const toggleSubMenu = (index: number) => {
         if (activeSubMenu === index) {
             setActiveSubMenu(null);
-            setActiveSubSubMenu(null); // 서브 메뉴가 닫힐 때 서브 서브 메뉴도 닫기
+            setActiveSubSubMenu(null);
         } else {
             setActiveSubMenu(index);
-            setActiveSubSubMenu(null); // 새로운 서브 메뉴를 열 때 서브 서브 메뉴 초기화
+            setActiveSubSubMenu(null);
         }
     };
 
@@ -89,18 +89,15 @@ const HamburgerMenu: React.FC = () => {
                 onClick={toggleMenu}
                 aria-label="Toggle menu"
             >
-                <span className={`block w-6 h-0.5 bg-current transform transition-transform ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`}/>
-                <span className={`block w-6 h-0.5 bg-current transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`}/>
-                <span className={`block w-6 h-0.5 bg-current transform transition-transform ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`}/>
+                <span className={`block w-6 h-0.5 bg-current transform transition-transform ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+                <span className={`block w-6 h-0.5 bg-current transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`} />
+                <span className={`block w-6 h-0.5 bg-current transform transition-transform ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
             </button>
 
             {isOpen && (
                 <div className="fixed inset-0 z-50 bg-white flex flex-col">
                     <div className="flex justify-between items-center p-4 border-b">
-                        <button
-                            className="text-2xl"
-                            onClick={toggleMenu}
-                        >
+                        <button className="text-2xl" onClick={toggleMenu}>
                             &times;
                         </button>
                     </div>

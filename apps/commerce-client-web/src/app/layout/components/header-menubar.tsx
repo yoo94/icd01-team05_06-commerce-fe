@@ -51,7 +51,7 @@ const mock = [
 
 const HeaderMenubar: React.FC = () => {
     return (
-        <Menubar className="flex space-x-4 lg:space-x-6 border-0">
+        <Menubar className="flex space-x-6 border-0">
             {mock.map((menu, index) => (
                 <MenubarMenu key={index}>
                     {menu.subMenu ? (
