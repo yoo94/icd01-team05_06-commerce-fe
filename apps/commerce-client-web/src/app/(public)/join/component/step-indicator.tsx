@@ -6,18 +6,18 @@ interface StepIndicatorProps {
 
 const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, onStepClick }) => {
   return (
-    <div className="relative flex items-center justify-between mb-8">
-      <div className="absolute top-2.5 left-0 right-0 h-[1px] bg-slate-200"></div>
+    <div className="relative mb-8 flex items-center justify-between">
+      <div className="absolute inset-x-0 top-2.5 h-px bg-slate-200"></div>
       {steps.map((label, index) => (
         <div
           key={index}
-          className="relative flex flex-col items-center cursor-pointer"
+          className="relative flex cursor-pointer flex-col items-center"
           onClick={() => onStepClick(index)}
         >
           <div
-            className={`w-5 h-5 rounded-full ${
+            className={`size-5 rounded-full ${
               currentStep === index ? 'bg-primary' : 'bg-gray-300'
-            } flex items-center justify-center text-white text-xs`}
+            } flex items-center justify-center text-xs text-white`}
           >
             {index + 1}
           </div>

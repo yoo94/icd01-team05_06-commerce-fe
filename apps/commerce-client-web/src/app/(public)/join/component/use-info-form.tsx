@@ -17,10 +17,10 @@ interface UserInfoFormProps {
 const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">정보입력</h2>
+      <h2 className="mb-4 text-2xl font-bold">정보입력</h2>
       <form>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="name" className="block pb-2 text-xs text-slate-500">
             이름
           </label>
           <Input
@@ -34,7 +34,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="email" className="block pb-2 text-xs text-slate-500">
             이메일
           </label>
           <Input
@@ -48,7 +48,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="password" className="block pb-2 text-xs text-slate-500">
             비밀번호
           </label>
           <Input
@@ -62,7 +62,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="confirmPassword" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="confirmPassword" className="block pb-2 text-xs text-slate-500">
             비밀번호 확인
           </label>
           <Input
@@ -76,7 +76,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="postalCode" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="postalCode" className="block pb-2 text-xs text-slate-500">
             우편번호
           </label>
           <div className="flex">
@@ -88,7 +88,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
               value={formData.postalCode}
               onChange={onChange}
               required
-              className="flex-grow"
+              className="grow"
             />
             <Button
               type="button"
@@ -103,7 +103,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           </div>
         </div>
         <div className="mb-4">
-          <label htmlFor="address" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="address" className="block pb-2 text-xs text-slate-500">
             기본 주소
           </label>
           <Input
@@ -117,7 +117,7 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ formData, onChange }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="addressDetail" className="block text-xs pb-2 text-slate-500">
+          <label htmlFor="addressDetail" className="block pb-2 text-xs text-slate-500">
             상세 주소
           </label>
           <Input

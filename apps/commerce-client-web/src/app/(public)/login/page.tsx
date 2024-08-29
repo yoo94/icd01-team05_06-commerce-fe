@@ -14,13 +14,13 @@ export default function LoginPage() {
           <Input type="password" placeholder="비밀번호를 입력해 주세요." name="password" required />
         </div>
         <div className="mb-16 flex items-center justify-between">
-          <div className="flex gap-x-2 items-center">
+          <div className="flex items-center gap-x-2">
             <Checkbox name="saveId" className="border-slate-300" />
             <label htmlFor="formSaveId" className="text-sm">
               아이디 저장
             </label>
           </div>
-          <div className="text-sm text-right">
+          <div className="text-right text-sm">
             <Link href="#" className="text-slate-400 hover:underline">
               아이디 찾기
             </Link>
@@ -37,15 +37,15 @@ export default function LoginPage() {
         </div>
       </form>
       <div className="relative py-8">
-        <div className="absolute h-[1px] w-full bg-slate-200 top-1/2"></div>
-        <p className="text-sm text-slate-500 px-2 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 h-px w-full bg-slate-200"></div>
+        <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-sm text-slate-500">
           또는
         </p>
       </div>
       <div className="flex">
         <Button
           variant="outline"
-          className="border-lime-600 hover:bg-lime-50/50 text-primary hover:text-primary w-full text-base"
+          className="w-full border-lime-600 text-base text-primary hover:bg-lime-50/50 hover:text-primary"
           size="lg"
           asChild
         >

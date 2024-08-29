@@ -65,7 +65,7 @@ export default function JoinPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-8">
+    <div className="mx-auto mt-8 max-w-xl">
       <StepIndicator steps={steps} currentStep={step} onStepClick={handleStepClick} />
       {step === 0 && (
         <TermsAgreement
@@ -77,7 +77,7 @@ export default function JoinPage() {
       )}
       {step === 1 && <UserInfoForm formData={formData} onChange={handleInputChange} />}
       {step === 2 && <CompletionStep userName={formData.name} />}
-      <div className="flex justify-between mt-8 gap-x-4">
+      <div className="mt-8 flex justify-between gap-x-4">
         {step < 2 ? (
           <>
             <Button
@@ -85,7 +85,7 @@ export default function JoinPage() {
               onClick={handlePrevStep}
               disabled={step === 0}
               size="lg"
-              className="text-base flex-1"
+              className="flex-1 text-base"
             >
               이전
             </Button>
@@ -96,7 +96,7 @@ export default function JoinPage() {
                 (step === 1 && !isStep1Complete())
               }
               size="lg"
-              className="text-base flex-1"
+              className="flex-1 text-base"
             >
               다음
             </Button>
@@ -104,7 +104,7 @@ export default function JoinPage() {
         ) : (
           <Button
             size="lg"
-            className="text-base w-full"
+            className="w-full text-base"
             onClick={() => (window.location.href = '/')}
           >
             홈으로 이동

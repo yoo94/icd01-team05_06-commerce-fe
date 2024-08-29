@@ -15,7 +15,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-y-4">
-      <h2 className="text-2xl font-bold mb-4">약관동의</h2>
+      <h2 className="mb-4 text-2xl font-bold">약관동의</h2>
       <div className="h-28 overflow-y-scroll border p-4">
         <p>여기에 개인정보처리방침의 내용이 들어갑니다...</p>
       </div>
