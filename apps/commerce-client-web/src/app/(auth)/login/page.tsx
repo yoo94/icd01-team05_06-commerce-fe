@@ -2,7 +2,6 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import ButtonLink from '@/components/button-link';
 
 export default function LoginPage() {
   return (
@@ -44,14 +43,14 @@ export default function LoginPage() {
         </p>
       </div>
       <div className="flex">
-        <ButtonLink
+        <Button
           variant="outline"
           className="w-full border-lime-600 text-base text-primary hover:bg-lime-50/50 hover:text-primary"
           size="lg"
-          href="/join"
+          asChild
         >
-          회원가입
-        </ButtonLink>
+          <Link href="/join">회원가입</Link>
+        </Button>
       </div>
     </>
   );
