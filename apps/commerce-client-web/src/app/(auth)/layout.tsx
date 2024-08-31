@@ -1,4 +1,13 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: '이너북스',
+  description: '도서 이커머스',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

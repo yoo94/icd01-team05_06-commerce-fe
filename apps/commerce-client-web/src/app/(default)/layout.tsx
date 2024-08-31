@@ -5,8 +5,11 @@ import Footer from '@/app/(default)/(layout)/components/footer';
 import React from 'react';
 
 export const metadata: Metadata = {
-  title: 'inner books',
+  title: '이너북스',
   description: '도서 이커머스',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
