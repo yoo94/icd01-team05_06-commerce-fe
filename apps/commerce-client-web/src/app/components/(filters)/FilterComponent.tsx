@@ -1,8 +1,8 @@
 import React from 'react';
 import { Accordion } from '@/components/ui/accordion';
-import PriceFilter from '@/components/filters/PriceFilter';
-import PublisherFilter from '@/components/filters/PublisherFilter';
-import CategoryFilter from '@/components/filters/CategoryFilter';
+import PriceFilter from '@/app/components/(filters)/PriceFilter';
+import PublisherFilter from '@/app/components/(filters)/PublisherFilter';
+import CategoryFilter from '@/app/components/(filters)/CategoryFilter';
 
 function FilterComponent() {
   return (

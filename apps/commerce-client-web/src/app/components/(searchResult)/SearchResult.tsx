@@ -1,22 +1,7 @@
 // SearchResult.tsx
 import React from 'react';
-import ProductCard from '@/components/searchResult/productCard';
-
-interface SearchResultProps {
-  products: Array<{
-    id: number;
-    imageUrl: string;
-    title: string;
-    price: string;
-    authors: string;
-    publisher: string;
-    publishedDate: string;
-    discount: string;
-    tags: string[];
-  }>;
-  onAddToCart: (id: number) => void;
-  onBuyNow: (id: number) => void;
-}
+import ProductCard from '@/app/components/(searchResult)/productCard';
+import { SearchResultProps } from '@/types/productTypes'; // 인터페이스를 가져오기
 
 function SearchResult({ products, onAddToCart, onBuyNow }: SearchResultProps) {
   return (

@@ -2,15 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
-
-interface ProductCardProps {
-  id: number;
-  imageUrl: string;
-  title: string;
-  price: string;
-  onAddToCart: () => void;
-  onBuyNow: () => void; // 바로 구매 기능 추가
-}
+import { ProductCardProps } from '@/types/productTypes';
 
 function ProductCard({ id, imageUrl, title, price, onAddToCart, onBuyNow }: ProductCardProps) {
   const router = useRouter(); // useRouter 훅 사용
