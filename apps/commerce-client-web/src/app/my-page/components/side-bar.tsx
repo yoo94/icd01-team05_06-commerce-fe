@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import MenuList from '@/app/my-page/components/menu-list';
-import Separator from '@/app/my-page/components/separator';
 
 const orderListItems = ['주문내역/배송조회', '반품/교환신청 및 조회', '취소 주문내역'];
 const userInfoItems = ['배송주소록', '회원정보관리', '마케팅 수신 및 정보 제공 동의 관리'];
