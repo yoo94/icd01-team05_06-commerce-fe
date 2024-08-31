@@ -1,0 +1,368 @@
+[
+  {
+    "id": 1,
+    "imageUrl": "https://image.yes24.com/goods/105266398/XL",
+    "title": "기초부터 완성까지, 프런트엔드",
+    "authors": "이재영, 현정지",
+    "publisher": "비제이퍼블릭",
+    "publishedDate": "2021년 11월",
+    "price": "29,700원",
+    "discount": "(10% 할인)",
+    "tags": [
+      "개발개념 정리",
+      "프론트입문"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "IT 모바일",
+        "href": "/category/it/mobile"
+      },
+      {
+        "label": "컴퓨터공학",
+        "href": "/category/it/computer-science"
+      },
+      {
+        "label": "컴퓨터 교육",
+        "href": "/category/it/computer-education"
+      }
+    ],
+    "description": "프런트엔드 개발의 기초부터 완성까지 단계별로 설명하는 책입니다. 최신 트렌드와 기술 스택을 다루고 있어 초급자부터 중급자까지 도움이 되는 내용으로 구성되어 있습니다.",
+    "reviews": [
+      "매우 유익한 책입니다.",
+      "프런트엔드 개발에 큰 도움이 되었습니다."
+    ]
+  },
+  {
+    "id": 2,
+    "imageUrl": "https://image.yes24.com/goods/101926719/XL",
+    "title": "프론트엔드의 모든 것",
+    "authors": "홍길동, 박자바",
+    "publisher": "자바출판사",
+    "publishedDate": "2022년 1월",
+    "price": "34,500원",
+    "discount": "(5% 할인)",
+    "tags": [
+      "자바스크립트",
+      "프론트엔드"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "IT 모바일",
+        "href": "/category/it/mobile"
+      },
+      {
+        "label": "컴퓨터공학",
+        "href": "/category/it/computer-science"
+      },
+      {
+        "label": "컴퓨터 교육",
+        "href": "/category/it/computer-education"
+      }
+    ],
+    "description": "이 책은 프론트엔드 개발의 모든 것을 다룹니다. 다양한 예제와 함께 실무에서 바로 적용할 수 있는 팁과 노하우가 가득합니다.",
+    "reviews": [
+      "실무에 큰 도움이 되는 책입니다.",
+      "프론트엔드 개발자라면 꼭 읽어야 할 책입니다."
+    ]
+  },
+  {
+    "id": 3,
+    "imageUrl": "https://image.yes24.com/goods/103492843/XL",
+    "title": "React 마스터 클래스",
+    "authors": "김철수, 박유리",
+    "publisher": "길벗",
+    "publishedDate": "2020년 5월",
+    "price": "32,000원",
+    "discount": "(15% 할인)",
+    "tags": [
+      "React",
+      "웹 개발"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "IT 모바일",
+        "href": "/category/it/mobile"
+      },
+      {
+        "label": "웹 개발",
+        "href": "/category/it/web-development"
+      }
+    ],
+    "description": "이 책은 리액트를 처음 접하는 개발자들이 쉽게 이해할 수 있도록 기초부터 고급 기능까지 상세하게 설명합니다.",
+    "reviews": [
+      "React의 기본을 확실히 다질 수 있었습니다.",
+      "초보자에게 추천하는 책입니다."
+    ]
+  },
+  {
+    "id": 4,
+    "imageUrl": "https://image.yes24.com/goods/106472871/XL",
+    "title": "Vue.js 입문과 실전",
+    "authors": "이현우",
+    "publisher": "한빛미디어",
+    "publishedDate": "2021년 8월",
+    "price": "28,000원",
+    "discount": "(20% 할인)",
+    "tags": [
+      "Vue.js",
+      "프론트엔드"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "IT 모바일",
+        "href": "/category/it/mobile"
+      },
+      {
+        "label": "프론트엔드",
+        "href": "/category/it/frontend"
+      }
+    ],
+    "description": "Vue.js를 처음 배우는 사람들을 위한 가이드로, 기초부터 실무 활용까지 다룹니다. 실전 예제와 함께 Vue.js를 쉽게 배울 수 있습니다.",
+    "reviews": [
+      "Vue.js를 배우는 데 큰 도움이 되었습니다.",
+      "실전 예제가 많아서 좋았습니다."
+    ]
+  },
+  {
+    "id": 5,
+    "imageUrl": "https://image.yes24.com/goods/108873476/XL",
+    "title": "TypeScript 완벽 가이드",
+    "authors": "최지현",
+    "publisher": "길벗",
+    "publishedDate": "2022년 4월",
+    "price": "35,000원",
+    "discount": "(10% 할인)",
+    "tags": [
+      "TypeScript",
+      "프로그래밍 언어"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "프로그래밍",
+        "href": "/category/it/programming"
+      },
+      {
+        "label": "프로그래밍 언어",
+        "href": "/category/it/programming-language"
+      }
+    ],
+    "description": "TypeScript를 처음부터 끝까지 배우고자 하는 사람들을 위한 책으로, 실무 예제와 함께 TypeScript의 모든 것을 다룹니다.",
+    "reviews": [
+      "TypeScript를 확실히 이해할 수 있었습니다.",
+      "초보자부터 고급 개발자까지 모두에게 유익한 책입니다."
+    ]
+  },
+  {
+    "id": 6,
+    "imageUrl": "https://image.yes24.com/goods/105566981/XL",
+    "title": "JavaScript 고급 프로그래밍",
+    "authors": "김민수",
+    "publisher": "위키북스",
+    "publishedDate": "2020년 12월",
+    "price": "27,500원",
+    "discount": "(12% 할인)",
+    "tags": [
+      "JavaScript",
+      "프로그래밍"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "프로그래밍",
+        "href": "/category/it/programming"
+      },
+      {
+        "label": "프로그래밍 언어",
+        "href": "/category/it/programming-language"
+      }
+    ],
+    "description": "이 책은 JavaScript의 고급 개념을 이해하고자 하는 개발자를 위해 작성되었습니다. 모던 JavaScript의 기능과 활용 방법을 상세히 다룹니다.",
+    "reviews": [
+      "JavaScript의 고급 개념을 이해하는 데 큰 도움이 되었습니다.",
+      "실무에 바로 적용할 수 있는 내용이 많습니다."
+    ]
+  },
+  {
+    "id": 7,
+    "imageUrl": "https://image.yes24.com/goods/102464321/XL",
+    "title": "Node.js로 배우는 백엔드 개발",
+    "authors": "이정훈",
+    "publisher": "한빛미디어",
+    "publishedDate": "2019년 10월",
+    "price": "30,000원",
+    "discount": "(15% 할인)",
+    "tags": [
+      "Node.js",
+      "백엔드"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "백엔드",
+        "href": "/category/it/backend"
+      }
+    ],
+    "description": "Node.js를 이용해 백엔드 개발을 배우고자 하는 개발자를 위한 책으로, 기본 개념부터 실무 예제까지 포괄적으로 다룹니다.",
+    "reviews": [
+      "Node.js를 처음 접하는 사람에게 매우 유익한 책입니다.",
+      "실제 프로젝트에 바로 적용할 수 있었습니다."
+    ]
+  },
+  {
+    "id": 8,
+    "imageUrl": "https://image.yes24.com/goods/109694527/XL",
+    "title": "데이터베이스 설계와 관리",
+    "authors": "박진수",
+    "publisher": "한빛아카데미",
+    "publishedDate": "2021년 3월",
+    "price": "33,000원",
+    "discount": "(10% 할인)",
+    "tags": [
+      "데이터베이스",
+      "DBMS"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "데이터베이스",
+        "href": "/category/it/database"
+      },
+      {
+        "label": "DBMS",
+        "href": "/category/it/dbms"
+      }
+    ],
+    "description": "데이터베이스 설계와 관리에 대한 기초부터 고급 개념까지 다루는 책으로, 다양한 DBMS를 활용한 실무 예제도 포함되어 있습니다.",
+    "reviews": [
+      "데이터베이스의 기초부터 심화까지 잘 설명된 책입니다.",
+      "실무에 적용하기 좋은 예제들이 많이 있습니다."
+    ]
+  },
+  {
+    "id": 9,
+    "imageUrl": "https://image.yes24.com/goods/110739123/XL",
+    "title": "알고리즘 문제 해결 전략",
+    "authors": "정환석",
+    "publisher": "인사이트",
+    "publishedDate": "2020년 7월",
+    "price": "29,000원",
+    "discount": "(20% 할인)",
+    "tags": [
+      "알고리즘",
+      "문제 해결"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "알고리즘",
+        "href": "/category/it/algorithm"
+      }
+    ],
+    "description": "이 책은 알고리즘 문제 해결을 위한 전략과 다양한 예제를 통해 실전 감각을 키울 수 있도록 도와줍니다.",
+    "reviews": [
+      "알고리즘 공부에 큰 도움이 되는 책입니다.",
+      "코딩 테스트 준비에 유익합니다."
+    ]
+  },
+  {
+    "id": 10,
+    "imageUrl": "https://image.yes24.com/goods/109396759/XL",
+    "title": "파이썬 데이터 분석 실무",
+    "authors": "이승현",
+    "publisher": "위키북스",
+    "publishedDate": "2022년 5월",
+    "price": "31,000원",
+    "discount": "(10% 할인)",
+    "tags": [
+      "Python",
+      "데이터 분석"
+    ],
+    "breadcrumbs": [
+      {
+        "label": "홈",
+        "href": "/"
+      },
+      {
+        "label": "국내도서",
+        "href": "/category/it"
+      },
+      {
+        "label": "데이터 분석",
+        "href": "/category/it/data-analysis"
+      }
+    ],
+    "description": "파이썬을 활용한 데이터 분석 실무에 대해 다룬 책으로, Pandas와 NumPy를 비롯한 다양한 라이브러리를 활용한 실무 예제를 제공합니다.",
+    "reviews": [
+      "데이터 분석 실무에 필요한 내용을 잘 다루고 있습니다.",
+      "파이썬으로 데이터 분석을 처음 배우는 사람에게 추천합니다."
+    ]
+  }
+]

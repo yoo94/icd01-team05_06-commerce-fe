@@ -11,6 +11,12 @@ export default [
     rules: {
       ...nextPlugin.configs['recommended'].rules,
       // Next.js 앱 특정 규칙 추가
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
     },
   },
 ];
