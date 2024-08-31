@@ -15,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <>
-          <Header />
-          <main className="container justify-center p-4 xs:p-6 md:p-8 lg:p-12 xl:p-[100px]">
-              {children}
-          </main>
-          <Footer />
-      </>
+    <>
+      <Header />
+      <main className="container justify-center p-4 xs:p-6 md:p-8 lg:p-12 xl:p-[100px]">
+        {children}
+      </main>
+      <Footer />
+    </>
   );
 }

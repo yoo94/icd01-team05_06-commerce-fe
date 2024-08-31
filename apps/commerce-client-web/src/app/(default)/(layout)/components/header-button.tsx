@@ -8,18 +8,18 @@ const HeaderButton: React.FC = () => {
     <>
       {isLogin ? (
         <>
-          <Button className="text-slate-800" asChild>
+          <Button asChild>
             <Link href={'/logout'}>로그아웃</Link>
           </Button>
-          <Button className="text-slate-800" asChild>
+          <Button asChild>
             <Link href={'/myPage'}>마이페이지</Link>
           </Button>
-          <Button className="text-slate-800" asChild>
+          <Button asChild>
             <Link href={'/myPage'}>장바구니</Link>
           </Button>
         </>
       ) : (
-        <Button className="text-slate-800" asChild>
+        <Button asChild>
           <Link href={'/login'}>로그인</Link>
         </Button>
       )}

@@ -130,8 +130,8 @@ const HamburgerMenu: React.FC = () => {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-white">
-          <div className="flex items-center justify-between border-b p-4">
-            <button className="text-2xl" onClick={toggleMenu}>
+          <div className="flex h-14 items-center justify-end border-b px-4">
+            <button className="mr-2 p-4 text-2xl" onClick={toggleMenu}>
               &times;
             </button>
           </div>

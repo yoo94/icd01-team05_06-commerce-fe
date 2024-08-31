@@ -10,8 +10,8 @@ import Search from './search';
 
 const Header: React.FC = () => {
   return (
-    <header className="w-full bg-background p-4">
-      <div className="container mx-auto flex items-center justify-between">
+    <header className="w-full border-b bg-background md:p-4">
+      <div className="container mx-auto flex h-14 items-center justify-between md:h-fit">
         {/* 로고 */}
         <div className="shrink-0">
           <Link href="/" className="hidden md:flex">
@@ -27,7 +27,7 @@ const Header: React.FC = () => {
             <Image
               src="/logo.svg"
               alt="이너북스"
-              width={120}
+              width={40}
               height={40}
               className="cursor-pointer"
             />
