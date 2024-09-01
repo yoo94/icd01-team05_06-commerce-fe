@@ -1,57 +1,23 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import CartItemList from './components/cart-item-list';
 import CartSummary from './components/cart-summary';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import useCartStore from '@/stores/useCartStore';
 
 const CartPage: React.FC = () => {
-  const [items, setItems] = useState([
-    { id: 1, title: '상품1', price: 10000, selectNum: 2, selected: true, imgSrc: '', shippingInfo: '무료' },
-    { id: 2, title: '상품2', price: 20000, selectNum: 1, selected: true, imgSrc: '', shippingInfo: '무료' },
-  ]);
-
-  const handleRemove = (id: number) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
-
-  const handleSelectNumChange = (id: number, newSelectNum: number) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, selectNum: newSelectNum } : item
-      )
-    );
-  };
-
-  const handleSelectChange = (id: number, selected: boolean) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, selected } : item
-      )
-    );
-  };
-
-  const handleToggleAll = (isChecked: boolean) => {
-    setItems((prevItems) =>
-      prevItems.map((item) => ({
-        ...item,
-        selected: isChecked,
-      }))
-    );
-  };
+  const { items } = useCartStore();
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">장바구니</h1>
-      <CartItemList
-        items={items}
-        onRemove={handleRemove}
-        onSelectNumChange={handleSelectNumChange}
-        onSelectChange={handleSelectChange}
-        onToggleAll={handleToggleAll}
-      />
-      <div className="flex justify-end mt-4">
+      <h1 className="mb-8 text-3xl font-bold">이너 카트</h1>
+      <CartItemList />
+      <div className="mt-4 flex justify-end">
         <CartSummary items={items} />
       </div>
+      <Button asChild className="w-full">
+        <Link href={'/order'}>주문하기</Link>
+      </Button>
     </div>
   );
 };

@@ -1,19 +1,28 @@
 import React from 'react';
+import { CartItem } from '@/types/cartTypes';
+import useCartStore from '@/stores/useCartStore';
 
-const CartSummary: React.FC<{ items: any[] }> = ({ items }) => {
-    const totalPrice = items
-        .filter(item => item.selected)
-        .reduce((acc, item) => acc + item.price * item.selectNum, 0)
-        .toLocaleString();
+interface CartSummaryProps {
+  items: CartItem[];
+}
 
-    return (
-        <div className="flex justify-end mt-8">
-            <div className="text-right">
-                <div className="text-lg font-semibold mb-2">총 주문 상품 {items.filter(item => item.selected).length}개</div>
-                <div className="text-2xl font-bold">{totalPrice}원</div>
-            </div>
+const CartSummary: React.FC<CartSummaryProps> = () => {
+  const { items } = useCartStore();
+  const totalPrice = items
+    .filter((item) => item.selected)
+    .reduce((acc, item) => acc + parseInt(item.price) * item.selectNum, 0)
+    .toLocaleString();
+
+  return (
+    <div className="mt-8 flex justify-end">
+      <div className="text-right">
+        <div className="mb-2 text-lg font-semibold">
+          총 주문 상품 {items.filter((item) => item.selected).length}개
         </div>
-    );
+        <div className="text-2xl font-bold">{totalPrice}원</div>
+      </div>
+    </div>
+  );
 };
 
 export default CartSummary;
