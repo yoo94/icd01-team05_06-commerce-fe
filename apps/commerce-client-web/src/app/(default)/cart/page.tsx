@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import CartItemList from './components/cart-item-list';
 import CartSummary from './components/cart-summary';

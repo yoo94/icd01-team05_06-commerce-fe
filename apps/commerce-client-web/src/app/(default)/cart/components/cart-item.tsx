@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -14,7 +15,6 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { removeProduct, updateProductQuantity, updateProductSelection } = useCartStore();
   return (
     <TableRow className="hover:bg-gray-50">
-      ,
       <TableCell className="text-center">
         <Checkbox
           checked={item.selected}
@@ -29,6 +29,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
         <Input
           type="number"
           value={item.selectNum}
+          min={1}
           onChange={(e) => updateProductQuantity(item.id, parseInt(e.target.value))}
           className="w-20 rounded border text-center"
         />
