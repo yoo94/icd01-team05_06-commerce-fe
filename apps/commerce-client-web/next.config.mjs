@@ -4,9 +4,15 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'image.yes24.com',
+        hostname: 'shopping-phinf.pstatic.net',
         port: '',
-        pathname: '/goods/**',
+        pathname: '/main_*/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'shopping-phinf.pstatic.net',
+        port: '',
+        pathname: '/noimage/**',
       },
     ],
   },
