@@ -1,7 +1,7 @@
 'use client';
 
-import SearchBox from '@/app/my-page/components/search-box';
-import OrderInfo from '@/app/my-page/components/order-info';
+import SearchBox from '@/app/(default)/my-page/orders/components/search-box';
+import OrderInfo from '@/app/(default)/my-page/orders/components/order-info';
 
 export default function Orders() {
   return (

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import ButtonRadioGroup from '@/app/my-page/components/button-radio-group';
+import ButtonRadioGroup from '@/app/(default)/my-page/orders/components/button-radio-group';
 
 const periodOptions = [
   { value: 'last-week', label: '최근 일주일' },

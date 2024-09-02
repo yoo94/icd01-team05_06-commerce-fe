@@ -1,6 +1,6 @@
-import SortOptionSelect from '@/app/my-page/components/sort-option-select';
-import OrderStatusSelect from '@/app/my-page/components/order-status-select';
-import OrderTable from '@/app/my-page/components/order-table';
+import SortOptionSelect from '@/app/(default)/my-page/orders/components/sort-option-select';
+import OrderStatusSelect from '@/app/(default)/my-page/orders/components/order-status-select';
+import OrderTable from '@/app/(default)/my-page/orders/components/order-table';
 
 export default function OrderInfo() {
   return (
