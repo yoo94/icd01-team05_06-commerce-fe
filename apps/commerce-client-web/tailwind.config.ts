@@ -16,7 +16,7 @@ const config = {
     },
     extend: {
       screens: {
-        xs: '480px'
+        xs: '480px',
       },
       fontFamily: {
         nanumeneo: ['NanumSquareNeo', 'sans-serif'],
