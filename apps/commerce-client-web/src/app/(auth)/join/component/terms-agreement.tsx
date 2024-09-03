@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
+import useTermsStore from '@/stores/useTermsStore';
+import parse from 'html-react-parser';
 
 interface TermsAgreementProps {
   isAgreedPrivacy: boolean;
@@ -13,14 +16,20 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({
   onPrivacyChange,
   onTermsChange,
 }) => {
+  const { terms, fetchTerms } = useTermsStore();
+
+  useEffect(() => {
+    fetchTerms(); // 컴포넌트가 처음 로드될 때 약관 데이터를 가져옵니다.
+  }, [fetchTerms]);
+
   return (
     <div className="flex flex-col gap-y-4">
       <h2 className="mb-4 text-2xl font-bold">약관동의</h2>
       <div className="h-28 overflow-y-scroll border p-4">
-        <p>여기에 개인정보처리방침의 내용이 들어갑니다...</p>
+        <div className="text-xs leading-5 text-slate-500">{parse(terms.privacy)} </div>
       </div>
       <div className="h-28 overflow-y-scroll border p-4">
-        <p>여기에 서비스 이용약관의 내용이 들어갑니다...</p>
+        <div className="text-xs leading-5 text-slate-500">{parse(terms.service)} </div>
       </div>
       <div>
         <Checkbox id="privacy" checked={isAgreedPrivacy} onCheckedChange={onPrivacyChange} />
