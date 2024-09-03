@@ -1,3 +1,4 @@
+import { fetcher } from '@/lib/fetcher';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -16,74 +17,20 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-
         const data = {
           email: credentials?.email,
           password: credentials?.password,
         };
 
         try {
-          // Fetch CSRF token
-          const csrfRes = await fetch(`${baseURL}/docs/auth-api-guide.html`, {
-            method: 'GET',
-            credentials: 'include', // Ensure cookies are included
-          });
-
-          if (!csrfRes.ok) {
-            console.error('Failed to fetch CSRF token:', csrfRes.statusText);
-            return null; // Return null to indicate failed authorization
-          }
-
-          const setCookieHeader = csrfRes.headers.get('set-cookie');
-
-          const cookies = setCookieHeader?.split(', ');
-
-          let xsrfToken = null;
-
-          for (const cookie of cookies || []) {
-            if (cookie.startsWith('XSRF-TOKEN=')) {
-              xsrfToken = cookie.split('=')[1].split(';')[0];
-            }
-          }
-
-          console.log('XSRF Token:', xsrfToken);
-
-          const headers = new Headers({
-            Cookie: `XSRF-TOKEN=${xsrfToken};`,
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          });
-
-          if (xsrfToken) {
-            headers.append('X-XSRF-TOKEN', xsrfToken);
-          }
-
-          console.log('Headers for login request:', headers);
-
-          const options = {
+          // fetcher를 사용하여 로그인 요청
+          const user = await fetcher('/login', {
             method: 'POST',
-            headers,
             body: JSON.stringify(data),
-          };
-
-          const res = await fetch(`${baseURL}/login`, options);
-          console.log('Login response:', res);
-
-          if (!res.ok) {
-            console.error('Invalid credentials or failed response');
-            return null;
-          }
-
-          const user = await res.json();
-          console.log('User response:', user);
-
-          if (!user) {
-            console.error('No user data returned');
-            return null;
-          }
+          });
 
           console.log('Successfully authenticated user:', user.memberInfo);
+
           return user.memberInfo;
         } catch (error) {
           console.error('Error during authorization:', error);
@@ -94,6 +41,7 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
+      console.log('JWT callback:', token, user);
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -101,9 +49,16 @@ const handler = NextAuth({
       }
       return token;
     },
+    async session({ session, token }) {
+      // 클라이언트 세션에 사용자 정보만 포함
+      session.user = {
+        email: token.email as string,
+        name: token.name as string,
+      };
+      return session;
+    },
   },
-  secret: process.env.NEXTAUTH_SECRET, // 보안을 위한 secret 키 설정
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
-// Export the NextAuth handler as default
 export { handler as GET, handler as POST };
