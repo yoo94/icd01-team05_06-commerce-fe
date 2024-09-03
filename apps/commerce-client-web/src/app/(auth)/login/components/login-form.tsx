@@ -8,7 +8,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useForm, FormProvider } from 'react-hook-form';
-import { signIn } from 'next-auth/react';
 import {
   Dialog,
   DialogContent,
@@ -25,6 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import useAuthStore from '@/stores/useAuthStore'; // zustand 스토어 가져오기
 
 interface LoginFormValues {
   email: string;
@@ -37,11 +37,10 @@ export default function LoginForm() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
+  const { loginData, setLoginData, submitLogin } = useAuthStore(); // zustand 스토어에서 상태와 함수 가져오기
+
   const methods = useForm<LoginFormValues>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: loginData, // zustand의 loginData를 기본값으로 사용
   });
 
   const { reset } = methods;
@@ -49,32 +48,19 @@ export default function LoginForm() {
   const handleFinish = useCallback(
     async (value: LoginFormValues) => {
       setIsLoading(true);
+      setLoginData(value); // zustand 스토어에 폼 데이터 설정
 
       try {
-        console.log(value);
-        const result = await signIn('credentials', {
-          redirect: false,
-          email: value.email,
-          password: value.password,
-        });
-
-        if (result?.error) {
-          console.error('Error during login:', result.error);
-          if (result.status === 401) {
-            setShowAlertDialog(true); // Show AlertDialog if 401 status
-          }
-          reset(); // Reset form fields after a failed login attempt
-          setIsLoading(false);
-        } else {
-          router.push('/'); // Redirect to the desired page on success
-        }
+        await submitLogin(); // zustand 스토어의 로그인 함수 호출
+        router.push('/'); // 성공 시 리다이렉트
       } catch (error) {
-        console.error('Unexpected error:', error);
+        console.error('Error during login:', error);
+        setShowAlertDialog(true); // 에러가 발생하면 AlertDialog 표시
         setIsLoading(false);
-        reset(); // Reset form fields in case of an unexpected error
+        reset(); // 에러 발생 시 폼 필드 초기화
       }
     },
-    [router, reset], // Add reset to the dependency array
+    [router, reset, setLoginData, submitLogin], // 종속성 배열에 zustand 함수 추가
   );
 
   return (
@@ -86,7 +72,10 @@ export default function LoginForm() {
               <Input
                 type="email"
                 placeholder="아이디를 입력해 주세요."
-                {...methods.register('email', { required: '이메일을 입력해주세요' })}
+                {...methods.register('email', {
+                  required: '이메일을 입력해주세요',
+                  onChange: (e) => setLoginData({ email: e.target.value }), // zustand 상태 업데이트
+                })}
               />
             </FormControl>
             <FormMessage />
@@ -97,7 +86,10 @@ export default function LoginForm() {
               <Input
                 type="password"
                 placeholder="비밀번호를 입력해 주세요."
-                {...methods.register('password', { required: '비밀번호를 입력해주세요' })}
+                {...methods.register('password', {
+                  required: '비밀번호를 입력해주세요',
+                  onChange: (e) => setLoginData({ password: e.target.value }), // zustand 상태 업데이트
+                })}
               />
             </FormControl>
             <FormMessage />
