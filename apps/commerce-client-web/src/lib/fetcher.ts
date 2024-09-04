@@ -1,6 +1,6 @@
 export async function fetcher(endpoint: string, options: RequestInit = {}) {
   // 1. 서버에서 CSRF 토큰 가져오기
-  const csrfRes = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/docs/auth-api-guide.html`, {
+  const csrfRes = await fetch(`/api/docs/auth-api-guide.html`, {
     method: 'GET',
     credentials: 'include', // 쿠키 포함
   });
@@ -10,14 +10,13 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
     throw new Error('Failed to fetch CSRF token');
   }
 
-  // 'Set-Cookie' 헤더에서 CSRF 토큰 추출
-  const setCookieHeader = csrfRes.headers.get('set-cookie');
-  const cookies = setCookieHeader?.split(', ');
+  // 쿠키에서 CSRF 토큰 추출
+  const cookies = document.cookie.split('; ');
 
   let xsrfToken = null;
   for (const cookie of cookies || []) {
     if (cookie.startsWith('XSRF-TOKEN=')) {
-      xsrfToken = cookie.split('=')[1].split(';')[0];
+      xsrfToken = cookie.split('=')[1];
     }
   }
 
@@ -28,8 +27,8 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
 
   // 2. 요청에 CSRF 토큰 추가
   const headers = new Headers({
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    // 'Content-Type': 'application/json',
+    // Accept: 'application/json',
   });
 
   // CSRF 토큰을 헤더에 추가
