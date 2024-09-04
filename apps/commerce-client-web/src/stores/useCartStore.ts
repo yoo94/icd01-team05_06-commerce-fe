@@ -11,11 +11,15 @@ export interface CartState {
   updateProductQuantity: (id: number, selectNum: number) => void;
   updateProductSelection: (id: number, selected: boolean) => void;
   toggleAllProducts: (selected: boolean) => void;
+  getSelectedProduct: () => CartItem[]; // 반환 타입을 명확히 지정
 }
 
 const useCartStore = create<CartState>()(
   persist(
-    (set: (partial: Partial<CartState> | ((state: CartState) => Partial<CartState>)) => void) => ({
+    (
+      set: (partial: Partial<CartState> | ((state: CartState) => Partial<CartState>)) => void,
+      get: () => CartState,
+    ) => ({
       items: [],
       addProduct: (product: Product) =>
         set((state: CartState) => {
@@ -62,6 +66,10 @@ const useCartStore = create<CartState>()(
         set((state: CartState) => ({
           items: state.items.map((item: CartItem) => ({ ...item, selected })),
         })),
+      getSelectedProduct: () => {
+        const state = get();
+        return state.items.filter((item: CartItem) => item.selected);
+      },
     }),
     {
       name: 'cart-storage',
