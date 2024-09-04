@@ -1,10 +1,8 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || '';
-
 export async function fetcher(endpoint: string, options: RequestInit = {}) {
-  // CSRF 토큰 가져오기
-  const csrfRes = await fetch(`${BASE_URL}/docs/auth-api-guide.html`, {
+  // 1. 서버에서 CSRF 토큰 가져오기
+  const csrfRes = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/docs/auth-api-guide.html`, {
     method: 'GET',
-    credentials: 'include', // 쿠키를 포함하여 요청
+    credentials: 'include', // 쿠키 포함
   });
 
   if (!csrfRes.ok) {
@@ -28,9 +26,8 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
     throw new Error('Failed to retrieve XSRF token');
   }
 
-  // 기본 헤더 설정
+  // 2. 요청에 CSRF 토큰 추가
   const headers = new Headers({
-    Cookie: `XSRF-TOKEN=${xsrfToken};`, // 쿠키에 CSRF 토큰 포함
     'Content-Type': 'application/json',
     Accept: 'application/json',
   });
@@ -49,8 +46,8 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
     credentials: 'include', // 항상 쿠키 포함
   };
 
-  // API 요청 보내기
-  const response = await fetch(`${BASE_URL}${endpoint}`, fetchOptions);
+  // 3. API 요청 보내기
+  const response = await fetch(`/api${endpoint}`, fetchOptions);
 
   if (!response.ok) {
     const errorText = await response.text();

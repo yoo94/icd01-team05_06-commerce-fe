@@ -138,11 +138,12 @@ export default function LoginForm() {
 
       {/* AlertDialog for 401 status */}
       <AlertDialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="min-h-[200px] w-[80vw] max-w-[400px] rounded-lg sm:min-h-fit sm:w-[50vw]">
           <AlertDialogHeader>
             <AlertDialogTitle>로그인 실패</AlertDialogTitle>
             <AlertDialogDescription>
-              이메일 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.
+              <p className="mt-3">이메일 또는 비밀번호가 잘못되었습니다.</p>
+              <p>다시 시도해주세요.</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
