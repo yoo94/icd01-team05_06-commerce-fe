@@ -5,37 +5,44 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormItem, FormControl, FormLabel, FormMessage } from '@/components/ui/form';
-import useAuthStore from '@/stores/useAuthStore'; // zustand 스토어 가져오기
+import useAuthStore from '@/stores/useAuthStore';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SignupSchema } from '@/schemas/signup-schema';
 
-interface UserInfoFormValues {
+interface SignUpFormValues {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
+  phone: string;
   postalCode: string;
   address: string;
   addressDetail: string;
 }
 
-interface UserInfoFormProps {
-  onSubmit: (values: UserInfoFormValues) => void;
+interface SignUpFormProps {
+  onSubmit: (values: SignUpFormValues) => void;
   onValidChange: (isValid: boolean) => void;
 }
 
-const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) => {
+const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, onValidChange }) => {
   const { signupData, setSignupData } = useAuthStore();
 
   const methods = useForm({
+    resolver: zodResolver(SignupSchema), // Zod 스키마 연결
     defaultValues: signupData,
     mode: 'onChange',
   });
 
-  const { handleSubmit, formState } = methods;
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+  } = methods;
 
   // 유효성 검사 상태를 상위 컴포넌트에 전달
   useEffect(() => {
-    onValidChange(formState.isValid);
-  }, [formState.isValid, onValidChange]);
+    onValidChange(isValid);
+  }, [isValid, onValidChange]);
 
   // 입력 필드가 변경될 때 zustand 상태 업데이트
   const handleInputChange = (name: keyof typeof signupData, value: string) => {
@@ -54,12 +61,11 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="name"
               placeholder="이름을 입력해 주세요."
               {...methods.register('name', {
-                required: '이름을 입력해주세요',
                 onChange: (e) => handleInputChange('name', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.name?.message}</FormMessage>
         </FormItem>
 
         {/* 이메일 입력 필드 */}
@@ -71,12 +77,11 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="email"
               placeholder="이메일을 입력해 주세요."
               {...methods.register('email', {
-                required: '이메일을 입력해주세요',
                 onChange: (e) => handleInputChange('email', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.email?.message}</FormMessage>
         </FormItem>
 
         {/* 비밀번호 입력 필드 */}
@@ -88,12 +93,11 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="password"
               placeholder="비밀번호를 입력해 주세요."
               {...methods.register('password', {
-                required: '비밀번호를 입력해주세요',
                 onChange: (e) => handleInputChange('password', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.password?.message}</FormMessage>
         </FormItem>
 
         {/* 비밀번호 확인 필드 */}
@@ -105,12 +109,28 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="confirmPassword"
               placeholder="비밀번호를 다시 입력해 주세요."
               {...methods.register('confirmPassword', {
-                required: '비밀번호 확인을 입력해주세요',
                 onChange: (e) => handleInputChange('confirmPassword', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.confirmPassword?.message}</FormMessage>
+        </FormItem>
+
+        {/* 전화번호 입력 필드 */}
+        <FormItem>
+          <FormLabel>전화번호</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              placeholder="숫자로 입력해주세요. ex) 01012345678"
+              {...methods.register('phone', {
+                onChange: (e) => handleInputChange('phone', e.target.value.replace(/\D/g, '')),
+              })}
+              maxLength={11} // 최대 11자리로 제한 (예: 01012345678)
+              className="w-full rounded border p-2 text-sm"
+            />
+          </FormControl>
+          <FormMessage>{errors.phone?.message}</FormMessage>
         </FormItem>
 
         {/* 우편번호 입력 필드 */}
@@ -123,7 +143,6 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
                 id="postalCode"
                 placeholder="우편번호를 입력해 주세요."
                 {...methods.register('postalCode', {
-                  required: '우편번호를 입력해주세요',
                   onChange: (e) => handleInputChange('postalCode', e.target.value),
                 })}
                 className="grow"
@@ -131,14 +150,14 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               <Button
                 type="button"
                 variant="secondary"
-                className="ml-2"
+                className="ml-2 w-32"
                 onClick={() => alert('우편번호 조회')}
               >
                 조회
               </Button>
             </div>
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.postalCode?.message}</FormMessage>
         </FormItem>
 
         {/* 기본 주소 입력 필드 */}
@@ -150,12 +169,11 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="address"
               placeholder="기본 주소를 입력해 주세요."
               {...methods.register('address', {
-                required: '기본 주소를 입력해주세요',
                 onChange: (e) => handleInputChange('address', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.address?.message}</FormMessage>
         </FormItem>
 
         {/* 상세 주소 입력 필드 */}
@@ -167,16 +185,15 @@ const UserInfoForm: React.FC<UserInfoFormProps> = ({ onSubmit, onValidChange }) 
               id="addressDetail"
               placeholder="상세 주소를 입력해 주세요."
               {...methods.register('addressDetail', {
-                required: '상세 주소를 입력해주세요',
                 onChange: (e) => handleInputChange('addressDetail', e.target.value),
               })}
             />
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.addressDetail?.message}</FormMessage>
         </FormItem>
       </form>
     </FormProvider>
   );
 };
 
-export default UserInfoForm;
+export default SignUpForm;

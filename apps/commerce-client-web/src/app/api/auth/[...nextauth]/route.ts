@@ -1,14 +1,9 @@
-import { fetcher } from '@/lib/fetcher';
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { fetcher } from '@/lib/fetcher';
 
 // Define your NextAuth options
-const handler = NextAuth({
-  pages: {
-    signIn: '/login',
-    verifyRequest: '/login?verify=1',
-    error: '/login',
-  },
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -23,15 +18,14 @@ const handler = NextAuth({
         };
 
         try {
-          // fetcher를 사용하여 로그인 요청
           const user = await fetcher('/login', {
             method: 'POST',
             body: JSON.stringify(data),
           });
 
-          console.log('Successfully authenticated user:', user.memberInfo);
+          console.log('User data:', user);
 
-          return user.memberInfo;
+          return user.data;
         } catch (error) {
           console.error('Error during authorization:', error);
           return null;
@@ -59,6 +53,8 @@ const handler = NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

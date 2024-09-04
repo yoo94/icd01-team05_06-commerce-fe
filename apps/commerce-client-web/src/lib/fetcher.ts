@@ -1,6 +1,6 @@
 export async function fetcher(endpoint: string, options: RequestInit = {}) {
   // 1. 서버에서 CSRF 토큰 가져오기
-  const csrfRes = await fetch(`/api/docs/auth-api-guide.html`, {
+  const csrfRes = await fetch('/api/proxy/docs/auth-api-guide.html', {
     method: 'GET',
     credentials: 'include', // 쿠키 포함
   });
@@ -27,8 +27,8 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
 
   // 2. 요청에 CSRF 토큰 추가
   const headers = new Headers({
-    // 'Content-Type': 'application/json',
-    // Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
   });
 
   // CSRF 토큰을 헤더에 추가
@@ -46,7 +46,7 @@ export async function fetcher(endpoint: string, options: RequestInit = {}) {
   };
 
   // 3. API 요청 보내기
-  const response = await fetch(`/api${endpoint}`, fetchOptions);
+  const response = await fetch(`/api/proxy${endpoint}`, fetchOptions);
 
   if (!response.ok) {
     const errorText = await response.text();

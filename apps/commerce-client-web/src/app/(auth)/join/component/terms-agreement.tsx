@@ -31,13 +31,13 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({
       <div className="h-28 overflow-y-scroll border p-4">
         <div className="text-xs leading-5 text-slate-500">{parse(terms.service)} </div>
       </div>
-      <div>
+      <div className="flex items-center">
         <Checkbox id="privacy" checked={isAgreedPrivacy} onCheckedChange={onPrivacyChange} />
         <label htmlFor="privacy" className="ml-2 text-sm">
           (필수) 개인정보처리방침에 동의합니다.
         </label>
       </div>
-      <div>
+      <div className="flex items-center">
         <Checkbox id="terms" checked={isAgreedTerms} onCheckedChange={onTermsChange} />
         <label htmlFor="terms" className="ml-2 text-sm">
           (필수) 서비스 이용약관에 동의합니다.
