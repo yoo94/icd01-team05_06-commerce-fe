@@ -13,10 +13,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/auth/:path*',
-        destination: '/api/auth/:path*',
-      },
-      {
         source: '/api/proxy/:path*',
         destination: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/:path*`,
       },

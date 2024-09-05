@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
+import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
 import { fetcher } from '@/lib/fetcher';
 import { useUserStore } from './useUserStore';
 
@@ -166,7 +166,7 @@ const useAuthStore = create<AuthStore>()(
       }),
       {
         name: 'auth-storage', // 로컬 스토리지에 저장될 key 이름
-        getStorage: () => localStorage, // 기본적으로 localStorage 사용
+        storage: createJSONStorage(() => localStorage), // JSON 저장소로 localStorage 설정
         partialize: (state) => ({
           accessToken: state.accessToken,
           refreshToken: state.refreshToken,

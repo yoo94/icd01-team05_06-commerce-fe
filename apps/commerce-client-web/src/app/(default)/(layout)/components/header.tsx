@@ -21,6 +21,7 @@ const Header: React.FC = () => {
               width={180}
               height={60}
               className="cursor-pointer"
+              priority
             />
           </Link>
           <Link href="/" className="flex md:hidden">

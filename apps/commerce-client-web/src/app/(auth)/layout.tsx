@@ -23,7 +23,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               alt="Logo"
               width={200}
               height={50}
-              className="w-40 cursor-pointer xs:w-48 sm:w-52 md:w-60 lg:w-64 xl:w-[200px]" // 클릭 커서 스타일 추가
+              className="w-40 cursor-pointer xs:w-48 sm:w-52 md:w-60 lg:w-64 xl:w-[200px]"
+              priority
             />
           </Link>
         </div>
