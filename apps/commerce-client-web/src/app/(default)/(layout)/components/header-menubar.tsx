@@ -13,7 +13,6 @@ import {
 
 type SubSubMenuItem = {
   title: string;
-  href: string;
 };
 
 type SubMenuItem = {
@@ -28,7 +27,6 @@ type MenuItemWithSubMenu = {
 
 type MenuItemWithHref = {
   title: string;
-  href: string;
 };
 
 type MenuItem = MenuItemWithSubMenu | MenuItemWithHref;
@@ -40,34 +38,49 @@ const mock: MenuItem[] = [
       {
         title: '국내도서',
         subSubMenu: [
-          { title: '소설', href: '/menu/1-1' },
-          { title: '시', href: '/menu/1-2' },
-          { title: '에세이', href: '/menu/1-2' },
-          { title: '인문', href: '/menu/1-2' },
-          { title: '역사', href: '/menu/1-2' },
-          { title: '청소년', href: '/menu/1-2' },
-          { title: '사회', href: '/menu/1-2' },
+          { title: '소설' },
+          { title: '시' },
+          { title: '에세이' },
+          { title: '인문' },
+          { title: '역사' },
+          { title: '청소년' },
+          { title: '사회' },
         ],
       },
       {
         title: '외국도서',
         subSubMenu: [
-          { title: 'Sub Menu 2-1', href: '/menu/2-1' },
-          { title: 'Sub Menu 2-2', href: '/menu/2-2' },
+          { title: '소설' },
+          { title: '시' },
+          { title: '에세이' },
+          { title: '인문' },
+          { title: '역사' },
+          { title: '청소년' },
+          { title: '사회' },
         ],
       },
       {
         title: 'eBook',
         subSubMenu: [
-          { title: 'Sub Menu 3-1', href: '/menu/3-1' },
-          { title: 'Sub Menu 3-2', href: '/menu/3-2' },
+          { title: '소설' },
+          { title: '시' },
+          { title: '에세이' },
+          { title: '인문' },
+          { title: '역사' },
+          { title: '청소년' },
+          { title: '사회' },
         ],
       },
     ],
   },
   {
-    title: '베스트 셀러',
-    href: '/menu/2',
+    title: '베스트셀러',
+  },
+  {
+    title: '새로나온책',
+  },
+  {
+    title: '추천도서',
   },
 ];
 
@@ -96,7 +109,16 @@ const HeaderMenubar: React.FC = () => {
                       <MenubarSubContent className="ml-2 mt-2 rounded-lg bg-gray-100 p-2 shadow-lg">
                         {subMenuItem.subSubMenu.map((subSubMenuItem, subSubIndex) => (
                           <MenubarItem key={subSubIndex} asChild>
-                            <Link href={subSubMenuItem.href} passHref>
+                            <Link
+                              href={{
+                                pathname: '/search',
+                                query: {
+                                  pc: subMenuItem.title,
+                                  sc: subSubMenuItem.title,
+                                },
+                              }}
+                              passHref
+                            >
                               <span className="block rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
                                 {subSubMenuItem.title}
                               </span>
@@ -112,7 +134,15 @@ const HeaderMenubar: React.FC = () => {
           ) : (
             <MenubarMenu>
               <MenubarTrigger asChild>
-                <Link href={menu.href} passHref>
+                <Link
+                  href={{
+                    pathname: '/search',
+                    query: {
+                      tag: menu.title,
+                    },
+                  }}
+                  passHref
+                >
                   <span className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                     {menu.title}
                   </span>
