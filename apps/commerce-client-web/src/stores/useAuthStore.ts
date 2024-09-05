@@ -34,6 +34,7 @@ interface AuthStore {
   clearTokens: () => void;
   submitSignup: () => Promise<void>;
   submitLogin: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -163,11 +164,29 @@ const useAuthStore = create<AuthStore>()(
             throw error;
           }
         },
+        logout: async () => {
+          const { clearTokens } = useAuthStore.getState();
+
+          try {
+            await fetcher('/logout', {
+              method: 'POST',
+            });
+
+            clearTokens();
+            useUserStore.getState().clearUserDetails();
+            set({ isAuthenticated: false });
+          } catch (error) {
+            console.error('Error during logout:', error);
+            throw error;
+          }
+        },
       }),
       {
         name: 'auth-storage', // 로컬 스토리지에 저장될 key 이름
         storage: createJSONStorage(() => localStorage), // JSON 저장소로 localStorage 설정
         partialize: (state) => ({
+          isAuthenticated: state.isAuthenticated,
+          signupData: state.signupData,
           accessToken: state.accessToken,
           refreshToken: state.refreshToken,
         }), // 저장할 상태만 선택

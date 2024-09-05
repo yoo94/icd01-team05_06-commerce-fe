@@ -1,16 +1,15 @@
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import useAuthStore from '@/stores/useAuthStore';
 
 const HeaderButton: React.FC = () => {
-  const isLogin = false; // 현재는 로그인 상태를 false로 설정
+  const { isAuthenticated, logout } = useAuthStore();
+
   return (
     <>
-      {isLogin ? (
+      {isAuthenticated ? (
         <>
-          <Button asChild>
-            <Link href={'/logout'}>로그아웃</Link>
-          </Button>
+          <Button onClick={logout}>로그아웃</Button>
           <Button asChild>
             <Link href={'/myPage'}>마이페이지</Link>
           </Button>
