@@ -10,7 +10,7 @@
     "build:apps": "pnpm --filter \"./apps/**\" build",
     "lint": "eslint . fil",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "keywords": [],
   "author": "",
