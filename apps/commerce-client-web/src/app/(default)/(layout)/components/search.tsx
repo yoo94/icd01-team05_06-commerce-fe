@@ -6,28 +6,39 @@ const Search: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // 입력값이 변경되면 searchTerm 업데이트
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // 폼의 기본 제출 동작을 방지합니다.
+  // URL에 searchWord 파라미터 업데이트
+  useEffect(() => {
+    const currentParams = new URLSearchParams(searchParams.toString());
+
     if (searchTerm.trim()) {
-      // 입력된 값이 있을 때만 리디렉션합니다.
-      router.push(`/search?SearchWord=${encodeURIComponent(searchTerm)}`);
+      // 검색어가 있을 때는 SearchWord 파라미터를 추가 또는 업데이트
+      currentParams.set('SearchWord', searchTerm);
+    } else {
+      // 검색어가 없을 때는 SearchWord 파라미터를 제거
+      currentParams.delete('SearchWord');
     }
-  };
+
+    // 변경된 파라미터로 URL을 교체하여 페이지 이동 없이 URL 업데이트
+    router.replace(`${window.location.pathname}?${currentParams.toString()}`);
+  }, [searchTerm, router, searchParams]);
 
   // URL 파라미터가 변경될 때 searchWord가 없는 경우 input 초기화
   useEffect(() => {
     const searchWord = searchParams.get('SearchWord');
-    if (!searchWord) {
+    if (searchWord) {
+      setSearchTerm(searchWord); // URL에 있는 searchWord를 입력값으로 설정
+    } else {
       setSearchTerm(''); // searchWord 파라미터가 없으면 input 초기화
     }
   }, [searchParams]);
 
   return (
-    <form onSubmit={handleSearchSubmit} className="relative mx-auto w-full max-w-md">
+    <form onSubmit={(e) => e.preventDefault()} className="relative mx-auto w-full max-w-md">
       <input
         className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="Search..."

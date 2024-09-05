@@ -1,27 +1,32 @@
 import React from 'react';
-import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
+import { useRouter, useSearchParams } from 'next/navigation'; // useRouter, useSearchParams 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
-function PublisherFilter() {
+interface PublisherFilterProps {
+  publishers: string[]; // 출판사 목록을 props로 전달받음
+}
+
+function PublisherFilter({ publishers }: PublisherFilterProps) {
   const router = useRouter();
+  const searchParams = useSearchParams(); // 현재 URL 파라미터 가져오기
 
   const handlePublisherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const publisherValue = event.target.value;
 
     // 현재 URL의 쿼리 파라미터를 업데이트
-    const currentParams = new URLSearchParams(window.location.search);
-    let publishers = currentParams.get('publisher')?.split(',') || [];
+    const currentParams = new URLSearchParams(searchParams.toString());
+    let selectedPublishers = currentParams.get('publisher')?.split(',') || [];
 
     if (event.target.checked) {
       // 체크박스가 선택된 경우 출판사를 추가
-      publishers.push(publisherValue);
+      selectedPublishers.push(publisherValue);
     } else {
       // 체크박스가 해제된 경우 출판사를 제거
-      publishers = publishers.filter((publisher) => publisher !== publisherValue);
+      selectedPublishers = selectedPublishers.filter((publisher) => publisher !== publisherValue);
     }
 
-    if (publishers.length > 0) {
-      currentParams.set('publisher', publishers.join(','));
+    if (selectedPublishers.length > 0) {
+      currentParams.set('publisher', selectedPublishers.join(','));
     } else {
       currentParams.delete('publisher');
     }
@@ -35,26 +40,19 @@ function PublisherFilter() {
       <AccordionTrigger>출판사</AccordionTrigger>
       <AccordionContent>
         <ul className="space-y-2">
-          <li>
-            <input
-              type="checkbox"
-              id="publisher-1"
-              value="publisher-1"
-              className="mr-2"
-              onChange={handlePublisherChange}
-            />
-            <label htmlFor="publisher-1">출판사 1</label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              id="publisher-2"
-              value="publisher-2"
-              className="mr-2"
-              onChange={handlePublisherChange}
-            />
-            <label htmlFor="publisher-2">출판사 2</label>
-          </li>
+          {publishers.map((publisher, index) => (
+            <li key={index}>
+              <input
+                type="checkbox"
+                id={`publisher-${index}`}
+                value={publisher}
+                className="mr-2"
+                onChange={handlePublisherChange}
+                defaultChecked={searchParams.get('publisher')?.split(',').includes(publisher)} // URL에 이미 포함된 경우 체크 표시
+              />
+              <label htmlFor={`publisher-${index}`}>{publisher}</label>
+            </li>
+          ))}
         </ul>
       </AccordionContent>
     </AccordionItem>

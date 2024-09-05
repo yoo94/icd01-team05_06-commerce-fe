@@ -1,27 +1,35 @@
 import React from 'react';
 import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { Product } from '@/types/productTypes'; // Product 타입 가져오기
 
-function CategoryFilter() {
+interface CategoryFilterProps {
+  products: Product[]; // 정확한 Product 타입을 사용
+}
+
+function CategoryFilter({ products }: CategoryFilterProps) {
   const router = useRouter();
+
+  // products에서 카테고리 추출 (예: 중복 제거)
+  const categories = [...new Set(products.map((product) => product.category.name))];
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const categoryValue = event.target.value;
 
     // 현재 URL의 쿼리 파라미터를 업데이트
     const currentParams = new URLSearchParams(window.location.search);
-    let categories = currentParams.get('category')?.split(',') || [];
+    let selectedCategories = currentParams.get('category')?.split(',') || [];
 
     if (event.target.checked) {
       // 체크박스가 선택된 경우 카테고리를 추가
-      categories.push(categoryValue);
+      selectedCategories.push(categoryValue);
     } else {
       // 체크박스가 해제된 경우 카테고리를 제거
-      categories = categories.filter((category) => category !== categoryValue);
+      selectedCategories = selectedCategories.filter((category) => category !== categoryValue);
     }
 
-    if (categories.length > 0) {
-      currentParams.set('category', categories.join(','));
+    if (selectedCategories.length > 0) {
+      currentParams.set('category', selectedCategories.join(','));
     } else {
       currentParams.delete('category');
     }
@@ -35,26 +43,18 @@ function CategoryFilter() {
       <AccordionTrigger>분야</AccordionTrigger>
       <AccordionContent>
         <ul className="space-y-2">
-          <li>
-            <input
-              type="checkbox"
-              id="category-1"
-              value="category-1"
-              className="mr-2"
-              onChange={handleCategoryChange}
-            />
-            <label htmlFor="category-1">분야 1</label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              id="category-2"
-              value="category-2"
-              className="mr-2"
-              onChange={handleCategoryChange}
-            />
-            <label htmlFor="category-2">분야 2</label>
-          </li>
+          {categories.map((category, index) => (
+            <li key={index}>
+              <input
+                type="checkbox"
+                id={`category-${index}`}
+                value={category}
+                className="mr-2"
+                onChange={handleCategoryChange}
+              />
+              <label htmlFor={`category-${index}`}>{category}</label>
+            </li>
+          ))}
         </ul>
       </AccordionContent>
     </AccordionItem>
