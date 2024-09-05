@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import FilterComponent from '@/app/components/(filters)/FilterComponent';
-import SearchResult from '@/app/components/(searchResult)/SearchResult';
+import FilterComponent from '@/app/(default)/search/components/(filters)/FilterComponent';
+import SearchResult from '@/app/(default)/search/components/(searchResult)/SearchResult';
 import productsData from '@/data/products.json';
 
 const SearchPage = () => {

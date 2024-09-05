@@ -1,7 +1,7 @@
 import { Accordion } from '@/components/ui/accordion';
-import PriceFilter from '@/app/components/(filters)/PriceFilter';
-import PublisherFilter from '@/app/components/(filters)/PublisherFilter';
-import CategoryFilter from '@/app/components/(filters)/CategoryFilter';
+import PriceFilter from '@/app/(default)/search/components/(filters)/PriceFilter';
+import PublisherFilter from '@/app/(default)/search/components/(filters)/PublisherFilter';
+import CategoryFilter from '@/app/(default)/search/components/(filters)/CategoryFilter';
 import { Product } from '@/types/productTypes';
 
 const FilterComponent = ({ products }: { products: Product[] }) => {

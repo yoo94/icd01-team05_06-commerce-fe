@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCard from '@/app/components/(searchResult)/productCard';
+import ProductCard from '@/app/(default)/search/components/(searchResult)/productCard';
 import { SearchResultProps } from '@/types/productTypes'; // 인터페이스를 가져오기
 import { parseAndRoundPrice } from '@/lib/utils'; // 유틸리티 함수 가져오기
 
