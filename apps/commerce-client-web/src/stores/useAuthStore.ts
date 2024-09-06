@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
 import { fetcher } from '@/lib/fetcher';
 import { useUserStore } from './useUserStore';
+// import { signIn } from 'next-auth/react';
 
 export interface SignupFormData {
   name: string;
@@ -145,6 +146,12 @@ const useAuthStore = create<AuthStore>()(
               method: 'POST',
               body: JSON.stringify(loginData),
             });
+
+            // TODO: next-auth로 로그인 처리
+            // const userData = await signIn('credentials', {
+            //   email: loginData.email,
+            //   password: loginData.password,
+            // });
 
             if (!userData) {
               throw new Error('Failed to get a valid userData from the server.');
