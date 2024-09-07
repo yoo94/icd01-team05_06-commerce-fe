@@ -8,7 +8,7 @@ import HeaderMenubar from './header-menubar';
 import HamburgerMenu from './header-hamburgermenu';
 import Search from './search';
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     <header className="w-full border-b bg-background md:p-4">
       <div className="container mx-auto flex h-14 items-center justify-between md:h-fit">
