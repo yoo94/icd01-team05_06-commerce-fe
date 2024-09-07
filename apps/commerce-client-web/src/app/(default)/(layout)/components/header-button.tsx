@@ -1,13 +1,15 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import useAuthStore from '@/stores/use-auth-store';
+import { ShoppingCart } from 'lucide-react';
 
-const HeaderButton: React.FC = () => {
-  const { isAuthenticated, logout } = useAuthStore();
-
+const HeaderButton = () => {
+  const isLogin = false; // 현재는 로그인 상태를 false로 설정
   return (
     <>
-      {isAuthenticated ? (
+      <Link href={'/cart'}>
+        <ShoppingCart />
+      </Link>
+      {isLogin ? (
         <>
           <Button onClick={logout}>로그아웃</Button>
           <Button asChild>

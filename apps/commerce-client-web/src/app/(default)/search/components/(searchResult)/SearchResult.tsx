@@ -1,9 +1,11 @@
 import React from 'react';
 import ProductCard from '@/app/(default)/search/components/(searchResult)/productCard';
 import { SearchResultProps } from '@/types/productTypes'; // 인터페이스를 가져오기
-import { parseAndRoundPrice } from '@/lib/utils'; // 유틸리티 함수 가져오기
+import { parseAndRoundPrice } from '@/lib/utils';
+import useCartStore from '@/stores/use-cart-store'; // 유틸리티 함수 가져오기
 
-function SearchResult({ products, onAddToCart, onBuyNow }: SearchResultProps) {
+function SearchResult({ products, onBuyNow }: SearchResultProps) {
+  const { addProduct } = useCartStore();
   return (
     <div className="space-y-4">
       {products.map((product) => {
@@ -18,7 +20,7 @@ function SearchResult({ products, onAddToCart, onBuyNow }: SearchResultProps) {
             price={roundedPrice} // 반올림된 가격을 전달
             discount={product.discount} // 할인 가격
             tags={product.tags}
-            onAddToCart={() => onAddToCart(product.id)}
+            onAddToCart={() => addProduct(product)}
             onBuyNow={() => onBuyNow(product.id)}
           />
         );
