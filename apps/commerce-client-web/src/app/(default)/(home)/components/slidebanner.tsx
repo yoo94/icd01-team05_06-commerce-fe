@@ -8,7 +8,11 @@ type Image = {
   alt: string;
 };
 
-const SliderBanner: React.FC<{ images: Image[] }> = ({ images }) => {
+interface SliderBannerProps {
+  images: Image[];
+}
+
+const SliderBanner = ({ images }: SliderBannerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
@@ -18,13 +22,15 @@ const SliderBanner: React.FC<{ images: Image[] }> = ({ images }) => {
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
+
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 3000); // Change slide every 2 seconds
+    }, 3000); // Change slide every 3 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
+
   return (
     <div className="relative mx-auto w-full max-w-screen-lg overflow-hidden">
       <div
