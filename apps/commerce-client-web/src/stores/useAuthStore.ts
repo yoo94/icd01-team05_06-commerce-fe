@@ -27,12 +27,14 @@ interface AuthStore {
   loginData: LoginFormData;
   accessToken: string | null;
   refreshToken: string | null;
+  saveId: boolean;
   setSignupData: (data: Partial<SignupFormData>) => void;
   setLoginData: (data: Partial<LoginFormData>) => void;
   resetSignupData: () => void;
   resetLoginData: () => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   clearTokens: () => void;
+  setSaveId: (save: boolean) => void;
   submitSignup: () => Promise<void>;
   submitLogin: () => Promise<void>;
   logout: () => Promise<void>;
@@ -43,6 +45,7 @@ const useAuthStore = create<AuthStore>()(
     persist(
       (set) => ({
         isAuthenticated: false,
+        saveId: false,
         signupData: {
           name: '',
           email: '',
@@ -87,17 +90,18 @@ const useAuthStore = create<AuthStore>()(
             },
           }),
         resetLoginData: () =>
-          set({
+          set((state) => ({
             loginData: {
-              email: '',
+              email: state.saveId ? state.loginData.email : '', // saveId가 true면 이메일 유지, 그렇지 않으면 공백
               password: '',
             },
-          }),
+          })),
         setTokens: (accessToken, refreshToken) =>
           set({
             accessToken,
             refreshToken,
           }),
+        setSaveId: (save) => set({ saveId: save }), // 아이디 저장 상태 설정 함수
         clearTokens: () =>
           set({
             accessToken: null,
@@ -132,7 +136,7 @@ const useAuthStore = create<AuthStore>()(
               password: signupData.password,
             });
 
-            await useAuthStore.getState().submitLogin();
+            resetSignupData();
           } catch (error) {
             console.error('Error during signup:', error);
             resetSignupData();
@@ -159,10 +163,10 @@ const useAuthStore = create<AuthStore>()(
 
             set({ isAuthenticated: true });
 
-            // User Store에 사용자 정보 저장
             useUserStore.getState().setUserDetails(userData.memberInfo);
 
-            // 받은 토큰 저장
+            resetLoginData();
+
             setTokens(userData.tokenInfo.accessToken, userData.tokenInfo.refreshToken);
           } catch (error) {
             console.error('Error submitting login:', error);

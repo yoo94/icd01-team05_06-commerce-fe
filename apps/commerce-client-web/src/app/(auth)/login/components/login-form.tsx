@@ -36,7 +36,7 @@ export default function LoginForm() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
-  const { loginData, setLoginData, submitLogin } = useAuthStore();
+  const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
 
   const methods = useForm<LoginFormValues>({
     defaultValues: loginData,
@@ -61,6 +61,16 @@ export default function LoginForm() {
     },
     [router, reset, setLoginData, submitLogin],
   );
+
+  const handleSaveIdChange = (checked: boolean) => {
+    setSaveId(checked);
+
+    if (checked) {
+      localStorage.setItem('savedEmail', loginData.email);
+    } else {
+      localStorage.removeItem('savedEmail');
+    }
+  };
 
   return (
     <>
@@ -96,8 +106,14 @@ export default function LoginForm() {
 
           <div className="mb-10 flex items-center justify-between">
             <div className="flex items-center gap-x-2">
-              <Checkbox name="saveId" className="border-slate-300" />
-              <label htmlFor="formSaveId" className="text-sm">
+              <Checkbox
+                id="saveId"
+                name="saveId"
+                className="border-slate-300"
+                checked={saveId}
+                onCheckedChange={handleSaveIdChange}
+              />
+              <label htmlFor="saveId" className="text-sm">
                 아이디 저장
               </label>
             </div>
