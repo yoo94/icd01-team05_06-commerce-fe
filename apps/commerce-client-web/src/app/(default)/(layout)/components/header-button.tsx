@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import useAuthStore from '@/stores/useAuthStore';
+import useAuthStore from '@/stores/use-auth-store';
 
 const HeaderButton: React.FC = () => {
   const { isAuthenticated, logout } = useAuthStore();

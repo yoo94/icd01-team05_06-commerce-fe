@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { FormItem, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -24,19 +23,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import useAuthStore from '@/stores/useAuthStore';
+import useAuthStore from '@/stores/use-auth-store';
+import { useRouter } from 'next/navigation';
+
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-export default function LoginForm() {
+const LoginForm = () => {
   const router = useRouter();
+  const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
-
-  const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
 
   const methods = useForm<LoginFormValues>({
     defaultValues: loginData,
@@ -59,7 +59,7 @@ export default function LoginForm() {
         reset();
       }
     },
-    [router, reset, setLoginData, submitLogin],
+    [reset, setLoginData, submitLogin],
   );
 
   const handleSaveIdChange = (checked: boolean) => {
@@ -167,4 +167,6 @@ export default function LoginForm() {
       </AlertDialog>
     </>
   );
-}
+};
+
+export default LoginForm;

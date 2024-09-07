@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
-import useTermsStore from '@/stores/useTermsStore';
+import useTermsStore from '@/stores/use-terms-store';
 import parse from 'html-react-parser';
 
 interface TermsAgreementProps {
@@ -10,12 +10,12 @@ interface TermsAgreementProps {
   onTermsChange: (checked: boolean) => void;
 }
 
-const TermsAgreement: React.FC<TermsAgreementProps> = ({
+const TermsAgreement = ({
   isAgreedPrivacy,
   isAgreedTerms,
   onPrivacyChange,
   onTermsChange,
-}) => {
+}: TermsAgreementProps) => {
   const { terms, fetchTerms } = useTermsStore();
 
   useEffect(() => {
@@ -33,13 +33,13 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({
       </div>
       <div className="flex items-center">
         <Checkbox id="privacy" checked={isAgreedPrivacy} onCheckedChange={onPrivacyChange} />
-        <label htmlFor="privacy" className="ml-2 text-sm">
+        <label htmlFor="privacy" className="ml-2 text-sm font-light">
           (필수) 개인정보처리방침에 동의합니다.
         </label>
       </div>
       <div className="flex items-center">
         <Checkbox id="terms" checked={isAgreedTerms} onCheckedChange={onTermsChange} />
-        <label htmlFor="terms" className="ml-2 text-sm">
+        <label htmlFor="terms" className="ml-2 text-sm font-light">
           (필수) 서비스 이용약관에 동의합니다.
         </label>
       </div>

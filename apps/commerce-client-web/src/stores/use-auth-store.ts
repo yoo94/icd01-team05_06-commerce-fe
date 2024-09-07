@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
 import { fetcher } from '@/lib/fetcher';
-import { useUserStore } from './useUserStore';
+import { useUserStore } from './use-user-store';
 // import { signIn } from 'next-auth/react';
 
 export interface SignupFormData {
@@ -127,8 +127,8 @@ const useAuthStore = create<AuthStore>()(
               body: JSON.stringify(submitData),
             });
 
-            if (!response.ok) {
-              throw new Error('Failed to submit signup');
+            if (!response) {
+              throw new Error('Failed to get a valid response from the server.');
             }
 
             useAuthStore.getState().setLoginData({
@@ -136,10 +136,12 @@ const useAuthStore = create<AuthStore>()(
               password: signupData.password,
             });
 
+            await useAuthStore.getState().submitLogin();
+
             resetSignupData();
           } catch (error) {
-            console.error('Error during signup:', error);
             resetSignupData();
+            throw error;
           }
         },
         submitLogin: async () => {

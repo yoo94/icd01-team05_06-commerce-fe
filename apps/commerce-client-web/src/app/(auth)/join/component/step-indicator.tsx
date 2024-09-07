@@ -4,7 +4,7 @@ interface StepIndicatorProps {
   onStepClick: (index: number) => void;
 }
 
-const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, onStepClick }) => {
+const StepIndicator = ({ steps, currentStep, onStepClick }: StepIndicatorProps) => {
   return (
     <div className="relative mb-8 flex items-center justify-between">
       <div className="absolute inset-x-0 top-2.5 h-px bg-slate-200"></div>

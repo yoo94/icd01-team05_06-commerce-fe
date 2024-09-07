@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormItem, FormControl, FormLabel, FormMessage } from '@/components/ui/form';
-import useAuthStore from '@/stores/useAuthStore';
+import useAuthStore from '@/stores/use-auth-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '@/schemas/signup-schema';
 
@@ -25,7 +25,7 @@ interface SignUpFormProps {
   onValidChange: (isValid: boolean) => void;
 }
 
-const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, onValidChange }) => {
+const SignUpForm = ({ onSubmit, onValidChange }: SignUpFormProps) => {
   const { signupData, setSignupData } = useAuthStore();
 
   const methods = useForm({
@@ -39,15 +39,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, onValidChange }) => {
     formState: { errors, isValid },
   } = methods;
 
-  // 유효성 검사 상태를 상위 컴포넌트에 전달
-  useEffect(() => {
-    onValidChange(isValid);
-  }, [isValid, onValidChange]);
-
   // 입력 필드가 변경될 때 zustand 상태 업데이트
   const handleInputChange = (name: keyof typeof signupData, value: string) => {
     setSignupData({ [name]: value });
   };
+
+  // 유효성 검사 상태를 상위 컴포넌트에 전달
+  useEffect(() => {
+    onValidChange(isValid);
+  }, [isValid, onValidChange]);
 
   return (
     <FormProvider {...methods}>

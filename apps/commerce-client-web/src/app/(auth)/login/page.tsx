@@ -2,7 +2,7 @@ import LoginForm from './components/login-form';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function LoginPage() {
+const LoginPage = () => {
   return (
     <>
       <LoginForm />
@@ -15,7 +15,7 @@ export default function LoginPage() {
       <div className="flex">
         <Button
           variant="outline"
-          className="w-full border-lime-600 text-base text-primary hover:bg-lime-50/50 hover:text-primary"
+          className="text-primary hover:text-primary w-full border-lime-600 text-base hover:bg-lime-50/50"
           size="lg"
           asChild
         >
@@ -24,4 +24,6 @@ export default function LoginPage() {
       </div>
     </>
   );
-}
+};
+
+export default LoginPage;
