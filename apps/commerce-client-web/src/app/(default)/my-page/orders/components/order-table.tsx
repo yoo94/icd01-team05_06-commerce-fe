@@ -22,13 +22,13 @@ export default function OrderTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>주문번호</TableHead>
-          <TableHead>주문일자</TableHead>
-          <TableHead className="w-[400px]">주문내역</TableHead>
-          <TableHead>주문금액</TableHead>
-          <TableHead>주문상태</TableHead>
-          <TableHead>배송조회</TableHead>
-          <TableHead>주문자</TableHead>
+          <TableHead className="min-w-[100px]">주문번호</TableHead>
+          <TableHead className="min-w-[100px]">주문일자</TableHead>
+          <TableHead className="min-w-[400px]">주문내역</TableHead>
+          <TableHead className="min-w-[100px]">주문금액</TableHead>
+          <TableHead className="min-w-[100px]">주문상태</TableHead>
+          <TableHead className="min-w-[100px]">배송조회</TableHead>
+          <TableHead className="min-w-[80px]">주문자</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
