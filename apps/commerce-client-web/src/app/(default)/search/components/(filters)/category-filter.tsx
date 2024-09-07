@@ -7,7 +7,7 @@ interface CategoryFilterProps {
   products: Product[]; // 정확한 Product 타입을 사용
 }
 
-function CategoryFilter({ products }: CategoryFilterProps) {
+const CategoryFilter = ({ products }: CategoryFilterProps) => {
   const router = useRouter();
 
   // products에서 카테고리 추출 (예: 중복 제거)
@@ -59,6 +59,6 @@ function CategoryFilter({ products }: CategoryFilterProps) {
       </AccordionContent>
     </AccordionItem>
   );
-}
+};
 
 export default CategoryFilter;

@@ -1,8 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { BreadCrumbProps } from '@/types/breadCrumbTypes'; // 인터페이스를 가져오기
 
-function Breadcrumb({ items }: BreadCrumbProps) {
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface BreadCrumbProps {
+  items: BreadcrumbItem[];
+}
+
+const Breadcrumb = ({ items }: BreadCrumbProps) => {
   return (
     <nav className="text-sm text-gray-500 mb-4">
       {items.map((item, index) => (
@@ -15,6 +23,6 @@ function Breadcrumb({ items }: BreadCrumbProps) {
       ))}
     </nav>
   );
-}
+};
 
 export default Breadcrumb;

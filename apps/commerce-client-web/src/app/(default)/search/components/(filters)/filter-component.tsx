@@ -1,8 +1,8 @@
-import { Accordion } from '@/components/ui/accordion';
-import PriceFilter from '@/app/(default)/search/components/(filters)/PriceFilter';
-import PublisherFilter from '@/app/(default)/search/components/(filters)/PublisherFilter';
-import CategoryFilter from '@/app/(default)/search/components/(filters)/CategoryFilter';
 import { Product } from '@/types/productTypes';
+import { Accordion } from '@/components/ui/accordion';
+import PriceFilter from './price-filter';
+import PublisherFilter from './publisher-filter';
+import CategoryFilter from './category-filter';
 
 const FilterComponent = ({ products }: { products: Product[] }) => {
   const publishers = [...new Set(products.map((product) => product.publisher))];

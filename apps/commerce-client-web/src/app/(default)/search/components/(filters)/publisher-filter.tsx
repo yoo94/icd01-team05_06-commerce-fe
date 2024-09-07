@@ -6,7 +6,7 @@ interface PublisherFilterProps {
   publishers: string[]; // 출판사 목록을 props로 전달받음
 }
 
-function PublisherFilter({ publishers }: PublisherFilterProps) {
+const PublisherFilter = ({ publishers }: PublisherFilterProps) => {
   const router = useRouter();
   const searchParams = useSearchParams(); // 현재 URL 파라미터 가져오기
 
@@ -57,6 +57,6 @@ function PublisherFilter({ publishers }: PublisherFilterProps) {
       </AccordionContent>
     </AccordionItem>
   );
-}
+};
 
 export default PublisherFilter;

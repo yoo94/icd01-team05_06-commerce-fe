@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import FilterComponent from '@/app/(default)/search/components/(filters)/FilterComponent';
-import SearchResult from '@/app/(default)/search/components/(searchResult)/SearchResult';
+import FilterComponent from '@/app/(default)/search/components/(filters)/filter-component';
+import SearchResult from '@/app/(default)/search/components/(searchResult)/search-result';
 import productsData from '@/data/products.json';
 
 const SearchPage = () => {
@@ -58,13 +58,13 @@ const SearchPage = () => {
   return (
     <div className="flex">
       {/* Sidebar with filters */}
-      <div className="w-1/4 p-4">
+      <div className="w-1/5 p-4 hidden lg:block">
         <FilterComponent products={productsData} />
       </div>
 
       {/* Main content area */}
-      <div className="w-3/4 p-4">
-        <h1 className="mb-4 text-2xl font-bold">Product List</h1>
+      <div className="w-full lg:w-4/5 p-4">
+        <h1 className="mb-4 text-xl font-bold">상품 목록</h1>
 
         {/* Render the search results */}
         <SearchResult

@@ -20,22 +20,3 @@ export type Product = {
     };
   };
 };
-
-// SearchResultProps 타입 정의
-export type SearchResultProps = {
-  products: Product[];
-  onAddToCart: (id: number) => void;
-  onBuyNow: (id: number) => void;
-};
-
-// ProductCardProps 타입 정의
-export type ProductCardProps = {
-  id: number;
-  imageUrl: string;
-  title: string;
-  price: number; // 또는 number (parseAndRoundPrice 함수가 문자열을 반환하는 경우 string 사용)
-  discount: number;
-  tags: string[];
-  onAddToCart: () => void;
-  onBuyNow: () => void;
-};

@@ -1,8 +1,10 @@
-// src/app/components/BookInfoPage.tsx
-
 import React from 'react';
 
-const BookInfoPage: React.FC<{ description: string }> = ({ description }) => {
+interface BookInfoPageProps {
+  description: string;
+}
+
+const BookInfoPage = ({ description }: BookInfoPageProps) => {
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">도서정보</h2>

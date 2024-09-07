@@ -3,9 +3,9 @@
 import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import products from '@/data/products.json'; // Adjust path as necessary
-import Breadcrumb from '@/app/components/Breadcrumb';
 import { Product } from '@/types/productTypes';
 import { parseAndRoundPrice } from '@/lib/utils';
+import Breadcrumb from './components/breadcrumb';
 
 // 카테고리 한글명 변환 객체
 const categoryTranslation: { [key: string]: string } = {
@@ -27,7 +27,9 @@ const ProductDetailsPage = () => {
   const productInfoRef = useRef<HTMLDivElement>(null);
 
   // 비동기적으로 BookInfoPage 가져오기
-  const BookInfoPage = React.lazy(() => import('@/app/(default)/details/[id]/book-info/bookinfo'));
+  const BookInfoPage = React.lazy(
+    () => import('@/app/(default)/details/[id]/components/book-info'),
+  );
 
   useEffect(() => {
     if (params?.id) {
@@ -94,10 +96,10 @@ const ProductDetailsPage = () => {
           <div className="mt-4 mb-6">
             {product.discount > 0 ? (
               <>
-                <p className="text-lg font-semibold text-gray-900">
-                  정가: <span className="line-through text-red-500">{originalPrice}</span>
+                <p className="text-slate-400 line-through">
+                  정가: <span>{originalPrice}원</span>
                 </p>
-                <p className="text-lg font-semibold text-red-600">판매가: {discountedPrice}원</p>
+                <p className="text-lg font-semibold">판매가: {discountedPrice}원</p>
               </>
             ) : (
               <p className="text-lg font-semibold text-gray-900">품절</p>
