@@ -1,5 +1,3 @@
-'use client';
-
 import LoginForm from './components/login-form';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';

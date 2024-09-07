@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import StepIndicator from './component/step-indicator';
