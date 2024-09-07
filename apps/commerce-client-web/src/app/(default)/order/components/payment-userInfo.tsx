@@ -3,10 +3,18 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-const PaymentUserInfo: React.FC<{
-  user: any;
+interface UserType {
+  name: string;
+  phnum: string;
+  email: string;
+}
+
+interface PaymentUserInfoProps {
+  user: UserType;
   onUserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ user, onUserChange }) => {
+}
+
+const PaymentUserInfo: React.FC<PaymentUserInfoProps> = ({ user, onUserChange }) => {
   return (
     <Card className="w-full">
       <CardHeader>

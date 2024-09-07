@@ -5,10 +5,21 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 
-const PaymentShippingInfo: React.FC<{
-  order: any;
+interface OrderType {
+  name: string;
+  phnum: string;
+  address: string;
+  detailAddress: string;
+  memo: string;
+}
+
+
+interface PaymentShippingInfoProps {
+  order: OrderType;
   onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}> = ({ order, onOrderChange }) => {
+}
+
+const PaymentShippingInfo: React.FC<PaymentShippingInfoProps> = ({ order, onOrderChange }) => {
   return (
     <Card className="w-full">
       <CardHeader>

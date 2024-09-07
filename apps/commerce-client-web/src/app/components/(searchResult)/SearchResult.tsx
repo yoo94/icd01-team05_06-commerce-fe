@@ -2,10 +2,10 @@
 import React from 'react';
 import ProductCard from '@/app/components/(searchResult)/productCard';
 import { Product, SearchResultProps } from '@/types/productTypes';
-import useCartStore from '@/stores/useCartStore'; // 인터페이스를 가져오기
+import usecartstore from '@/stores/usecartstore'; // 인터페이스를 가져오기
 
 function SearchResult({ products, onBuyNow }: SearchResultProps) {
-  const { addProduct } = useCartStore();
+  const { addProduct } = usecartstore();
   return (
     <div className="space-y-4">
       {products.map((product: Product) => (

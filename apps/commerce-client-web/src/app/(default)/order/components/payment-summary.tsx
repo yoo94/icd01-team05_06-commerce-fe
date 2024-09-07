@@ -1,11 +1,18 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { CartItem } from '@/types/cartTypes';
+import { CartItem } from '@/types/carttypes';
 
-const PaymentSummary: React.FC<{ products: CartItem[] }> = ({ products }) => {
+interface PaymentSummaryProps {
+  products: CartItem[];
+  shippingCost?: number; // 배송비를 선택적 프롭스로 추가
+}
+
+const PaymentSummary: React.FC<PaymentSummaryProps> = ({ products, shippingCost = 0 }) => {
   const totalPrice = products
-    .reduce((acc, product) => acc + parseInt(product.price) * product.selectNum, 0)
+    .reduce((acc, product) => acc + Number(product.price) * product.selectNum, 0)
     .toLocaleString();
+
+  const totalAmount = (Number(totalPrice.replace(/,/g, '')) + shippingCost).toLocaleString();
 
   return (
     <Card className="w-full">
@@ -23,7 +30,7 @@ const PaymentSummary: React.FC<{ products: CartItem[] }> = ({ products }) => {
         </div>
         <div className="mt-4 flex justify-between font-bold">
           <p>총 주문금액</p>
-          <p>{totalPrice}원</p>
+          <p>{totalAmount}원</p>
         </div>
       </CardContent>
     </Card>

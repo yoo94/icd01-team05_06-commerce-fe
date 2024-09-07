@@ -3,16 +3,17 @@ import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CartItem as CartItemType } from '@/types/cartTypes';
+import { CartItem as CartItemType } from '@/types/carttypes';
 import { Checkbox } from '@/components/ui/checkbox';
-import useCartStore from '@/stores/useCartStore';
+import usecartstore from '@/stores/usecartstore';
 
 interface CartItemProps {
   item: CartItemType;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  const { removeProduct, updateProductQuantity, updateProductSelection } = useCartStore();
+  const { removeProduct, updateProductQuantity, updateProductSelection } = usecartstore();
+  const totalPrice = (parseInt(String(item.price)) * item.selectNum).toLocaleString();
   return (
     <TableRow className="hover:bg-gray-50">
       <TableCell className="text-center">
@@ -34,9 +35,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           className="w-20 rounded border text-center"
         />
       </TableCell>
-      <TableCell className="text-left font-bold">
-        {(parseInt(item.price) * item.selectNum).toLocaleString()}원
-      </TableCell>
+      <TableCell className="text-left font-bold">{totalPrice}원</TableCell>
       <TableCell className="text-left">{item.shippingInfo || '무료'}</TableCell>
       <TableCell className="text-left">
         <Button

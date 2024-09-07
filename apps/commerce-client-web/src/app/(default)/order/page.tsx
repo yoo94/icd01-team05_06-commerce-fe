@@ -7,8 +7,8 @@ import OrderShippingInfo from './components/payment-shippinginfo';
 import OrderPaymentMethod from './components/payment-method';
 import PaymentAgreement from './components/payment-agreement';
 import PaymentUserInfo from './components/payment-userInfo';
-import useCartStore from '@/stores/useCartStore';
-import { CartItem } from '@/types/cartTypes'; // CartItem 타입 임포트
+import usecartstore from '@/stores/usecartstore';
+import { CartItem } from '@/types/carttypes'; // CartItem 타입 임포트
 
 const mockUser = {
   name: '유재석',
@@ -25,7 +25,7 @@ const mockOrder = {
 };
 
 const PaymentPage: React.FC = () => {
-  const { getSelectedProduct } = useCartStore();
+  const { getSelectedProduct } = usecartstore();
   const [products, setProducts] = useState<CartItem[]>([]); // 제네릭 타입 명시적으로 지정
   const [user, setUser] = useState(mockUser);
   const [order, setOrder] = useState(mockOrder);

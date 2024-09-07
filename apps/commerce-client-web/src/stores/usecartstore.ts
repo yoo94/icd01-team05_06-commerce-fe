@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product } from '@/types/productTypes';
-import { CartItem } from '@/types/cartTypes';
+import { CartItem } from '@/types/carttypes';
 
 export interface CartState {
   items: CartItem[];
@@ -11,10 +11,10 @@ export interface CartState {
   updateProductQuantity: (id: number, selectNum: number) => void;
   updateProductSelection: (id: number, selected: boolean) => void;
   toggleAllProducts: (selected: boolean) => void;
-  getSelectedProduct: () => CartItem[]; // 반환 타입을 명확히 지정
+  getSelectedProduct: () => CartItem[];
 }
 
-const useCartStore = create<CartState>()(
+const usecartstore = create<CartState>()(
   persist(
     (
       set: (partial: Partial<CartState> | ((state: CartState) => Partial<CartState>)) => void,
@@ -77,4 +77,4 @@ const useCartStore = create<CartState>()(
   ),
 );
 
-export default useCartStore;
+export default usecartstore;

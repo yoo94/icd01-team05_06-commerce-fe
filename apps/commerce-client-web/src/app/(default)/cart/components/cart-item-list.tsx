@@ -2,16 +2,16 @@ import React from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import useCartStore from '@/stores/useCartStore';
+import usecartstore from '@/stores/usecartstore';
 import CartItem from './cart-item';
 
 const CartItemList: React.FC = ({}) => {
-  const { items, removeAllProduct, toggleAllProducts } = useCartStore();
+  const { items, removeAllProduct, toggleAllProducts } = usecartstore();
   const allSelected = items.every((item) => item.selected);
 
   return (
     <div className="overflow-x-auto">
-      <Button onClick={() => removeAllProduct()}>전체삭제</Button>
+      <Button onClick={removeAllProduct}>전체삭제</Button>
       <Table className="min-w-full divide-y divide-gray-200">
         <TableHeader>
           <TableRow>
