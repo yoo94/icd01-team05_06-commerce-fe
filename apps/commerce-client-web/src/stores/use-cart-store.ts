@@ -14,7 +14,7 @@ export interface CartState {
   getSelectedProduct: () => CartItem[];
 }
 
-const usecartstore = create<CartState>()(
+const useCartStore = create<CartState>()(
   persist(
     (
       set: (partial: Partial<CartState> | ((state: CartState) => Partial<CartState>)) => void,
@@ -77,4 +77,4 @@ const usecartstore = create<CartState>()(
   ),
 );
 
-export default usecartstore;
+export default useCartStore;

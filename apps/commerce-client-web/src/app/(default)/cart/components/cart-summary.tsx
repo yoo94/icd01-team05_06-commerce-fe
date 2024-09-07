@@ -1,13 +1,8 @@
 import React from 'react';
-import { CartItem } from '@/types/carttypes';
-import usecartstore from '@/stores/usecartstore';
+import useCartStore from '@/stores/use-cart-store';
 
-interface CartSummaryProps {
-  items: CartItem[];
-}
-
-const CartSummary: React.FC<CartSummaryProps> = () => {
-  const { items } = usecartstore();
+const CartSummary = () => {
+  const { items } = useCartStore();
   const totalPrice = items
     .filter((item) => item.selected)
     .reduce((acc, item) => acc + parseInt(item.price) * item.selectNum, 0)

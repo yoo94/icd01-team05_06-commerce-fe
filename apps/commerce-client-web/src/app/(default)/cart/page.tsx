@@ -4,10 +4,10 @@ import CartItemList from './components/cart-item-list';
 import CartSummary from './components/cart-summary';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import usecartstore from '@/stores/usecartstore';
+import useCartStore from '@/stores/use-cart-store';
 
-const CartPage: React.FC = () => {
-  const { items } = usecartstore();
+const CartPage = () => {
+  const { items } = useCartStore();
 
   return (
     <div className="container mx-auto p-6">

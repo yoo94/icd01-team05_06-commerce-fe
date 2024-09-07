@@ -14,7 +14,7 @@ interface PaymentUserInfoProps {
   onUserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PaymentUserInfo: React.FC<PaymentUserInfoProps> = ({ user, onUserChange }) => {
+const PaymentUserInfo = ({ user, onUserChange }:PaymentUserInfoProps) => {
   return (
     <Card className="w-full">
       <CardHeader>

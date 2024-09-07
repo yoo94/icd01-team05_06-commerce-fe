@@ -11,9 +11,10 @@ interface CartItemProps {
   item: CartItemType;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item }) => {
+const CartItem = ({ item }: CartItemProps) => {
   const { removeProduct, updateProductQuantity, updateProductSelection } = usecartstore();
   const totalPrice = (parseInt(String(item.price)) * item.selectNum).toLocaleString();
+
   return (
     <TableRow className="hover:bg-gray-50">
       <TableCell className="text-center">

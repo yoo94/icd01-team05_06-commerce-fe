@@ -18,8 +18,7 @@ interface PaymentShippingInfoProps {
   order: OrderType;
   onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
-
-const PaymentShippingInfo: React.FC<PaymentShippingInfoProps> = ({ order, onOrderChange }) => {
+const PaymentShippingInfo = ({ order, onOrderChange } : PaymentShippingInfoProps) => {
   return (
     <Card className="w-full">
       <CardHeader>

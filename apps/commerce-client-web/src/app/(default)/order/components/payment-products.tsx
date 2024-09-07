@@ -6,7 +6,7 @@ interface PaymentProductsProps {
   products: CartItem[];
 }
 
-const PaymentProducts: React.FC<PaymentProductsProps> = ({ products }) => {
+const PaymentProducts = ({ products }: PaymentProductsProps) => {
   return (
     <Card className="w-full">
       <CardHeader>

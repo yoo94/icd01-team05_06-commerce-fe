@@ -7,7 +7,7 @@ interface PaymentSummaryProps {
   shippingCost?: number; // 배송비를 선택적 프롭스로 추가
 }
 
-const PaymentSummary: React.FC<PaymentSummaryProps> = ({ products, shippingCost = 0 }) => {
+const PaymentSummary = ({ products, shippingCost = 0 } : PaymentSummaryProps) => {
   const totalPrice = products
     .reduce((acc, product) => acc + Number(product.price) * product.selectNum, 0)
     .toLocaleString();

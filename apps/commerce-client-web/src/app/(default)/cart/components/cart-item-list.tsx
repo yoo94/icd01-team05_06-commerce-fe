@@ -2,11 +2,11 @@ import React from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import usecartstore from '@/stores/usecartstore';
+import useCartStore from '@/stores/use-cart-store';
 import CartItem from './cart-item';
 
-const CartItemList: React.FC = ({}) => {
-  const { items, removeAllProduct, toggleAllProducts } = usecartstore();
+const CartItemList = ({}) => {
+  const { items, removeAllProduct, toggleAllProducts } = useCartStore();
   const allSelected = items.every((item) => item.selected);
 
   return (

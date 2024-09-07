@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ShoppingCart } from 'lucide-react';
 
-const HeaderButton: React.FC = () => {
+const HeaderButton = () => {
   const isLogin = false; // 현재는 로그인 상태를 false로 설정
   return (
     <>

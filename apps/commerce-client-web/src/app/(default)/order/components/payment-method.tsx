@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
-const PaymentMethod: React.FC = () => {
+const PaymentMethod = () => {
   return (
     <Card className="w-full">
       <CardHeader>

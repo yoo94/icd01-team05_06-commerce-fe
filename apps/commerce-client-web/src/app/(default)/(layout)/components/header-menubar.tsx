@@ -89,7 +89,7 @@ const isMenuItemWithSubMenu = (menu: MenuItem): menu is MenuItemWithSubMenu => {
   return 'subMenu' in menu;
 };
 
-const HeaderMenubar: React.FC = () => {
+const HeaderMenubar = () => {
   return (
     <Menubar className="flex space-x-6 border-0">
       {mock.map((menu, index) => (
