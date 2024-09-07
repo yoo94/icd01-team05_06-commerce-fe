@@ -13,12 +13,11 @@ interface OrderType {
   memo: string;
 }
 
-
 interface PaymentShippingInfoProps {
   order: OrderType;
   onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
-const PaymentShippingInfo = ({ order, onOrderChange } : PaymentShippingInfoProps) => {
+const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps) => {
   return (
     <Card className="w-full">
       <CardHeader>

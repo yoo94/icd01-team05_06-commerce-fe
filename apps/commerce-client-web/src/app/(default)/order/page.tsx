@@ -26,7 +26,7 @@ const mockOrder = {
 
 const PaymentPage = () => {
   const { getSelectedProduct } = useCartStore();
-  const [products, setProducts] = useState<CartItem[]>([]); // 제네릭 타입 명시적으로 지정
+  const [products, setProducts] = useState<CartItem[]>([]);
   const [user, setUser] = useState(mockUser);
   const [order, setOrder] = useState(mockOrder);
 

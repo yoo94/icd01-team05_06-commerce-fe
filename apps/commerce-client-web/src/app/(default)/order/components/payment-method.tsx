@@ -15,8 +15,8 @@ const PaymentMethod = () => {
           <input type="radio" id="bankTransfer" name="paymentMethod" className="mr-2" />
           <Label htmlFor="bankTransfer">무통장입금</Label>
         </div>
-        <div>
-          <Select className="w-full">
+        <div className="w-full">
+          <Select>
             <option>은행을 선택하세요</option>
             <option>국민은행</option>
             <option>신한은행</option>
