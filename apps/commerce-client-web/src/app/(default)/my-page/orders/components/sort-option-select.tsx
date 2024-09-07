@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-export default function SortOptionSelect() {
+const SortOptionSelect = () => {
   return (
     <Select defaultValue="latest">
       <SelectTrigger className="w-[120px]">
@@ -21,4 +21,6 @@ export default function SortOptionSelect() {
       </SelectContent>
     </Select>
   );
-}
+};
+
+export default SortOptionSelect;

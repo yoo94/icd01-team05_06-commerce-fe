@@ -2,7 +2,7 @@ import SortOptionSelect from './sort-option-select';
 import OrderStatusSelect from './order-status-select';
 import OrderTable from './order-table';
 
-export default function OrderInfo() {
+const OrderInfo = () => {
   return (
     <div className="flex flex-col gap-2 text-sm">
       <div className="flex justify-end gap-4">
@@ -24,4 +24,6 @@ export default function OrderInfo() {
       </div>
     </div>
   );
-}
+};
+
+export default OrderInfo;

@@ -10,7 +10,7 @@ const periodOptions = [
   { value: 'last-six-months', label: '6개월' },
 ];
 
-export default function PeriodSelect() {
+const PeriodSelect = () => {
   const [period, setPeriod] = useState('last-week');
 
   const handleChange = useCallback((value: string) => {
@@ -25,4 +25,6 @@ export default function PeriodSelect() {
       onChange={handleChange}
     />
   );
-}
+};
+
+export default PeriodSelect;

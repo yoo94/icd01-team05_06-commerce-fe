@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-export default function SearchOptionSelect() {
+const SearchOptionSelect = () => {
   return (
     <Select defaultValue="all">
       <SelectTrigger className="w-[180px]">
@@ -24,4 +24,6 @@ export default function SearchOptionSelect() {
       </SelectContent>
     </Select>
   );
-}
+};
+
+export default SearchOptionSelect;

@@ -8,14 +8,14 @@ interface Option {
   label: string;
 }
 
-interface Props {
+interface ButtonRadioGroupProps {
   name: string;
   options: Option[];
   value: string;
   onChange?: (value: string) => void;
 }
 
-const ButtonRadioGroup: React.FC<Props> = ({ name, options, value, onChange }) => {
+const ButtonRadioGroup = ({ name, options, value, onChange }: ButtonRadioGroupProps) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange?.(e.target.value);

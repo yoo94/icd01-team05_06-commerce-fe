@@ -1,15 +1,17 @@
 import { ReactNode } from 'react';
 import SideBar from './components/side-bar';
 
-interface Props {
+interface LayoutProps {
   children: ReactNode;
 }
 
-export default function Layout({ children }: Props) {
+const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex gap-12">
       <SideBar />
       <div className="flex-1">{children}</div>
     </div>
   );
-}
+};
+
+export default Layout;

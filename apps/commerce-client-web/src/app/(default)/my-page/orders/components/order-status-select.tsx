@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-export default function OrderStatusSelect() {
+const OrderStatusSelect = () => {
   return (
     <Select defaultValue="all">
       <SelectTrigger className="w-[120px]">
@@ -25,4 +25,6 @@ export default function OrderStatusSelect() {
       </SelectContent>
     </Select>
   );
-}
+};
+
+export default OrderStatusSelect;

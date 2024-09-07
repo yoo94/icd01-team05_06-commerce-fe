@@ -4,7 +4,7 @@ import DatePicker from '@/components/common/date-picker';
 import PeriodSelect from './period-select';
 import SearchOptionSelect from './search-option-select';
 
-export default function SearchBox() {
+const SearchBox = () => {
   return (
     <div className="border-primary flex flex-col gap-3 rounded-lg border-2 p-4">
       <div>
@@ -24,4 +24,6 @@ export default function SearchBox() {
       </div>
     </div>
   );
-}
+};
+
+export default SearchBox;

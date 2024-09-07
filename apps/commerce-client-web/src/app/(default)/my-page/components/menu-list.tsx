@@ -1,9 +1,9 @@
-interface Props {
+interface MenuListProps {
   title: string;
   items: string[];
 }
 
-export default function MenuList({ title, items }: Props) {
+const MenuList = ({ title, items }: MenuListProps) => {
   return (
     <div className="flex flex-col gap-2">
       <span>{title}</span>
@@ -14,4 +14,6 @@ export default function MenuList({ title, items }: Props) {
       </ul>
     </div>
   );
-}
+};
+
+export default MenuList;

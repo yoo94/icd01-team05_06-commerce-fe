@@ -1,7 +1,7 @@
 import SearchBox from './components/search-box';
 import OrderInfo from './components/order-info';
 
-export default function Page() {
+const Page = () => {
   return (
     <div className="font-nanumeneo flex flex-col gap-4">
       <header>주문내역/배송조회</header>
@@ -12,4 +12,6 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};
+
+export default Page;

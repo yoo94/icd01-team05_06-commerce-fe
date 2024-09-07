@@ -9,15 +9,15 @@ import {
 } from '@/components/ui/table';
 import orders from '@/data/orders.json';
 
-function formatDate(date: string) {
+const formatDate = (date: string) => {
   return format(date, 'yyyy.MM.dd');
-}
+};
 
-function formatTitle(items: { book: { title: string } }[]) {
+const formatTitle = (items: { book: { title: string } }[]) => {
   return items.map((item) => item.book.title).join(', ');
-}
+};
 
-export default function OrderTable() {
+const OrderTable = () => {
   return (
     <Table>
       <TableHeader>
@@ -46,4 +46,6 @@ export default function OrderTable() {
       </TableBody>
     </Table>
   );
-}
+};
+
+export default OrderTable;
