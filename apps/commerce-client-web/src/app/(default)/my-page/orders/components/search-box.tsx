@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PeriodSelect from '@/app/(default)/my-page/orders/components/period-select';
-import DatePicker from '@/components/date-picker';
+import DatePicker from '@/components/common/date-picker';
 import SearchOptionSelect from '@/app/(default)/my-page/orders/components/search-option-select';
 
 export default function SearchBox() {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border-2 border-primary p-4">
+    <div className="border-primary flex flex-col gap-3 rounded-lg border-2 p-4">
       <div>
         <div className="flex items-center gap-4">
           <PeriodSelect />
