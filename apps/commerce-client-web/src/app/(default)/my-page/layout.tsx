@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import SideBar from '@/app/(default)/my-page/orders/components/side-bar';
+import SideBar from './components/side-bar';
 
 interface Props {
   children: ReactNode;

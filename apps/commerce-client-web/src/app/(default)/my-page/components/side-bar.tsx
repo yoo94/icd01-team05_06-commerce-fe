@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import MenuList from '@/app/(default)/my-page/orders/components/menu-list';
+import MenuList from './menu-list';
 
 const orderListItems = ['주문내역/배송조회', '반품/교환신청 및 조회', '취소 주문내역'];
 const userInfoItems = ['배송주소록', '회원정보관리', '마케팅 수신 및 정보 제공 동의 관리'];
 
 export default function SideBar() {
   return (
-    <aside className="flex min-h-[800px] w-[200px] flex-col gap-6 rounded-md border p-4 font-nanumeneo text-sm">
+    <aside className="font-nanumeneo flex min-h-[800px] w-[200px] flex-col gap-6 rounded-md border p-4 text-sm">
       <MenuList title="주문내역" items={orderListItems} />
       <Separator />
       <MenuList title="회원정보" items={userInfoItems} />

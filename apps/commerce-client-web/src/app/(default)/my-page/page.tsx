@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function MyPage() {
+export default function Page() {
   redirect('/my-page/orders');
 }

@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import {
   Table,
   TableBody,
@@ -7,7 +8,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import orders from '@/data/orders.json';
-import { format } from 'date-fns';
 
 function formatDate(date: string) {
   return format(date, 'yyyy.MM.dd');
