@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CartItem as CartItemType } from '@/types/carttypes';
 import { Checkbox } from '@/components/ui/checkbox';
-import usecartstore from '@/stores/usecartstore';
+import usecartstore from '@/stores/use-cart-store';
 
 interface CartItemProps {
   item: CartItemType;
