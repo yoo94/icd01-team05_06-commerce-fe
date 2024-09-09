@@ -19,6 +19,7 @@ export type Product = {
       name: string;
     };
   };
+  reviews?: string[];
 };
 
 // SearchResultProps 타입 정의

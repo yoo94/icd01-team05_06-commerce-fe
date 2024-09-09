@@ -1,20 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import FilterComponent from '@/app/(default)/search/components/(filters)/FilterComponent';
 import SearchResult from '@/app/(default)/search/components/(searchResult)/SearchResult';
 import productsData from '@/data/products.json';
 
-const SearchPage = () => {
-  const searchParams = useSearchParams();
+interface SearchPageProps {
+  searchParams: {
+    SearchWord?: string;
+    price?: string;
+    publisher?: string;
+    category?: string;
+  };
+}
+
+const SearchPage = ({ searchParams }: SearchPageProps) => {
   const [filteredProducts, setFilteredProducts] = useState(productsData);
 
   useEffect(() => {
-    const searchWord = searchParams.get('SearchWord') || '';
-    const priceRange = searchParams.get('price') || '';
-    const selectedPublisher = searchParams.get('publisher') || '';
-    const selectedCategory = searchParams.get('category') || '';
+    const searchWord = searchParams.SearchWord ?? '';
+    const priceRange = searchParams.price ?? '';
+    const selectedPublisher = searchParams.publisher ?? '';
+    const selectedCategory = searchParams.category ?? '';
 
     let filtered = productsData;
 
