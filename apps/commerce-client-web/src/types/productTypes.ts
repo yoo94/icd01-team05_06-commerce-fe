@@ -20,6 +20,7 @@ export type Product = {
     };
   };
   reviews?: string[];
+  imgSrc?: string;
 };
 
 // SearchResultProps 타입 정의
