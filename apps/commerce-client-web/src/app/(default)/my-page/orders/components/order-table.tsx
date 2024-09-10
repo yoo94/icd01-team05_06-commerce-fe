@@ -7,17 +7,34 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import orders from '@/data/orders.json';
 
-const formatDate = (date: string) => {
+interface Order {
+  id: number;
+  orderDate: string;
+  orderItems: {
+    book: {
+      title: string;
+    };
+  }[];
+  finalPrice: number;
+  status: string;
+  user: {
+    username: string;
+  };
+}
+
+function formatDate(date: string) {
   return format(date, 'yyyy.MM.dd');
-};
+}
 
-const formatTitle = (items: { book: { title: string } }[]) => {
+function formatTitle(items: { book: { title: string } }[]) {
   return items.map((item) => item.book.title).join(', ');
-};
+}
 
-const OrderTable = () => {
+const OrderTable = async () => {
+  const res = await fetch('https://example.com/orders');
+  const orders: Order[] = await res.json();
+
   return (
     <Table>
       <TableHeader>
