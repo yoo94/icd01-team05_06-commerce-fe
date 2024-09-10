@@ -1,10 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { BreadCrumbProps } from '@/types/breadCrumbTypes'; // 인터페이스를 가져오기
+
+interface BreadCrumbProps {
+  items: {
+    href: string;
+    label: string;
+  }[];
+}
 
 function Breadcrumb({ items }: BreadCrumbProps) {
   return (
-    <nav className="text-sm text-gray-500 mb-4">
+    <nav className="mb-4 text-sm text-gray-500">
       {items.map((item, index) => (
         <span key={index}>
           <Link href={item.href} className="hover:underline">
