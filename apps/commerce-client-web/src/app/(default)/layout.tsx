@@ -20,10 +20,11 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <main className="container justify-center p-4 xs:p-6 md:p-8 lg:p-12 xl:p-[100px]">
+      <main className="xs:p-6 container justify-center p-4 md:p-8 lg:p-12 xl:p-[100px]">
         {children}
       </main>
       <Footer />
+      <div id="global-modal"></div>
     </>
   );
 }
