@@ -16,13 +16,19 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/proxy/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API}/:path*`,
-      },
-    ];
+  experimental: {
+    instrumentationHook: true,
+  },
+  webpack: (config, { isServer }) => {
+    const name = isServer ? 'msw/browser' : 'msw/node';
+
+    if (Array.isArray(config.resolve.alias)) {
+      config.resolve.alias.push({ name, alias: false });
+    } else {
+      config.resolve.alias[name] = false;
+    }
+
+    return config;
   },
 };
 

@@ -1,6 +1,6 @@
 import SliderBanner from '@/app/(default)/(home)/components/slidebanner';
 
-export const mockImages = [
+const mockImages = [
   { src: '/mockbannerimage/book1.png', alt: 'Banner 1' },
   { src: '/mockbannerimage/book2.png', alt: 'Banner 2' },
 ];
