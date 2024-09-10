@@ -2,9 +2,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ShoppingCart } from 'lucide-react';
 import useAuthStore from '@/stores/use-auth-store';
+import { useSession } from 'next-auth/react';
 
 const HeaderButton = () => {
-  const { isAuthenticated, logout } = useAuthStore();
+  const { data: session } = useSession();
+  const { logout } = useAuthStore();
+
+  const isAuthenticated = !!session;
 
   return (
     <>

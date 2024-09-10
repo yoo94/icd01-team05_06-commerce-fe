@@ -3,14 +3,29 @@
  * name, email, image 외에 추가 속성을 정의
  */
 
-import { DefaultSession } from 'next-auth';
+import { DefaultUser } from 'next-auth';
+import { UserInfo } from '@/types/auth';
 
 declare module 'next-auth' {
-  interface Session {
+  interface Session extends DefaultSession {
+    user: UserInfo; // Use the UserInfo interface for the user property
     accessToken: string;
-    user: {
-      id: string;
-      accessToken: string;
-    } & DefaultSession['user'];
+    error?: 'RefreshTokenError';
+  }
+
+  interface ExtendedUser extends DefaultUser {
+    accessToken: string;
+    refreshToken: string;
+    expiredAt: number;
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: number;
+    expiredAt: number;
+    error?: 'RefreshTokenError';
   }
 }

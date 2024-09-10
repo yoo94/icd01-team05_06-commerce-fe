@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import { User } from '@/types/auth';
+import { UserInfo } from '@/types/auth-types';
 
 interface UserState {
   isAuthenticated: boolean;
-  userDetails: User | null;
-  setUserDetails: (details: User) => void;
+  userDetails: UserInfo | null;
+  setUserDetails: (details: UserInfo) => void;
   clearUserDetails: () => void;
 }
 
