@@ -1,12 +1,16 @@
 import NextAuth, { ExtendedUser, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginResponse } from '@/types/auth-types'; // Import the interfaces from auth.ts
-import { api } from '@/lib/api';
+import { LoginResponse } from '@/types/auth-types';
+import ky from 'ky';
 
 type ApiError = {
   message: string;
   code?: number;
 };
+
+const apiClient = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_API, // Use your API URL here
+});
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -21,9 +25,10 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, _req) {
+      async authorize(credentials) {
         try {
-          const result = await api
+          // Step 1: Authenticate and retrieve JWT tokens
+          const result = await apiClient
             .post('login', {
               json: credentials,
             })
@@ -34,30 +39,54 @@ export const authOptions: NextAuthOptions = {
             throw new Error(result.error?.message || 'Failed to login');
           }
 
-          const { memberInfo, tokenInfo } = result.data;
+          const { tokenInfo } = result.data;
 
-          // Check for access token
           if (!tokenInfo.accessToken) {
             console.error('No access token returned from the server');
             throw new Error('No access token returned from the server');
           }
 
-          // TODO : 서버에서 expiresIn을 반환하지 않는 경우, 기본값으로 1시간 설정
-          if (!tokenInfo.expiresIn) {
-            tokenInfo.expiresIn = 60 * 60; // 1 hour
+          const currentTime = Date.now();
+          const accessTokenExpiresIn =
+            tokenInfo.accessTokenExpiresIn - currentTime > 0
+              ? tokenInfo.accessTokenExpiresIn - currentTime
+              : 0;
+          const refreshTokenExpiresIn =
+            tokenInfo.refreshTokenExpiresIn - currentTime > 0
+              ? tokenInfo.refreshTokenExpiresIn - currentTime
+              : 0;
+
+          // Step 2: Fetch user information using the access token
+          const userInfoResponse = await apiClient
+            .get('info', {
+              headers: {
+                Authorization: `Bearer ${tokenInfo.accessToken}`,
+              },
+            })
+            .json<{
+              success: boolean;
+              data: { id: number; name: string; email: string };
+              error: ApiError | null;
+            }>();
+
+          if (!userInfoResponse.success || !userInfoResponse.data) {
+            console.error(
+              'Failed to fetch user information:',
+              userInfoResponse.error?.message || 'Unknown error',
+            );
+            throw new Error(userInfoResponse.error?.message || 'Failed to fetch user information');
           }
 
-          // Calculate expiresAt using expiresIn
-          const expiredAt = Date.now() + tokenInfo.expiresIn * 1000; // Convert expiresIn to milliseconds
+          const { id, name, email } = userInfoResponse.data;
 
-          // Return an ExtendedUser object
-          const user = {
-            id: memberInfo.id.toString(),
-            name: memberInfo.name,
-            email: memberInfo.email,
+          const user: ExtendedUser = {
+            id: id.toString(),
+            name,
+            email,
             accessToken: tokenInfo.accessToken,
             refreshToken: tokenInfo.refreshToken,
-            expiredAt: expiredAt,
+            accessTokenExpiresIn,
+            refreshTokenExpiresIn,
           };
 
           return user;
@@ -73,18 +102,20 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // If the user is provided (first-time login), save the access and refresh tokens
       if (user) {
         const extendedUser = user as ExtendedUser;
-        token.accessToken = extendedUser.accessToken;
-        token.refreshToken = extendedUser.refreshToken;
-        token.expiredAt = extendedUser.expiredAt;
-        token.error = undefined;
 
-        return token;
+        return {
+          ...token,
+          ...extendedUser,
+          error: undefined,
+        };
       }
 
-      if (typeof token.expiresAt === 'number' && Date.now() < token.expiresAt) {
+      if (
+        typeof token.accessTokenExpiresIn === 'number' &&
+        Date.now() < token.accessTokenExpiresIn
+      ) {
         return token;
       }
 
@@ -93,7 +124,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       try {
-        const refreshData = await api
+        const refreshData = await apiClient
           .post('refresh', {
             json: { refreshToken: token.refreshToken },
           })
@@ -109,20 +140,29 @@ export const authOptions: NextAuthOptions = {
 
         const { accessToken } = refreshData.data;
 
-        token.accessToken = accessToken;
-        token.expiredAt = Date.now() + 60 * 60 * 1000; // 1 hour
-        token.error = undefined;
-
-        return token;
+        return {
+          ...token,
+          accessToken,
+          accessTokenExpiresIn: Date.now() + 60 * 60 * 1000,
+          error: undefined,
+        };
       } catch (error) {
         console.error('Error refreshing access token', error);
-        token.error = 'RefreshTokenError'; // Correctly type the error
-        return token;
+        return {
+          ...token,
+          error: 'RefreshTokenError',
+        };
       }
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       session.error = token.error;
+      session.user = {
+        id: token.id,
+        name: token.name,
+        email: token.email,
+      };
       return session;
     },
   },

@@ -10,13 +10,15 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: UserInfo; // Use the UserInfo interface for the user property
     accessToken: string;
+    refreshToken: string;
     error?: 'RefreshTokenError';
   }
 
   interface ExtendedUser extends DefaultUser {
     accessToken: string;
     refreshToken: string;
-    expiredAt: number;
+    accessTokenExpiresIn: number;
+    refreshTokenExpiresIn: number;
   }
 }
 
@@ -24,8 +26,8 @@ declare module 'next-auth/jwt' {
   interface JWT {
     accessToken: string;
     refreshToken: string;
-    expiresIn: number;
-    expiredAt: number;
+    accessTokenExpiresIn: number;
+    refreshTokenExpiresIn: number;
     error?: 'RefreshTokenError';
   }
 }

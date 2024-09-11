@@ -1,19 +1,19 @@
+interface TokenInfo {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresIn: number;
+  refreshTokenExpiresIn: number;
+}
+
+interface LoginResponse {
+  tokenInfo: TokenInfo;
+}
+
 interface UserInfo {
   id: number;
   email: string;
   name: string;
-  phone: string;
+  phone: number;
 }
 
-interface TokenInfo {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-}
-
-interface LoginResponse {
-  memberInfo: UserInfo;
-  tokenInfo: TokenInfo;
-}
-
-export type { UserInfo, TokenInfo, LoginResponse };
+export type { TokenInfo, LoginResponse, UserInfo };

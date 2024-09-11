@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
 import { useUserStore } from './use-user-store';
-import { api } from '@/lib/api';
+import api from '@/lib/api';
 import { signIn, signOut } from 'next-auth/react';
 
 export interface SignupFormData {
