@@ -16,6 +16,20 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    instrumentationHook: true,
+  },
+  webpack: (config, { isServer }) => {
+    const name = isServer ? 'msw/browser' : 'msw/node';
+
+    if (Array.isArray(config.resolve.alias)) {
+      config.resolve.alias.push({ name, alias: false });
+    } else {
+      config.resolve.alias[name] = false;
+    }
+
+    return config;
+  },
 };
 
 export default nextConfig;

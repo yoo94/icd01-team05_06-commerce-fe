@@ -12,7 +12,7 @@ interface BreadCrumbProps {
 
 const Breadcrumb = ({ items }: BreadCrumbProps) => {
   return (
-    <nav className="text-sm text-gray-500 mb-4">
+    <nav className="mb-4 text-sm text-gray-500">
       {items.map((item, index) => (
         <span key={index}>
           <Link href={item.href} className="hover:underline">

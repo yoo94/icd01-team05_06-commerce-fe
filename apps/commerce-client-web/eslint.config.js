@@ -1,8 +1,10 @@
 import nextPlugin from '@next/eslint-plugin-next';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 import rootConfig from '../../eslint.config.js';
 
 export default [
   ...rootConfig,
+  ...pluginQuery.configs['flat/recommended'],
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {

@@ -19,4 +19,6 @@ export type Product = {
       name: string;
     };
   };
+  reviews?: string[];
+  imgSrc?: string;
 };

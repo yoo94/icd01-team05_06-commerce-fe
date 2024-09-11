@@ -75,7 +75,7 @@ const ProductDetailsPage = () => {
     : null;
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="mx-auto max-w-5xl p-4">
       <Breadcrumb items={breadcrumbItems} />
 
       <div className="flex">
@@ -83,17 +83,17 @@ const ProductDetailsPage = () => {
           <img
             src={product.coverImage}
             alt={product.title}
-            className="w-full h-auto rounded-lg shadow-lg"
+            className="h-auto w-full rounded-lg shadow-lg"
           />
         </div>
 
         <div className="w-2/3 pl-6">
-          <h1 className="text-2xl font-semibold mb-2">{product.title}</h1>
+          <h1 className="mb-2 text-2xl font-semibold">{product.title}</h1>
           <p className="text-sm text-gray-600">
             {product.author} | {product.publisher} | {product.pubdate}
           </p>
 
-          <div className="mt-4 mb-6">
+          <div className="mb-6 mt-4">
             {product.discount > 0 ? (
               <>
                 <p className="text-slate-400 line-through">
@@ -106,30 +106,30 @@ const ProductDetailsPage = () => {
             )}
           </div>
 
-          <p className="text-gray-700 mb-4">{product.description}</p>
+          <p className="mb-4 text-gray-700">{product.description}</p>
         </div>
 
-        <div className="w-1/4 ml-6">
-          <div className="p-4 bg-gray-50 border rounded-lg shadow-sm">
-            <div className="flex items-center justify-between mb-4">
+        <div className="ml-6 w-1/4">
+          <div className="rounded-lg border bg-gray-50 p-4 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
               <button
-                className="text-lg px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-200"
+                className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
                 onClick={handleDecrease}
               >
                 -
               </button>
               <span className="text-lg">{quantity}</span>
               <button
-                className="text-lg px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-200"
+                className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
                 onClick={handleIncrease}
               >
                 +
               </button>
             </div>
-            <button className="w-full py-2 mb-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600">
+            <button className="mb-2 w-full rounded-lg bg-green-500 py-2 font-semibold text-white hover:bg-green-600">
               카트에 넣기
             </button>
-            <button className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">
+            <button className="w-full rounded-lg bg-blue-500 py-2 font-semibold text-white hover:bg-blue-600">
               바로구매
             </button>
           </div>
@@ -181,9 +181,9 @@ const ProductDetailsPage = () => {
         </div>
 
         <div ref={reviewsRef} className="mt-8">
-          <h2 className="text-xl font-semibold mb-2">리뷰/한줄평</h2>
+          <h2 className="mb-2 text-xl font-semibold">리뷰/한줄평</h2>
           <div>
-            {product.reviews?.length > 0 ? (
+            {product.reviews && product.reviews.length > 0 ? (
               product.reviews.map((review, index) => (
                 <p key={index} className="mb-2">
                   {review}
@@ -196,12 +196,12 @@ const ProductDetailsPage = () => {
         </div>
 
         <div ref={shippingRef} className="mt-8">
-          <h2 className="text-xl font-semibold mb-2">배송/반품/교환</h2>
+          <h2 className="mb-2 text-xl font-semibold">배송/반품/교환</h2>
           <div>배송/반품/교환 정보가 여기에 표시됩니다.</div>
         </div>
 
         <div ref={productInfoRef} className="mt-8">
-          <h2 className="text-xl font-semibold mb-2">품목정보</h2>
+          <h2 className="mb-2 text-xl font-semibold">품목정보</h2>
           <div>품목정보가 여기에 표시됩니다.</div>
         </div>
       </div>
