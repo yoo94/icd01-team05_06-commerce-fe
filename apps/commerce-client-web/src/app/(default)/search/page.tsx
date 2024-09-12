@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import FilterComponent from '@/app/(default)/search/components/(filters)/FilterComponent';
-import SearchResult from '@/app/(default)/search/components/(searchResult)/SearchResult';
+
 import productsData from '@/data/products.json';
+import FilterComponent from './components/(filters)/filter-component';
+import SearchResult from './components/(searchResult)/search-result';
 
 interface SearchPageProps {
   searchParams: {
@@ -65,13 +66,13 @@ const SearchPage = ({ searchParams }: SearchPageProps) => {
   return (
     <div className="flex">
       {/* Sidebar with filters */}
-      <div className="w-1/4 p-4">
+      <div className="hidden w-1/5 p-4 lg:block">
         <FilterComponent products={productsData} />
       </div>
 
       {/* Main content area */}
-      <div className="w-3/4 p-4">
-        <h1 className="mb-4 text-2xl font-bold">Product List</h1>
+      <div className="w-full p-4 lg:w-4/5">
+        <h1 className="mb-4 text-xl font-bold">상품 목록</h1>
 
         {/* Render the search results */}
         <SearchResult

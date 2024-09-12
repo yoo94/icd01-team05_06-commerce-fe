@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
-function PriceFilter() {
+const PriceFilter = () => {
   const router = useRouter();
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ function PriceFilter() {
   };
 
   return (
-    <AccordionItem value="price">
+    <AccordionItem value="price" className="text-base">
       <AccordionTrigger>가격</AccordionTrigger>
       <AccordionContent>
         <ul className="space-y-2">
@@ -84,6 +84,6 @@ function PriceFilter() {
       </AccordionContent>
     </AccordionItem>
   );
-}
+};
 
 export default PriceFilter;

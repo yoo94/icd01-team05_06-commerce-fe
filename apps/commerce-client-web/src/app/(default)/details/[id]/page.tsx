@@ -1,11 +1,12 @@
 'use client';
-
 import React, { useEffect, useState, useRef, Suspense } from 'react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import products from '@/data/products.json'; // Adjust path as necessary
 import { Product } from '@/types/productTypes';
 import { parseAndRoundPrice } from '@/lib/utils';
-import Breadcrumb from '@/app/(default)/search/components/Breadcrumb';
+import Breadcrumb from './components/breadcrumb';
+import { Button } from '@/components/ui/button';
 
 // 카테고리 한글명 변환 객체
 const categoryTranslation: { [key: string]: string } = {
@@ -27,7 +28,9 @@ const ProductDetailsPage = () => {
   const productInfoRef = useRef<HTMLDivElement>(null);
 
   // 비동기적으로 BookInfoPage 가져오기
-  const BookInfoPage = React.lazy(() => import('@/app/(default)/details/[id]/book-info/bookinfo'));
+  const BookInfoPage = React.lazy(
+    () => import('@/app/(default)/details/[id]/components/book-info'),
+  );
 
   useEffect(() => {
     if (params?.id) {
@@ -78,26 +81,19 @@ const ProductDetailsPage = () => {
 
       <div className="flex">
         <div className="w-1/3">
-          <img
-            src={product.coverImage}
-            alt={product.title}
-            className="h-auto w-full rounded-lg shadow-lg"
-          />
+          <Image src={product.coverImage} alt={product.title} width={300} height={400} />
         </div>
 
         <div className="w-2/3 pl-6">
-          <h1 className="mb-2 text-2xl font-semibold">{product.title}</h1>
-          <p className="text-sm text-gray-600">
-            {product.author} | {product.publisher} | {product.pubdate}
-          </p>
+          <h1 className="mb-2 text-xl font-semibold">{product.title}</h1>
 
           <div className="mb-6 mt-4">
             {product.discount > 0 ? (
               <>
-                <p className="text-lg font-semibold text-gray-900">
-                  정가: <span className="text-red-500 line-through">{originalPrice}</span>
+                <p className="text-slate-400 line-through">
+                  정가: <span>{originalPrice}원</span>
                 </p>
-                <p className="text-lg font-semibold text-red-600">판매가: {discountedPrice}원</p>
+                <p className="text-lg font-semibold">판매가: {discountedPrice}원</p>
               </>
             ) : (
               <p className="text-lg font-semibold text-gray-900">품절</p>
@@ -108,7 +104,7 @@ const ProductDetailsPage = () => {
         </div>
 
         <div className="ml-6 w-1/4">
-          <div className="rounded-lg border bg-gray-50 p-4 shadow-sm">
+          <div className="rounded-lg border p-4 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
               <button
                 className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
@@ -116,7 +112,7 @@ const ProductDetailsPage = () => {
               >
                 -
               </button>
-              <span className="text-lg">{quantity}</span>
+              <span>{quantity}</span>
               <button
                 className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
                 onClick={handleIncrease}
@@ -124,12 +120,10 @@ const ProductDetailsPage = () => {
                 +
               </button>
             </div>
-            <button className="mb-2 w-full rounded-lg bg-green-500 py-2 font-semibold text-white hover:bg-green-600">
-              카트에 넣기
-            </button>
-            <button className="w-full rounded-lg bg-blue-500 py-2 font-semibold text-white hover:bg-blue-600">
-              바로구매
-            </button>
+            <Button variant="secondary" className="w-full">
+              장바구니
+            </Button>
+            <Button className="mt-2.5 w-full">바로구매</Button>
           </div>
         </div>
       </div>

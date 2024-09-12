@@ -1,14 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 
-interface BreadCrumbProps {
-  items: {
-    href: string;
-    label: string;
-  }[];
+interface BreadcrumbItem {
+  label: string;
+  href: string;
 }
 
-function Breadcrumb({ items }: BreadCrumbProps) {
+interface BreadCrumbProps {
+  items: BreadcrumbItem[];
+}
+
+const Breadcrumb = ({ items }: BreadCrumbProps) => {
   return (
     <nav className="mb-4 text-sm text-gray-500">
       {items.map((item, index) => (
@@ -21,6 +23,6 @@ function Breadcrumb({ items }: BreadCrumbProps) {
       ))}
     </nav>
   );
-}
+};
 
 export default Breadcrumb;
