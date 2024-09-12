@@ -12,7 +12,7 @@ const apiClient = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API, // Use your API URL here
 });
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
     verifyRequest: '/login?verify=1',
