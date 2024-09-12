@@ -1,4 +1,4 @@
-import { Product } from '@/types/productTypes';
+import { Product } from '@/types/product-types';
 
 export interface CartItem extends Product {
   selectNum: number; // 선택한 수량

@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductCard from './product-card';
-import { Product } from '@/types/productTypes';
+import { Product } from '@/types/product-types';
 import useCartStore from '@/stores/use-cart-store'; // 유틸리티 함수 가져오기
 
 // SearchResultProps 타입 정의

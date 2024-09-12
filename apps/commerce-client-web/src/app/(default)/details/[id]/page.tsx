@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import products from '@/data/products.json'; // Adjust path as necessary
-import { Product } from '@/types/productTypes';
+import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 import Breadcrumb from './components/breadcrumb';
 import { Button } from '@/components/ui/button';

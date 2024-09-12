@@ -3,7 +3,7 @@ import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CartItem as CartItemType } from '@/types/carttypes';
+import { CartItem as CartItemType } from '@/types/cart-types';
 import { Checkbox } from '@/components/ui/checkbox';
 import usecartstore from '@/stores/use-cart-store';
 

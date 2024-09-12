@@ -1,4 +1,4 @@
-import { Product } from '@/types/productTypes';
+import { Product } from '@/types/product-types';
 import { Accordion } from '@/components/ui/accordion';
 import PriceFilter from './price-filter';
 import PublisherFilter from './publisher-filter';

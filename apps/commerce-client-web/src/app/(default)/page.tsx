@@ -1,4 +1,4 @@
-import SliderBanner from '@/app/(default)/(home)/components/slidebanner';
+import SliderBanner from '@/components/common/slide-banner';
 
 const mockImages = [
   { src: '/mockbannerimage/book1.png', alt: 'Banner 1' },

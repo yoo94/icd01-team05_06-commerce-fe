@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
-import { Product } from '@/types/productTypes';
+import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 
 // ProductCardProps 타입 정의

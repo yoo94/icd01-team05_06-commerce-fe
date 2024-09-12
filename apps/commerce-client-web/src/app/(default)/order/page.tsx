@@ -8,7 +8,7 @@ import OrderPaymentMethod from './components/payment-method';
 import PaymentAgreement from './components/payment-agreement';
 import PaymentUserInfo from './components/payment-userInfo';
 import useCartStore from '@/stores/use-cart-store';
-import { CartItem } from '@/types/carttypes'; // CartItem 타입 임포트
+import { CartItem } from '@/types/cart-types'; // CartItem 타입 임포트
 
 const mockUser = {
   name: '유재석',

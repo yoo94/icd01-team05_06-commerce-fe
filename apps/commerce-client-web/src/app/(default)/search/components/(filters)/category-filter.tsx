@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { Product } from '@/types/productTypes'; // Product 타입 가져오기
+import { Product } from '@/types/product-types'; // Product 타입 가져오기
 
 interface CategoryFilterProps {
   products: Product[]; // 정확한 Product 타입을 사용
