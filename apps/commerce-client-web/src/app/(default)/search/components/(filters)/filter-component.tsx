@@ -3,6 +3,7 @@ import { Accordion } from '@/components/ui/accordion';
 import PriceFilter from './price-filter';
 import PublisherFilter from './publisher-filter';
 import CategoryFilter from './category-filter';
+import { Suspense } from 'react';
 
 const FilterComponent = ({ products }: { products: Product[] }) => {
   const publishers = [...new Set(products.map((product) => product.publisher))];

@@ -2,33 +2,22 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
+import { Product } from '@/types/productTypes';
+import { parseAndRoundPrice } from '@/lib/utils';
 
 // ProductCardProps 타입 정의
 export type ProductCardProps = {
   id: number;
-  imageUrl: string;
-  title: string;
-  price: number; // 또는 number (parseAndRoundPrice 함수가 문자열을 반환하는 경우 string 사용)
-  description: string;
-  discount: number;
-  tags: string[];
+  product: Product;
   onAddToCart: () => void;
   onBuyNow: () => void;
 };
 
-const ProductCard = ({
-  id,
-  imageUrl,
-  title,
-  price,
-  description,
-  discount,
-  tags = [], // tags에 기본값으로 빈 배열을 설정
-  onAddToCart,
-  onBuyNow,
-}: ProductCardProps) => {
+const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) => {
   const router = useRouter(); // useRouter 훅 사용
   const maxLength = 70; // 최대 출력할 글자 수
+
+  const roundedPrice = parseAndRoundPrice(product.price); // 유틸리티 함수 사용
 
   const handleNavigate = () => {
     router.push(`/details/${id}`);
@@ -40,41 +29,50 @@ const ProductCard = ({
 
   return (
     <div
-      className="border rounded-md p-4 shadow-sm hover:shadow-md flex flex-col flex-shrink cursor-pointer w-full sm:w-auto hover:border-primary md:flex-row" // flex-wrap과 w-full 추가
+      className="hover:border-primary flex w-full shrink cursor-pointer flex-col rounded-md border p-4 shadow-sm hover:shadow-md sm:w-auto md:flex-row" // flex-wrap과 w-full 추가
       onClick={handleNavigate}
     >
       <div className="flex">
-        <div className="h-100 mr-4 flex align-center items-center">{id}</div>
         {/* Left Side: Image */}
-        <div className="relative w-24 h-32 flex-shrink-0">
+        <div className="relative h-44 w-32 shrink-0">
           <Image
-            src={imageUrl}
-            alt={title}
-            layout="fill"
-            objectFit="cover"
+            src={product.coverImage}
+            alt={product.title}
+            fill
+            style={{ objectFit: 'cover' }}
             className="rounded-lg"
           />
         </div>
 
         {/* Center: Title, Price, Tags */}
-        <div className="flex flex-col justify-between ml-4 mr-4 flex-grow">
-          <h2 className="font-semibold">{title}</h2>
-          <h2 className="text-sm text-slate-500 hidden md:block">
-            {truncateDescription(description, maxLength)}
-          </h2>
-          <p className="text-gray-500">
-            {discount > 0 ? (
-              <>
-                <span className="font-bold mr-2 text-black">{discount.toLocaleString()}원</span>
-                <span className="line-through text-slate-300">{price.toLocaleString()}원</span>
-              </>
-            ) : (
-              <span className="text-black font-bold">품절</span>
-            )}
-          </p>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {tags.map((tag, index) => (
-              <span key={index} className="text-sm bg-gray-200 px-2 py-1 gap-2 rounded">
+        <div className="mx-4 flex grow flex-col justify-between">
+          <div className="flex flex-col gap-y-1.5 py-2">
+            <h2 className="max-w-96 truncate text-sm font-semibold">{product.title}</h2>
+            <p className="text-xs font-light text-slate-600">
+              {product.author} | {product.publisher} | {product.pubdate}
+            </p>
+            <p className="mt-2 text-sm">
+              {product.discount > 0 ? (
+                <>
+                  <span className="mr-1 font-extrabold">{product.discount.toLocaleString()}원</span>
+                  <span className="text-xs text-slate-400 line-through">
+                    {roundedPrice.toLocaleString()}원
+                  </span>
+                </>
+              ) : (
+                <span className="font-bold">품절</span>
+              )}
+            </p>
+            <p className="hidden text-xs font-light text-slate-500 md:block">
+              {truncateDescription(product.description, maxLength)}
+            </p>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {product.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="gap-2 rounded bg-slate-100 px-2 py-1 text-xs font-light text-slate-400"
+              >
                 #{tag}
               </span>
             ))}
@@ -82,7 +80,7 @@ const ProductCard = ({
         </div>
       </div>
       {/* Right Side: Buttons */}
-      <div className="flex flex-row items-end space-y-2 justify-around mt-4 md:justify-start md:flex-col md:ml-auto md:mt-0">
+      <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
         <Button
           onClick={(e) => {
             e.stopPropagation();
@@ -91,7 +89,7 @@ const ProductCard = ({
           variant="secondary"
           className="w-24"
         >
-          카트에 넣기
+          장바구니
         </Button>
         <Button
           onClick={(e) => {
