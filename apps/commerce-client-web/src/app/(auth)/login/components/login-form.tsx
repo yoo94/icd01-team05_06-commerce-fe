@@ -26,16 +26,12 @@ import {
 import useAuthStore from '@/stores/use-auth-store';
 import { useRouter } from 'next/navigation';
 
-interface LoginFormProps {
-  csrfToken?: string;
-}
-
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-const LoginForm = ({ csrfToken }: LoginFormProps) => {
+const LoginForm = () => {
   const router = useRouter();
   const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -80,9 +76,6 @@ const LoginForm = ({ csrfToken }: LoginFormProps) => {
     <>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleFinish)} className="mt-4 flex flex-col gap-y-4">
-          {/* Include CSRF token as a hidden input */}
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-
           <FormItem>
             <FormControl>
               <Input
