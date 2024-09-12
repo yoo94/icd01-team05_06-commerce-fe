@@ -9,7 +9,7 @@ type ApiError = {
 };
 
 const apiClient = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API, // Use your API URL here
+  prefixUrl: process.env.API_BASE_URL, // Use your API URL here
 });
 
 const authOptions: NextAuthOptions = {
