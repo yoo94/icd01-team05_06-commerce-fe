@@ -1,67 +1,71 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import StepIndicator from './component/step-indicator';
-import TermsAgreement from './component/terms-agreement';
-import UserInfoForm from './component/use-info-form';
-import CompletionStep from './component/completion-step';
+import StepIndicator from './components/step-indicator';
+import TermsAgreement from './components/terms-agreement';
+import SignUpForm from './components/sign-up-form';
+import CompletionStep from './components/completion-step';
+import useAuthStore from '@/stores/use-auth-store';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+import Link from 'next/link';
 
 const steps = ['약관동의', '정보입력', '가입완료'];
 
-export default function JoinPage() {
+const JoinPage = () => {
   const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    postalCode: '',
-    address: '',
-    addressDetail: '',
-  });
+  const [isFormValid, setIsFormValid] = useState(false);
+  const { signupData, submitSignup } = useAuthStore();
   const [isAgreedPrivacy, setIsAgreedPrivacy] = useState(false);
   const [isAgreedTerms, setIsAgreedTerms] = useState(false);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
 
-  const handleStepClick = (index: number) => setStep(index);
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleStepClick = (index: number) => {
+    if (index === 0) {
+      setStep(index);
+    } else if (index === 1 && isAgreedPrivacy && isAgreedTerms) {
+      setStep(index);
+    } else if (index === 2 && isFormValid) {
+      setStep(index);
+    } else {
+      alert(index === 1 ? '약관에 동의해 주세요.' : '모든 필드를 올바르게 입력해 주세요.');
+    }
   };
+
   const handleCheckboxChange =
     (setter: React.Dispatch<React.SetStateAction<boolean>>) => (checked: boolean) =>
       setter(checked);
 
-  const isStep1Complete = () => {
-    return (
-      formData.name &&
-      formData.email &&
-      formData.password &&
-      formData.confirmPassword &&
-      formData.postalCode &&
-      formData.address &&
-      formData.addressDetail &&
-      formData.password === formData.confirmPassword
-    );
-  };
+  const handleFormValidityChange = useCallback((isValid: boolean) => {
+    setIsFormValid(isValid);
+  }, []);
 
   const handlePrevStep = () => step > 0 && setStep(step - 1);
-  const handleNextStep = (e: React.FormEvent) => {
+
+  const handleNextStep = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (step === 0 && isAgreedPrivacy && isAgreedTerms) {
       setStep(step + 1);
-    } else if (step === 1 && isStep1Complete()) {
-      handleSubmit(e);
-      setStep(step + 1);
+    } else if (step === 1 && isFormValid) {
+      try {
+        await submitSignup();
+        setStep(step + 1);
+      } catch (error) {
+        console.error('Error during signup:', error);
+        setShowAlertDialog(true);
+      }
     } else {
       alert(step === 0 ? '약관에 동의해 주세요.' : '모든 필드를 올바르게 입력해 주세요.');
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const fullAddress = `${formData.address} ${formData.addressDetail}`;
-    const submitData = { ...formData, address: fullAddress };
-    // TODO: 서버로 데이터 전송 (예: fetch API 사용)
   };
 
   return (
@@ -75,8 +79,10 @@ export default function JoinPage() {
           onTermsChange={handleCheckboxChange(setIsAgreedTerms)}
         />
       )}
-      {step === 1 && <UserInfoForm formData={formData} onChange={handleInputChange} />}
-      {step === 2 && <CompletionStep userName={formData.name} />}
+      {step === 1 && (
+        <SignUpForm onSubmit={submitSignup} onValidChange={handleFormValidityChange} />
+      )}
+      {step === 2 && <CompletionStep userName={signupData.name} />}
       <div className="mt-8 flex justify-between gap-x-4">
         {step < 2 ? (
           <>
@@ -92,8 +98,7 @@ export default function JoinPage() {
             <Button
               onClick={handleNextStep}
               disabled={
-                (step === 0 && (!isAgreedPrivacy || !isAgreedTerms)) ||
-                (step === 1 && !isStep1Complete())
+                (step === 0 && (!isAgreedPrivacy || !isAgreedTerms)) || (step === 1 && !isFormValid)
               }
               size="lg"
               className="flex-1 text-base"
@@ -102,15 +107,28 @@ export default function JoinPage() {
             </Button>
           </>
         ) : (
-          <Button
-            size="lg"
-            className="w-full text-base"
-            onClick={() => (window.location.href = '/')}
-          >
-            홈으로 이동
+          <Button size="lg" className="w-full text-base" asChild>
+            <Link href="/">홈으로 이동</Link>
           </Button>
         )}
       </div>
+
+      {/* AlertDialog for error handling */}
+      <AlertDialog open={showAlertDialog} onOpenChange={setShowAlertDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>회원가입 실패</AlertDialogTitle>
+            <AlertDialogDescription>
+              회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAlertDialog(false)}>확인</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
-}
+};
+
+export default JoinPage;

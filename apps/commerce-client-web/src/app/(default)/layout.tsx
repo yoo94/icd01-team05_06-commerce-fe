@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/app/globals.css';
-import Header from '@/app/(default)/(layout)/components/header';
-import Footer from '@/app/(default)/(layout)/components/footer';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -20,9 +20,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <main className="container justify-center p-4 xs:p-6 md:p-8 lg:p-12 xl:p-[100px]">
-        {children}
-      </main>
+      <main className="container justify-center p-4 md:p-8">{children}</main>
       <Footer />
     </>
   );
