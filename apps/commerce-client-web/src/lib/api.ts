@@ -37,7 +37,7 @@ const api = ky.create({
         }
 
         try {
-          const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API}/refresh`, {
+          const refreshResponse = await fetch(`${process.env.API_BASE_URL}/refresh`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
