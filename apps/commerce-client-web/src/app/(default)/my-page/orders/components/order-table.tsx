@@ -7,21 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-interface Order {
-  id: number;
-  orderDate: string;
-  orderItems: {
-    book: {
-      title: string;
-    };
-  }[];
-  finalPrice: number;
-  status: string;
-  user: {
-    username: string;
-  };
-}
+import orders from '@/data/orders.json';
 
 function formatDate(date: string) {
   return format(date, 'yyyy.MM.dd');
@@ -32,9 +18,6 @@ function formatTitle(items: { book: { title: string } }[]) {
 }
 
 const OrderTable = async () => {
-  const res = await fetch('https://example.com/orders');
-  const orders: Order[] = await res.json();
-
   return (
     <Table>
       <TableHeader>
