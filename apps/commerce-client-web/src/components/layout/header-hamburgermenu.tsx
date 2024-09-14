@@ -129,13 +129,8 @@ const HamburgerMenu: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white">
-          <div className="flex h-14 items-center justify-end border-b px-4">
-            <button className="mr-2 p-4 text-2xl" onClick={toggleMenu}>
-              &times;
-            </button>
-          </div>
-          <ul className="flex flex-col space-y-2 p-4">
+        <div className="fixed inset-0 top-14 z-50 flex flex-col border-t bg-white">
+          <ul className="container flex flex-col space-y-2 p-4">
             {mock.map((menu, index) => (
               <li key={index}>
                 {isMenuItemWithSubMenu(menu) ? (

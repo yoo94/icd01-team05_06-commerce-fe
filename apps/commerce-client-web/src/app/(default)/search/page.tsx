@@ -8,7 +8,7 @@ import SearchResult from './components/(searchResult)/search-result';
 
 interface SearchPageProps {
   searchParams: {
-    SearchWord?: string;
+    word?: string;
     price?: string;
     publisher?: string;
     category?: string;
@@ -19,7 +19,7 @@ const SearchPage = ({ searchParams }: SearchPageProps) => {
   const [filteredProducts, setFilteredProducts] = useState(productsData);
 
   useEffect(() => {
-    const searchWord = searchParams.SearchWord ?? '';
+    const searchWord = searchParams.word ?? '';
     const priceRange = searchParams.price ?? '';
     const selectedPublisher = searchParams.publisher ?? '';
     const selectedCategory = searchParams.category ?? '';
