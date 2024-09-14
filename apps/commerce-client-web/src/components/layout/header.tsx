@@ -6,12 +6,17 @@ import Image from 'next/image';
 import HeaderButton from './header-button';
 import HeaderMenubar from './header-menubar';
 import HamburgerMenu from './header-hamburgermenu';
-import Search from './search';
+
+import TopBar from './top-bar';
+import SearchBar from './search-bar';
 
 const Header = () => {
   return (
-    <header className="bg-background w-full border-b md:p-4">
-      <div className="container mx-auto flex h-14 items-center justify-between md:h-fit">
+    <header className="bg-background w-full border-b">
+      {/* 상단 고정 헤더 */}
+      <TopBar />
+      {/* 메인 헤더 */}
+      <div className="container mx-auto flex h-14 items-center justify-between py-4 md:h-fit">
         {/* 로고 */}
         <div className="shrink-0">
           <Link href="/" className="hidden md:flex">
@@ -36,9 +41,9 @@ const Header = () => {
         </div>
 
         {/* 검색 바 (모바일에서 숨김) */}
-        <div className="mx-4 hidden max-w-xs grow md:flex md:max-w-md lg:max-w-lg">
+        <div className="mx-4 hidden w-full flex-1 md:flex">
           <Suspense fallback="로딩 중..">
-            <Search />
+            <SearchBar />
           </Suspense>
         </div>
 
