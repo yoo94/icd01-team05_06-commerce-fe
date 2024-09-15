@@ -10,66 +10,23 @@ import {
   MenubarSubTrigger,
   MenubarSubContent,
 } from '@/components/ui/menubar';
+import { MainMenu } from '@/types/menu-types';
 
-type SubSubMenuItem = {
-  title: string;
-};
-
-type SubMenuItem = {
-  title: string;
-  subSubMenu: SubSubMenuItem[];
-};
-
-type MenuItemWithSubMenu = {
-  title: string;
-  subMenu: SubMenuItem[];
-};
-
-type MenuItemWithHref = {
-  title: string;
-};
-
-type MenuItem = MenuItemWithSubMenu | MenuItemWithHref;
-
-const mock: MenuItem[] = [
+const mock: MainMenu[] = [
   {
     title: '전체 카테고리',
-    subMenu: [
+    categories: [
       {
         title: '국내도서',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
         title: '외국도서',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
         title: 'eBook',
-        subSubMenu: [
-          { title: '소설' },
-          { title: '시' },
-          { title: '에세이' },
-          { title: '인문' },
-          { title: '역사' },
-          { title: '청소년' },
-          { title: '사회' },
-        ],
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
     ],
   },
@@ -84,71 +41,63 @@ const mock: MenuItem[] = [
   },
 ];
 
-// Type guard function
-const isMenuItemWithSubMenu = (menu: MenuItem): menu is MenuItemWithSubMenu => {
-  return 'subMenu' in menu;
-};
-
 const HeaderMenubar = () => {
   return (
     <Menubar className="flex space-x-6 border-0">
       {mock.map((menu, index) => (
         <MenubarMenu key={index}>
-          {isMenuItemWithSubMenu(menu) ? (
+          {menu.categories ? (
             <>
               <MenubarTrigger className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors">
                 {menu.title}
               </MenubarTrigger>
               <MenubarContent className="mt-2 rounded-lg bg-white p-2 shadow-lg">
-                {menu.subMenu.map((subMenuItem, subIndex) =>
-                  subMenuItem.subSubMenu ? (
-                    <MenubarSub key={subIndex}>
-                      <MenubarSubTrigger className="block rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        {subMenuItem.title}
-                      </MenubarSubTrigger>
-                      <MenubarSubContent className="ml-2 mt-2 rounded-lg bg-gray-100 p-2 shadow-lg">
-                        {subMenuItem.subSubMenu.map((subSubMenuItem, subSubIndex) => (
-                          <MenubarItem key={subSubIndex} asChild>
+                {menu.categories.map((category, subIndex) => (
+                  <MenubarSub key={subIndex}>
+                    <MenubarSubTrigger className="rounded-md p-4 text-sm text-gray-700 hover:bg-gray-100">
+                      {category.title}
+                    </MenubarSubTrigger>
+                    {category.items && (
+                      <MenubarSubContent className="ml-2 mt-2 rounded-lg p-2 shadow-lg">
+                        {category.items.map((item, itemIndex) => (
+                          <MenubarItem key={itemIndex} asChild>
                             <Link
                               href={{
                                 pathname: '/search',
                                 query: {
-                                  pc: subMenuItem.title,
-                                  sc: subSubMenuItem.title,
+                                  category: item.title,
                                 },
                               }}
                               passHref
                             >
-                              <span className="block rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
-                                {subSubMenuItem.title}
+                              <span className="w-full rounded-md px-4 py-2 text-sm">
+                                {item.title}
                               </span>
                             </Link>
                           </MenubarItem>
                         ))}
                       </MenubarSubContent>
-                    </MenubarSub>
-                  ) : null,
-                )}
+                    )}
+                  </MenubarSub>
+                ))}
               </MenubarContent>
             </>
           ) : (
-            <MenubarMenu>
-              <MenubarTrigger asChild>
-                <Link
-                  href={{
-                    pathname: '/search',
-                    query: {
-                      tag: menu.title,
-                    },
-                  }}
-                  passHref
-                >
-                  <span className="text-muted-foreground hover:text-primary cursor-pointer text-sm font-medium transition-colors">
-                    {menu.title}
-                  </span>
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
+            <MenubarTrigger asChild>
+              <Link
+                href={{
+                  pathname: '/search',
+                  query: {
+                    tag: menu.title,
+                  },
+                }}
+                passHref
+              >
+                <span className="text-muted-foreground hover:text-primary cursor-pointer text-sm font-medium transition-colors">
+                  {menu.title}
+                </span>
+              </Link>
+            </MenubarTrigger>
           )}
         </MenubarMenu>
       ))}

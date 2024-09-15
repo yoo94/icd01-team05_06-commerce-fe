@@ -32,7 +32,7 @@ const Footer = () => {
           <h1>
             <Link href="/" className="hidden md:flex">
               <Image
-                src="/logo-lg.svg"
+                src="/images/svg/logo-lg.svg"
                 alt="이너북스"
                 width={150}
                 height={40}

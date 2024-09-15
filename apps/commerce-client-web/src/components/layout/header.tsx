@@ -21,7 +21,7 @@ const Header = () => {
         <div className="shrink-0">
           <Link href="/" className="hidden md:flex">
             <Image
-              src="/logo-lg.svg"
+              src="/images/svg/logo-lg.svg"
               alt="이너북스"
               width={180}
               height={60}
@@ -31,7 +31,7 @@ const Header = () => {
           </Link>
           <Link href="/" className="flex md:hidden">
             <Image
-              src="/logo.svg"
+              src="/images/svg/logo.svg"
               alt="이너북스"
               width={40}
               height={40}
