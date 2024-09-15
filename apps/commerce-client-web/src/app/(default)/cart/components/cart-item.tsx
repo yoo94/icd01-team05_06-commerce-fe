@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { CartItem as CartItemType } from '@/types/cart-types';
 import { Checkbox } from '@/components/ui/checkbox';
 import usecartstore from '@/stores/use-cart-store';
+import Image from 'next/image';
 
 interface CartItemProps {
   item: CartItemType;
@@ -24,7 +25,7 @@ const CartItem = ({ item }: CartItemProps) => {
         />
       </TableCell>
       <TableCell className="flex items-center space-x-4">
-        <img src={item.imageUrl} alt={item.title} className="size-16 rounded" />
+        <Image src={item.imageUrl || 'none'} alt={item.title} className="rounded" />
         {item.title}
       </TableCell>
       <TableCell className="text-left">

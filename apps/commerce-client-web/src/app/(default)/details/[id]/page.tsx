@@ -8,15 +8,6 @@ import { parseAndRoundPrice } from '@/lib/utils';
 import Breadcrumb from './components/breadcrumb';
 import { Button } from '@/components/ui/button';
 
-// 카테고리 한글명 변환 객체
-const categoryTranslation: { [key: string]: string } = {
-  DOMESTIC: '국내도서',
-  DOMESTIC_POETRY: '국내 시',
-  FOREIGN: '외국도서',
-  FOREIGN_HISTORY: '외국 역사',
-  FOREIGN_POETRY: '외국 시',
-};
-
 const ProductDetailsPage = () => {
   const params = useParams();
   const [product, setProduct] = useState<Product | null>(null);
@@ -60,10 +51,8 @@ const ProductDetailsPage = () => {
     return <div>Product not found</div>;
   }
 
-  const parentCategoryName =
-    categoryTranslation[product.category.parentCategory.name] ||
-    product.category.parentCategory.name;
-  const categoryName = categoryTranslation[product.category.name] || product.category.name;
+  const parentCategoryName = product.category.parentCategory.name;
+  const categoryName = product.category.name;
 
   const breadcrumbItems = [
     { label: parentCategoryName, href: `/category/${product.category.parentCategory.id}` },
@@ -175,15 +164,7 @@ const ProductDetailsPage = () => {
         <div ref={reviewsRef} className="mt-8">
           <h2 className="mb-2 text-xl font-semibold">리뷰/한줄평</h2>
           <div>
-            {product.reviews && product.reviews.length > 0 ? (
-              product.reviews.map((review, index) => (
-                <p key={index} className="mb-2">
-                  {review}
-                </p>
-              ))
-            ) : (
-              <p>아직 리뷰가 없습니다.</p>
-            )}
+            <p>아직 리뷰가 없습니다.</p>
           </div>
         </div>
 
