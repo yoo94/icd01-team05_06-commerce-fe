@@ -1,88 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import useAuthStore from '@/stores/use-auth-store';
 
-// 타입 정의
-type SubSubMenuItem = {
-  title: string;
-  href: string;
-};
-
-type SubMenuItem = {
-  title: string;
-  subSubMenu: SubSubMenuItem[];
-};
-
-type MenuItemWithSubMenu = {
-  title: string;
-  subMenu: SubMenuItem[];
-};
-
-type MenuItemWithHref = {
-  title: string;
-  href: string;
-};
-
-type MenuItem = MenuItemWithSubMenu | MenuItemWithHref;
-
-const mock: MenuItem[] = [
-  {
-    title: 'Home',
-    href: '/',
-  },
+const mock: MainMenu[] = [
   {
     title: '전체 카테고리',
-    subMenu: [
+    categories: [
       {
-        title: '가전',
-        subSubMenu: [
-          { title: 'Sub Menu 1-1', href: '/menu/1-1' },
-          { title: 'Sub Menu 1-2', href: '/menu/1-2' },
-        ],
+        title: '국내도서',
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
-        title: '식품',
-        subSubMenu: [
-          { title: 'Sub Menu 2-1', href: '/menu/2-1' },
-          { title: 'Sub Menu 2-2', href: '/menu/2-2' },
-        ],
+        title: '외국도서',
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
       {
-        title: '의류',
-        subSubMenu: [
-          { title: 'Sub Menu 3-1', href: '/menu/3-1' },
-          { title: 'Sub Menu 3-2', href: '/menu/3-2' },
-        ],
-      },
-      {
-        title: '기타',
-        subSubMenu: [
-          { title: 'Sub Menu 4-1', href: '/menu/4-1' },
-          { title: 'Sub Menu 4-2', href: '/menu/4-2' },
-        ],
+        title: 'eBook',
+        items: [{ title: '소설' }, { title: '시' }, { title: '역사' }, { title: '과학' }],
       },
     ],
   },
   {
-    title: '베스트',
-    href: '/menu/2',
+    title: '베스트셀러',
   },
   {
-    title: '세일',
-    href: '/menu/3',
+    title: '새로나온책',
+  },
+  {
+    title: '추천도서',
   },
 ];
 
-// 타입 가드 함수
-const isMenuItemWithSubMenu = (menu: MenuItem): menu is MenuItemWithSubMenu => {
-  return 'subMenu' in menu;
-};
+const HamburgerMenu = () => {
+  const { data: session } = useSession();
+  const { logout } = useAuthStore();
 
-const HamburgerMenu: React.FC = () => {
+  const isAuthenticated = !!session;
+
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState<number | null>(null);
-  const [activeSubSubMenu, setActiveSubSubMenu] = useState<number | null>(null);
+  const [activeCategories, setActiveCategories] = useState<number | null>(null);
+  const [activeItems, setActiveItems] = useState<number | null>(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -90,23 +52,25 @@ const HamburgerMenu: React.FC = () => {
 
   const closeMenu = () => {
     setIsOpen(false);
+    setActiveCategories(null);
+    setActiveItems(null);
   };
 
-  const toggleSubMenu = (index: number) => {
-    if (activeSubMenu === index) {
-      setActiveSubMenu(null);
-      setActiveSubSubMenu(null);
+  const toggleCateogries = (index: number) => {
+    if (activeCategories === index) {
+      setActiveCategories(null);
+      setActiveItems(null);
     } else {
-      setActiveSubMenu(index);
-      setActiveSubSubMenu(null);
+      setActiveCategories(index);
+      setActiveItems(null);
     }
   };
 
-  const toggleSubSubMenu = (index: number) => {
-    if (activeSubSubMenu === index) {
-      setActiveSubSubMenu(null);
+  const toggleItems = (index: number) => {
+    if (activeItems === index) {
+      setActiveItems(null);
     } else {
-      setActiveSubSubMenu(index);
+      setActiveItems(index);
     }
   };
 
@@ -130,54 +94,79 @@ const HamburgerMenu: React.FC = () => {
 
       {isOpen && (
         <div className="fixed inset-0 top-14 z-50 flex flex-col border-t bg-white">
+          <div className="container flex justify-center space-x-5 px-8 pb-4 pt-8">
+            {isAuthenticated ? (
+              <>
+                <Button variant={'outline'} onClick={logout}>
+                  로그아웃
+                </Button>
+                <Button asChild>
+                  <Link href={'/myPage'}>마이페이지</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button asChild className="max-w-40 flex-1 rounded-full">
+                  <Link href={'/login'}>로그인</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-primary text-primary max-w-40 flex-1 rounded-full"
+                >
+                  <Link href={'/join'}>회웡가입</Link>
+                </Button>
+              </>
+            )}
+          </div>
           <ul className="container flex flex-col space-y-2 p-4">
             {mock.map((menu, index) => (
               <li key={index}>
-                {isMenuItemWithSubMenu(menu) ? (
-                  <div>
-                    <button
-                      className="w-full rounded-md p-2 text-left text-gray-700 hover:bg-gray-100"
-                      onClick={() => toggleSubMenu(index)}
-                    >
-                      {menu.title}
-                    </button>
-                    {activeSubMenu === index && (
-                      <ul className="ml-4 mt-2 space-y-2">
-                        {menu.subMenu.map((subMenuItem, subIndex) => (
-                          <li key={subIndex}>
-                            <div>
-                              <button
-                                className="w-full rounded-md p-2 text-left text-gray-600 hover:bg-gray-200"
-                                onClick={() => toggleSubSubMenu(subIndex + index * 100)}
-                              >
-                                {subMenuItem.title}
-                              </button>
-                              {activeSubSubMenu === subIndex + index * 100 && (
-                                <ul className="ml-4 mt-2 space-y-2">
-                                  {subMenuItem.subSubMenu.map((subSubMenuItem, subSubIndex) => (
-                                    <li key={subSubIndex}>
-                                      <Link href={subSubMenuItem.href} onClick={closeMenu}>
-                                        <span className="block rounded-md p-2 text-gray-500 hover:bg-gray-300">
-                                          {subSubMenuItem.title}
-                                        </span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ) : (
-                  <Link href={menu.href} onClick={closeMenu}>
-                    <span className="block rounded-md p-2 text-gray-700 hover:bg-gray-100">
-                      {menu.title}
-                    </span>
-                  </Link>
-                )}
+                <div>
+                  <button
+                    className="w-full rounded-md p-2 text-left text-gray-700 hover:bg-gray-100"
+                    onClick={() => toggleCateogries(index)}
+                  >
+                    {menu.title}
+                  </button>
+                  {menu.categories && activeCategories === index && (
+                    <ul className="ml-4 mt-2 space-y-2">
+                      {menu.categories.map((category, categoryIndex) => (
+                        <li key={categoryIndex}>
+                          <div>
+                            <button
+                              className="w-full rounded-md p-2 text-left text-gray-600 hover:bg-gray-200"
+                              onClick={() => toggleItems(categoryIndex)}
+                            >
+                              {category.title}
+                            </button>
+                            {category.items && activeItems === categoryIndex && (
+                              <ul className="ml-4 mt-2 space-y-2">
+                                {category.items.map((item, itemIndex) => (
+                                  <li key={itemIndex}>
+                                    <Link
+                                      href={{
+                                        pathname: '/search',
+                                        query: {
+                                          category: item.title,
+                                        },
+                                      }}
+                                      onClick={closeMenu}
+                                    >
+                                      <span className="block rounded-md p-2 text-gray-500 hover:bg-gray-300">
+                                        {item.title}
+                                      </span>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

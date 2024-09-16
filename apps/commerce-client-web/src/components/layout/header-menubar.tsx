@@ -52,8 +52,8 @@ const HeaderMenubar = () => {
                 {menu.title}
               </MenubarTrigger>
               <MenubarContent className="mt-2 rounded-lg bg-white p-2 shadow-lg">
-                {menu.categories.map((category, subIndex) => (
-                  <MenubarSub key={subIndex}>
+                {menu.categories.map((category, categoryIndex) => (
+                  <MenubarSub key={categoryIndex}>
                     <MenubarSubTrigger className="rounded-md p-4 text-sm text-gray-700 hover:bg-gray-100">
                       {category.title}
                     </MenubarSubTrigger>

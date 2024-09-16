@@ -103,14 +103,14 @@ const Home = async () => {
           <CarouselContent>
             {eventImages.map((image, index) => (
               <CarouselItem key={index}>
-                <Card className="relative size-full">
-                  <CardContent className="relative flex h-32 items-center justify-center p-6">
+                <Card className="relative h-32 w-full">
+                  <CardContent className="relative flex size-full items-center justify-center bg-slate-100 p-6">
                     <Image
                       src={image.src}
                       alt={image.alt}
                       fill
                       sizes="100vw"
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'contain' }}
                       className="rounded-lg"
                     />
                   </CardContent>
