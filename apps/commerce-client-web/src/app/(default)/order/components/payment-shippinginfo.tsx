@@ -107,6 +107,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
           <div>
             <Label>우편번호</Label>
             <Input
+              className="cursor-pointer"
               type="text"
               placeholder="우편번호"
               name="zonecode" // 우편번호 필드
@@ -123,6 +124,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
               name="address"
               value={order.address} // 주소 값 반영
               onChange={onOrderChange}
+              readOnly={true}
             />
           </div>
           <div>
