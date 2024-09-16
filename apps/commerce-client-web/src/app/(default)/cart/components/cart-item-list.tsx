@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
