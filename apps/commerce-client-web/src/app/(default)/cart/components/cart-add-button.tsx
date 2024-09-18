@@ -14,7 +14,7 @@ const AddToCartButton = ({ product, quantity }: { product: Product; quantity: nu
     addProduct(product, quantity);
     toast({
       title: 'add to cart!',
-      description: `${product.title}이(가) 장바구니에 추가되었습니다.`,
+      description: `${product.title}이(가) ${quantity ?? 1}개가 장바구니에 추가되었습니다.`,
       action: (
         <div className="mt-4 flex w-full justify-end">
           <ToastAction altText="바로가기" className="border-slate-600">
