@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Search as SearchIcon } from 'lucide-react';
+
 const SearchBar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();

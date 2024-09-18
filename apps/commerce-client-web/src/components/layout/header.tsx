@@ -1,16 +1,17 @@
-import { MainMenu, MenuCategory } from '@/types/menu-types';
-import mswApi from '@/lib/msw-api';
-
-import { transformServerCategories } from '@/lib/utils';
-import { Category } from '@/types/category-types';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
 import HeaderButton from './header-button';
 import HeaderMenubar from './header-menubar';
 import HamburgerMenu from './header-hamburgermenu';
-
 import TopBar from './top-bar';
 import SearchBar from './search-bar';
+
+import mswApi from '@/lib/msw-api';
+import { transformServerCategories } from '@/lib/utils';
+import { MainMenu, MenuCategory } from '@/types/menu-types';
+import { Category } from '@/types/category-types';
 
 const Header = async () => {
   const serverData = await mswApi.get('categories').json<Category[]>();
@@ -64,7 +65,9 @@ const Header = async () => {
 
         {/* 검색 바 (모바일에서 숨김) */}
         <div className="mx-4 hidden w-full flex-1 md:flex">
-          <SearchBar />
+          <Suspense>
+            <SearchBar />
+          </Suspense>
         </div>
 
         {/* 버튼들 (데스크탑용) */}

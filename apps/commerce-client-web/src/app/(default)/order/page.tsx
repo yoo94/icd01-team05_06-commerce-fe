@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import PaymentBooks from './components/payment-books';
+import PaymentProducts from './components/payment-products';
 import PaymentSummary from './components/payment-summary';
 import OrderShippingInfo from './components/payment-shippinginfo';
 import OrderPaymentMethod from './components/payment-method';
@@ -51,7 +51,7 @@ const PaymentPage = () => {
       {/* 그리드 설정: 기본 1열, md(768px) 이상 2열 */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         {/* 주문 상품 정보 */}
-        <PaymentBooks books={books} />
+        <PaymentProducts products={books} />
 
         {/* 주문 요약 */}
         <PaymentSummary books={books} />
