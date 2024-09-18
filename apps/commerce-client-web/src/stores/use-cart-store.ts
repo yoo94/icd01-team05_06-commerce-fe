@@ -1,78 +1,68 @@
 import { CartItem } from '@/types/cart-types';
-import { Product } from '@/types/product-types';
+import { Book } from '@/types/book-types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartState {
   items: CartItem[];
-  addProduct: (product: Product) => void;
-  removeProduct: (id: number) => void;
-  removeAllProduct: () => void;
-  updateProductQuantity: (id: number, selectNum: number) => void;
-  updateProductSelection: (id: number, selected: boolean) => void;
-  toggleAllProducts: (selected: boolean) => void;
-  getSelectedProduct: () => CartItem[];
+  addBook: (book: Book) => void;
+  removeBook: (id: number) => void;
+  removeAllBook: () => void;
+  updateBookQuantity: (id: number, selectNum: number) => void;
+  updateBookSelection: (id: number, selected: boolean) => void;
+  toggleAllBooks: (selected: boolean) => void;
+  getSelectedBook: () => CartItem[];
 }
 
 const useCartStore = create<CartState>()(
   persist(
-    (
-      set: (partial: Partial<CartState> | ((state: CartState) => Partial<CartState>)) => void,
-      get: () => CartState,
-    ) => ({
+    (set, get) => ({
       items: [],
-      addProduct: (product: Product) =>
-        set((state: CartState) => {
-          // 장바구니에 동일한 상품이 있는지 확인
-          const existingProduct = state.items.find((item: CartItem) => item.id === product.id);
-          if (existingProduct) {
-            // 동일한 상품이 있으면 수량 증가
+      addBook: (book: Book) =>
+        set((state) => {
+          // Check if the book already exists in the cart
+          const existingBook = state.items.find((item) => item.id === book.id);
+          if (existingBook) {
+            // Increment the quantity if the book exists
             return {
-              items: state.items.map((item: CartItem) =>
-                item.id === product.id ? { ...item, selectNum: item.selectNum + 1 } : item,
+              items: state.items.map((item) =>
+                item.id === book.id ? { ...item, selectNum: item.selectNum + 1 } : item,
               ),
             };
           } else {
-            // 새로운 상품 추가
+            // Add a new book to the cart
             return {
               items: [
                 ...state.items,
-                { ...product, selectNum: 1, selected: true, shippingInfo: '무료' },
+                { ...book, selectNum: 1, selected: true, shippingInfo: '무료' } as CartItem, // Ensure the new item is typed as CartItem
               ],
             };
           }
         }),
-      removeProduct: (id: number) =>
-        set((state: CartState) => ({
-          items: state.items.filter((item: CartItem) => item.id !== id),
+      removeBook: (id: number) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
         })),
-      removeAllProduct: () =>
-        set(() => ({
-          items: [],
+      removeAllBook: () => set(() => ({ items: [] })),
+      updateBookQuantity: (id: number, selectNum: number) =>
+        set((state) => ({
+          items: state.items.map((item) => (item.id === id ? { ...item, selectNum } : item)),
         })),
-      updateProductQuantity: (id: number, selectNum: number) =>
-        set((state: CartState) => ({
-          items: state.items.map((item: CartItem) =>
-            item.id === id ? { ...item, selectNum } : item,
-          ),
+      updateBookSelection: (id: number, selected: boolean) =>
+        set((state) => ({
+          items: state.items.map((item) => (item.id === id ? { ...item, selected } : item)),
         })),
-      updateProductSelection: (id: number, selected: boolean) =>
-        set((state: CartState) => ({
-          items: state.items.map((item: CartItem) =>
-            item.id === id ? { ...item, selected } : item,
-          ),
+      toggleAllBooks: (selected: boolean) =>
+        set((state) => ({
+          items: state.items.map((item) => ({ ...item, selected })),
         })),
-      toggleAllProducts: (selected: boolean) =>
-        set((state: CartState) => ({
-          items: state.items.map((item: CartItem) => ({ ...item, selected })),
-        })),
-      getSelectedProduct: () => {
+      getSelectedBook: () => {
         const state = get();
-        return state.items.filter((item: CartItem) => item.selected);
+        return state.items.filter((item) => item.selected);
       },
     }),
     {
-      name: 'cart-storage',
+      name: 'cart-storage', // This is the name of the localStorage key
     },
   ),
 );

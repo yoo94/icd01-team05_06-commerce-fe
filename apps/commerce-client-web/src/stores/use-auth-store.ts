@@ -141,9 +141,14 @@ const useAuthStore = create<AuthStore>()(
               throw new Error(response.error);
             }
 
-            // TODO: 로그인 성공하고 나면, 사용자 정보를 가져와서 저장
-            // const user = await api.get('me').json<UserInfo>();
-            // useUserStore.getState().setUserDetails(user);
+            // TODO: 서버로부터 받은 유저 정보 저장하기
+            // const user = await api.get('info').json<{
+            //   success: boolean;
+            //   data: UserInfo;
+            //   error: ApiError | null;
+            // }>();
+
+            // useUserStore.getState().setUserDetails(user.data);
 
             resetLoginData();
           } catch (error) {
