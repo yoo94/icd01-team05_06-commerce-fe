@@ -52,6 +52,7 @@ const SearchPage = ({ searchParams }: SearchPageProps) => {
       const categories = selectedCategory.split(',');
       filtered = filtered.filter((product) => categories.includes(product.category.name));
     }
+
     setFilteredProducts(filtered);
   }, [searchParams]);
 

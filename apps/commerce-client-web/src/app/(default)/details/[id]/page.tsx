@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef, Suspense } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import products from '@/data/products.json'; // Adjust path as necessary
@@ -7,6 +7,7 @@ import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 import Breadcrumb from './components/breadcrumb';
 import { Button } from '@/components/ui/button';
+import Info from './components/info/info';
 
 const ProductDetailsPage = () => {
   const params = useParams();
@@ -17,11 +18,6 @@ const ProductDetailsPage = () => {
   const reviewsRef = useRef<HTMLDivElement>(null);
   const shippingRef = useRef<HTMLDivElement>(null);
   const productInfoRef = useRef<HTMLDivElement>(null);
-
-  // 비동기적으로 BookInfoPage 가져오기
-  const BookInfoPage = React.lazy(
-    () => import('@/app/(default)/details/[id]/components/book-info'),
-  );
 
   useEffect(() => {
     if (params?.id) {
@@ -64,6 +60,13 @@ const ProductDetailsPage = () => {
     ? parseAndRoundPrice(product.price - product.discount)
     : null;
 
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + '...';
+    }
+    return description;
+  };
+
   return (
     <div className="mx-auto max-w-5xl p-4">
       <Breadcrumb items={breadcrumbItems} />
@@ -89,7 +92,7 @@ const ProductDetailsPage = () => {
             )}
           </div>
 
-          <p className="mb-4 text-gray-700">{product.description}</p>
+          <p className="mb-4 text-gray-700">{truncateDescription(product.description, 300)}</p>
         </div>
 
         <div className="ml-6 w-1/4">
@@ -156,9 +159,7 @@ const ProductDetailsPage = () => {
 
       <div className="mt-8">
         <div ref={bookInfoRef}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <BookInfoPage description={product.description} />
-          </Suspense>
+          <Info product={product} />
         </div>
 
         <div ref={reviewsRef} className="mt-8">
