@@ -121,7 +121,7 @@ const ProductDetailsPage = () => {
                 +
               </button>
             </div>
-            <AddToCartButton product={product} />
+            <AddToCartButton product={product} quantity={quantity} />
             <Button className="mt-2.5 w-full">바로구매</Button>
           </div>
         </div>

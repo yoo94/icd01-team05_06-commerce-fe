@@ -5,7 +5,7 @@ import { persist } from 'zustand/middleware';
 
 export interface CartState {
   items: CartItem[];
-  addProduct: (product: Product) => void;
+  addProduct: (product: Product, quantity: number) => void;
   removeProduct: (id: number) => void;
   removeAllProduct: () => void;
   updateProductQuantity: (id: number, selectNum: number) => void;
@@ -21,7 +21,7 @@ const useCartStore = create<CartState>()(
       get: () => CartState,
     ) => ({
       items: [],
-      addProduct: (product: Product) =>
+      addProduct: (product: Product, quantity?: number) =>
         set((state: CartState) => {
           // 장바구니에 동일한 상품이 있는지 확인
           const existingProduct = state.items.find((item: CartItem) => item.id === product.id);
@@ -37,7 +37,7 @@ const useCartStore = create<CartState>()(
             return {
               items: [
                 ...state.items,
-                { ...product, selectNum: 1, selected: true, shippingInfo: '무료' },
+                { ...product, selectNum: quantity ?? 1, selected: true, shippingInfo: '무료' },
               ],
             };
           }
