@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PaymentProducts from './components/payment-products';
 import PaymentSummary from './components/payment-summary';
 import OrderShippingInfo from './components/payment-shippinginfo';
@@ -22,6 +22,7 @@ const mockOrder = {
   address: '서울',
   detailAddress: '강남구',
   memo: '놓고 가주세여',
+  zonecode: '12345',
 };
 
 const PaymentPage = () => {

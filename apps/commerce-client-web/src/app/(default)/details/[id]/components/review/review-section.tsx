@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PreviousReviews from './previous-reviews';
 import NewReviewForm from './new-review-form';
 import allReviews from '@/data/reviews.json';

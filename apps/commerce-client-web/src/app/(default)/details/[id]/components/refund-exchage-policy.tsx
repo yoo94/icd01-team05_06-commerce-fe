@@ -1,5 +1,3 @@
-import React from 'react';
-
 const RefundExchangePolicy = () => {
   return (
     <div className="mb-10">
