@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import ky from 'ky';
 import {
   Carousel,
   CarouselContent,
@@ -8,8 +7,9 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import BookSection from './components/book-section';
-import { Product } from '@/types/product-types';
+import { Book } from '@/types/book-types';
 import { Card, CardContent } from '@/components/ui/card';
+import mswApi from '@/lib/msw-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,16 +27,16 @@ const Home = async () => {
   ];
 
   const [newReleasesResponse, recommendedBooksResponse, bestSellersResponse] = await Promise.all([
-    ky.get('http://localhost:3000/api/books/new-releases').json<Product[]>(),
-    ky.get('http://localhost:3000/api/books/recommended').json<Product[]>(),
-    ky.get('http://localhost:3000/api/books/best-sellers').json<Product[]>(),
+    mswApi.get('books/new-releases').json<Book[]>(),
+    mswApi.get('books/recommended').json<Book[]>(),
+    mswApi.get('books/best-sellers').json<Book[]>(),
   ]);
 
-  const newReleases: Product[] = Array.isArray(newReleasesResponse) ? newReleasesResponse : [];
-  const recommendedBooks: Product[] = Array.isArray(recommendedBooksResponse)
+  const newReleases: Book[] = Array.isArray(newReleasesResponse) ? newReleasesResponse : [];
+  const recommendedBooks: Book[] = Array.isArray(recommendedBooksResponse)
     ? recommendedBooksResponse
     : [];
-  const bestSellers: Product[] = Array.isArray(bestSellersResponse) ? bestSellersResponse : [];
+  const bestSellers: Book[] = Array.isArray(bestSellersResponse) ? bestSellersResponse : [];
 
   return (
     <div className="container mx-auto space-y-12 px-4 py-8">
@@ -85,7 +85,7 @@ const Home = async () => {
       <BookSection title="화제의 신간" books={newReleases} />
 
       {/* Recommended Books Section */}
-      <BookSection title="도서 추천" books={recommendedBooks} />
+      <BookSection title="추천 도서" books={recommendedBooks} />
 
       {/* Best Sellers Section */}
       <BookSection title="베스트 셀러" books={bestSellers} />
@@ -110,7 +110,7 @@ const Home = async () => {
                       alt={image.alt}
                       fill
                       sizes="100vw"
-                      style={{ objectFit: 'contain' }}
+                      style={{ objectFit: 'cover' }}
                       className="rounded-lg"
                     />
                   </CardContent>

@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/carousel'; // Import Carousel components from shadcn/ui
 import Image from 'next/image';
 import Link from 'next/link';
-import { Product } from '@/types/product-types';
+import { Book } from '@/types/book-types';
 
 interface BookSectionProps {
   title: string;
-  books: Product[];
+  books: Book[];
 }
 
 const BookSection = ({ title, books }: BookSectionProps) => {
@@ -54,14 +54,20 @@ const BookSection = ({ title, books }: BookSectionProps) => {
                         src={book.coverImage}
                         alt={book.title}
                         fill
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'fill' }}
                         className="rounded-lg"
                       />
                     </Link>
-                    <p className="mt-4 text-xs font-light text-slate-500">
-                      {book.category.parentCategory.name} &gt; {book.category.name}
+                    {book.category.subCategory?.subCategory && (
+                      <p className="mt-4 text-xs text-gray-500">
+                        {book.category.subCategory.subCategory.name} &gt;
+                        {book.category.subCategory.name} &gt; {book.category.name}
+                      </p>
+                    )}
+                    <p className="mt-1 text-sm font-semibold">
+                      {' '}
+                      {book.title.length > 10 ? `${book.title.slice(0, 12)}...` : book.title}
                     </p>
-                    <p className="mt-1 text-sm font-semibold">{book.title}</p>
                     <p className="mt-2 text-xs text-gray-500">
                       {book.author} ・ {book.publisher}
                     </p>
