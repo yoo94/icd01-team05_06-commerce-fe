@@ -1,4 +1,3 @@
-import React from 'react';
 import { Star } from 'lucide-react'; // Lucide 아이콘 가져오기
 
 // Review 타입 정의

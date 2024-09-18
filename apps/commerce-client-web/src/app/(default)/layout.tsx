@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import '@/app/globals.css';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import React from 'react';
 
 export const metadata: Metadata = {
   title: '이너북스',

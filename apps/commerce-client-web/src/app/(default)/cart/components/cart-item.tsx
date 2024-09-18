@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const { removeProduct, updateProductQuantity, updateProductSelection } = usecartstore();
+  const { removeBook, updateBookQuantity, updateBookSelection } = usecartstore();
   const totalPrice = (parseInt(String(item.price)) * item.selectNum).toLocaleString();
 
   return (
@@ -21,11 +21,18 @@ const CartItem = ({ item }: CartItemProps) => {
       <TableCell className="text-center">
         <Checkbox
           checked={item.selected}
-          onCheckedChange={(checked: boolean) => updateProductSelection(item.id, checked)}
+          onCheckedChange={(checked: boolean) => updateBookSelection(item.id, checked)}
         />
       </TableCell>
       <TableCell className="flex items-center space-x-4">
-        <Image src={item.imageUrl || 'none'} alt={item.title} className="rounded" />
+        <Image
+          src={item.imageUrl}
+          fill
+          width={200}
+          height={300}
+          alt={item.title}
+          className="rounded"
+        />
         {item.title}
       </TableCell>
       <TableCell className="text-left">
@@ -33,7 +40,7 @@ const CartItem = ({ item }: CartItemProps) => {
           type="number"
           value={item.selectNum}
           min={1}
-          onChange={(e) => updateProductQuantity(item.id, parseInt(e.target.value))}
+          onChange={(e) => updateBookQuantity(item.id, parseInt(e.target.value))}
           className="w-20 rounded border text-center"
         />
       </TableCell>
@@ -42,7 +49,7 @@ const CartItem = ({ item }: CartItemProps) => {
       <TableCell className="text-left">
         <Button
           variant="outline"
-          onClick={() => removeProduct(item.id)}
+          onClick={() => removeBook(item.id)}
           className="text-red-600 hover:bg-red-50"
         >
           삭제
