@@ -1,7 +1,6 @@
 import React from 'react';
 import ProductCard from './product-card';
 import { Product } from '@/types/product-types';
-import useCartStore from '@/stores/use-cart-store'; // 유틸리티 함수 가져오기
 
 // SearchResultProps 타입 정의
 export type SearchResultProps = {
@@ -11,7 +10,6 @@ export type SearchResultProps = {
 };
 
 const SearchResult = ({ products, onBuyNow }: SearchResultProps) => {
-  const { addProduct } = useCartStore();
   return (
     <div className="space-y-4">
       {products.map((product) => {
@@ -20,7 +18,6 @@ const SearchResult = ({ products, onBuyNow }: SearchResultProps) => {
             key={product.id}
             id={product.id}
             product={product}
-            onAddToCart={() => addProduct(product)}
             onBuyNow={() => onBuyNow(product.id)}
           />
         );

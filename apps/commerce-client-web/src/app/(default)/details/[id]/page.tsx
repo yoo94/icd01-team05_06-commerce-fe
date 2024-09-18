@@ -7,6 +7,7 @@ import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 import Breadcrumb from './components/breadcrumb';
 import { Button } from '@/components/ui/button';
+import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 
 // 카테고리 한글명 변환 객체
 const categoryTranslation: { [key: string]: string } = {
@@ -120,9 +121,7 @@ const ProductDetailsPage = () => {
                 +
               </button>
             </div>
-            <Button variant="secondary" className="w-full">
-              장바구니
-            </Button>
+            <AddToCartButton product={product} />
             <Button className="mt-2.5 w-full">바로구매</Button>
           </div>
         </div>

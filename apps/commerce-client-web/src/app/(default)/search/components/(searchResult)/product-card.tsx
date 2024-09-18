@@ -4,16 +4,16 @@ import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
 import { Product } from '@/types/product-types';
 import { parseAndRoundPrice } from '@/lib/utils';
+import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 
 // ProductCardProps 타입 정의
 export type ProductCardProps = {
   id: number;
   product: Product;
-  onAddToCart: () => void;
   onBuyNow: () => void;
 };
 
-const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) => {
+const ProductCard = ({ id, product, onBuyNow }: ProductCardProps) => {
   const router = useRouter(); // useRouter 훅 사용
   const maxLength = 70; // 최대 출력할 글자 수
 
@@ -81,16 +81,7 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
       </div>
       {/* Right Side: Buttons */}
       <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddToCart();
-          }}
-          variant="secondary"
-          className="w-24"
-        >
-          장바구니
-        </Button>
+        <AddToCartButton product={product} />
         <Button
           onClick={(e) => {
             e.stopPropagation();
