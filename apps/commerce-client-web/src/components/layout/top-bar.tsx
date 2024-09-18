@@ -1,3 +1,5 @@
+'use client';
+
 import useAuthStore from '@/stores/use-auth-store';
 import { useSession } from 'next-auth/react';
 import NavLinks from '@/components/common/nav-links';

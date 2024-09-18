@@ -1,15 +1,18 @@
-export interface MenuItem {
+interface MenuItem {
   title: string;
   link?: string;
+  items?: MenuItem[];
 }
 
-export interface Category {
+interface MenuCategory {
   title: string;
   items?: MenuItem[];
 }
 
-export interface MainMenu {
+interface MainMenu {
   title: string;
-  categories?: Category[];
+  categories?: MenuCategory[];
   link?: string;
 }
+
+export type { MenuItem, MenuCategory, MainMenu };
