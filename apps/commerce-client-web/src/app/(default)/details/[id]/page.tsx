@@ -41,7 +41,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
             />
           </div>
           {/* Button to open preview link */}
-          <Button variant="outline" className="w-full border-slate-300">
+          <Button variant="outline" className="mt-4 w-full border-slate-300">
             <Link href={book.previewLink} target="_blank">
               미리보기
             </Link>
