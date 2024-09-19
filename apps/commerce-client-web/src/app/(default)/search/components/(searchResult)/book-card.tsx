@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
-import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 import { Book } from '@/types/book-types';
 import { parseAndRoundPrice } from '@/lib/utils';
 import AddToCartButton from '@/app/(default)/cart/components/cart-add-button'; // Import the useCartStore hook
+import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
 
 export type BookCardProps = {
   id: number;
@@ -81,9 +81,7 @@ const BookCard = ({ id, book }: BookCardProps) => {
       {/* Right Side: Buttons */}
       <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
         <AddToCartButton book={book} quantity={1} />
-        <Button variant="default" className="w-24">
-          바로구매
-        </Button>
+        <PaymentAddButton text={'바로구매'} book={book} />
       </div>
     </div>
   );

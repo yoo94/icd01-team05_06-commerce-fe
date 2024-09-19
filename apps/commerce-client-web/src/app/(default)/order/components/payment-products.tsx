@@ -2,23 +2,23 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CartItem } from '@/types/cart-types';
 
 interface PaymentProductsProps {
-  products: CartItem[];
+  books: CartItem[];
 }
 
-const PaymentProducts = ({ products }: PaymentProductsProps) => {
+const PaymentProducts = ({ books }: PaymentProductsProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>주문 상품 정보</CardTitle>
       </CardHeader>
       <CardContent>
-        {products?.map((product) => (
-          <div key={product.id} className="mb-4 flex items-center space-x-4">
-            <img src={product.coverImage} alt={product.title} className="size-16 rounded" />
+        {books?.map((books) => (
+          <div key={books.id} className="mb-4 flex items-center space-x-4">
+            <img src={books.coverImage} alt={books.title} className="size-16 rounded" />
             <div>
-              <p className="font-medium">{product.title}</p>
-              <p className="text-gray-500">{product.selectNum}개</p>
-              <p className="font-bold">{product.price}</p>
+              <p className="font-medium">{books.title}</p>
+              <p className="text-gray-500">{books.selectNum}개</p>
+              <p className="font-bold">{books.price}</p>
             </div>
           </div>
         ))}

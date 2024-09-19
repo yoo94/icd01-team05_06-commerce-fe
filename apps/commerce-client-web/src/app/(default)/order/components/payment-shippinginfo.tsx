@@ -14,7 +14,7 @@ interface OrderType {
   address: string;
   detailAddress: string;
   memo: string;
-  zonecode: string;
+  zonecode?: string;
 }
 
 interface PaymentShippingInfoProps {

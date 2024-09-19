@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PaymentProducts from './components/payment-products';
 import PaymentSummary from './components/payment-summary';
 import OrderShippingInfo from './components/payment-shippinginfo';
@@ -8,7 +8,7 @@ import OrderPaymentMethod from './components/payment-method';
 import PaymentAgreement from './components/payment-agreement';
 import PaymentUserInfo from './components/payment-userInfo';
 import useCartStore from '@/stores/use-cart-store';
-import { CartItem } from '@/types/cart-types'; // CartItem 타입 임포트
+import { CartItem } from '@/types/cart-types';
 
 const mockUser = {
   name: '유재석',
@@ -22,18 +22,26 @@ const mockOrder = {
   address: '서울',
   detailAddress: '강남구',
   memo: '놓고 가주세여',
-  zonecode: '12345',
 };
 
 const PaymentPage = () => {
-  const { getSelectedBook } = useCartStore();
+  const { getSelectedBook, items } = useCartStore();
   const [books, setBooks] = useState<CartItem[]>([]);
   const [user, setUser] = useState(mockUser);
   const [order, setOrder] = useState(mockOrder);
 
   useEffect(() => {
-    setBooks(getSelectedBook());
-  }, [getSelectedBook]);
+    const searchParams = new URLSearchParams(window.location.search);
+    const productId = searchParams.get('productId');
+
+    if (productId) {
+      const id = Number(productId);
+      const product = items.find((item) => item.id === id);
+      if (product) setBooks([product]);
+    } else {
+      setBooks(getSelectedBook());
+    }
+  }, [getSelectedBook, items]);
 
   const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,7 +60,7 @@ const PaymentPage = () => {
       {/* 그리드 설정: 기본 1열, md(768px) 이상 2열 */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         {/* 주문 상품 정보 */}
-        <PaymentProducts products={books} />
+        <PaymentProducts books={books} />
 
         {/* 주문 요약 */}
         <PaymentSummary books={books} />
