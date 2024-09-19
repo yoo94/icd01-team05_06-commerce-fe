@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 type NewReviewFormProps = {
   onSubmit: (username: string, content: string, rating: number, date: string) => void;
@@ -25,8 +26,22 @@ const NewReviewForm = ({ onSubmit }: NewReviewFormProps) => {
 
   return (
     <div className="mb-8">
-      <h2 className="mb-4 text-xl font-semibold">리뷰 작성하기</h2>
+      <h2 className="mb-4 text-lg font-semibold">리뷰 작성하기</h2>
       <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">평점</label>
+          <div className="flex">
+            {[...Array(5)].map((_, index) => (
+              <Star
+                key={index}
+                onClick={() => setRating(index + 1)}
+                className={`size-6 cursor-pointer ${
+                  index < rating ? 'text-yellow-500' : 'text-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">이름</label>
           <input
@@ -46,26 +61,9 @@ const NewReviewForm = ({ onSubmit }: NewReviewFormProps) => {
             placeholder="리뷰 내용을 입력하세요"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">평점</label>
-          <div className="flex">
-            {[...Array(5)].map((_, index) => (
-              <Star
-                key={index}
-                onClick={() => setRating(index + 1)}
-                className={`size-6 cursor-pointer ${
-                  index < rating ? 'text-yellow-500' : 'text-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full rounded-md bg-blue-500 py-2 font-semibold text-white hover:bg-blue-600"
-        >
+        <Button type="submit" variant="default" className="w-24">
           리뷰 등록
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import StarRating from '@/components/common/star-rating';
 import RefundExchangePolicy from './components/refund-exchage-policy';
+import ReviewSection from './components/review/review-section';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -106,6 +107,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
       {/* Bottom Section */}
       <div className="mt-8 border-t pt-4">
         <BookInfo book={book} />
+        <ReviewSection id={book.id} />
         <RefundExchangePolicy />
       </div>
     </div>
