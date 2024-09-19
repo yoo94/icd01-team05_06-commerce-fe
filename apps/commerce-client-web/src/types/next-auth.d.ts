@@ -11,7 +11,7 @@ declare module 'next-auth' {
     user: UserInfo; // Use the UserInfo interface for the user property
     accessToken: string;
     refreshToken: string;
-    error?: 'RefreshTokenError';
+    error?: string;
   }
 
   interface ExtendedUser extends DefaultUser {
@@ -27,7 +27,7 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     refreshToken: string;
     accessTokenExpiresIn: number;
-    refreshTokenExpiresIn: number;
-    error?: 'RefreshTokenError';
+    userId: string;
+    error?: string;
   }
 }

@@ -13,6 +13,8 @@ const api = ky.create({
       async (request) => {
         const session = await getSession();
 
+        console.log('Setting authorization header:', session?.accessToken);
+
         if (session?.accessToken) {
           request.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
@@ -42,6 +44,7 @@ const api = ky.create({
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${session!.refreshToken}`,
             },
           });
 

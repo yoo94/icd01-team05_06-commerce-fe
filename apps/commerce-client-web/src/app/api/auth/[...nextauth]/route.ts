@@ -1,17 +1,57 @@
 import NextAuth, { ExtendedUser, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginResponse, UserInfo } from '@/types/auth-types';
+import { JWT } from 'next-auth/jwt';
 import ky from 'ky';
+import { LoginResponse } from '@/types/auth-types';
 import { ApiError } from '@/types/api-types';
 
 const apiClient = ky.create({
   prefixUrl: process.env.API_BASE_URL,
 });
 
-const authOptions: NextAuthOptions = {
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+  console.log('Now refreshing the expired token...');
+  try {
+    const res = await apiClient.post('refresh', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.refreshToken}`, // Use refresh token in the request
+      },
+    });
+
+    const { success, data } = await res.json();
+
+    if (!success || !data.accessToken) {
+      console.log('The token could not be refreshed!');
+      throw new Error('Failed to refresh access token');
+    }
+
+    // Decode the new access token
+    const decodedAccessToken = JSON.parse(
+      Buffer.from(data.accessToken.split('.')[1], 'base64').toString(),
+    );
+
+    return {
+      ...token,
+      accessToken: data.accessToken,
+      accessTokenExpiresIn: decodedAccessToken.exp * 1000, // New expiration time
+      refreshToken: data.refreshToken ?? token.refreshToken, // Use new refreshToken if provided
+      error: undefined,
+    };
+  } catch (error) {
+    console.log('Error refreshing access token:', error);
+
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+}
+
+export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
-    verifyRequest: '/login?verify=1',
     error: '/login',
   },
   providers: [
@@ -43,6 +83,7 @@ const authOptions: NextAuthOptions = {
           }
 
           const currentTime = Date.now();
+
           const accessTokenExpiresIn =
             tokenInfo.accessTokenExpiresIn - currentTime > 0
               ? tokenInfo.accessTokenExpiresIn - currentTime
@@ -51,6 +92,8 @@ const authOptions: NextAuthOptions = {
             tokenInfo.refreshTokenExpiresIn - currentTime > 0
               ? tokenInfo.refreshTokenExpiresIn - currentTime
               : 0;
+
+          // console.log('External server accessToken', tokenInfo.accessToken);
 
           // Step 2: Fetch user information using the access token
           const userInfoResponse = await apiClient
@@ -61,7 +104,7 @@ const authOptions: NextAuthOptions = {
             })
             .json<{
               success: boolean;
-              data: UserInfo;
+              data: { id: number; name: string; email: string };
               error: ApiError | null;
             }>();
 
@@ -87,22 +130,39 @@ const authOptions: NextAuthOptions = {
 
           return user;
         } catch (error) {
-          if (error instanceof Error) {
-            throw new Error(error.message);
-          }
+          console.error('Error in authorization:', error);
+          throw new Error('Failed to authenticate');
         }
-
-        return null;
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        const extendedUser = user as ExtendedUser;
+
+        return {
+          ...token,
+          accessToken: extendedUser.accessToken,
+          refreshToken: extendedUser.refreshToken,
+          accessTokenExpiresIn: extendedUser.accessTokenExpiresIn,
+          refreshTokenExpiresIn: extendedUser.refreshTokenExpiresIn,
+          userId: extendedUser.id,
+        };
+      }
+
+      if (Date.now() < token.accessTokenExpiresIn) {
+        return token;
+      }
+
+      return refreshAccessToken(token);
+    },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       session.error = token.error;
       session.user = {
-        id: token.id,
+        id: token.userId,
         name: token.name,
         email: token.email,
       };
