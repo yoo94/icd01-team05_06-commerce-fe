@@ -16,6 +16,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/external-auth/:path*',
+        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_URL}/:path*`,
+      },
+    ];
+  },
   experimental: {
     instrumentationHook: true,
   },

@@ -5,12 +5,12 @@
 
 import { DefaultUser } from 'next-auth';
 import { UserInfo } from '@/types/auth';
+import { TokenInfo } from './auth-types';
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: UserInfo; // Use the UserInfo interface for the user property
-    accessToken: string;
-    refreshToken: string;
+    tokenInfo: TokenInfo;
     error?: string;
   }
 
@@ -27,6 +27,7 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     refreshToken: string;
     accessTokenExpiresIn: number;
+    refreshTokenExpiresIn: number;
     userId: string;
     error?: string;
   }

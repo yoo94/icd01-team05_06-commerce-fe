@@ -106,7 +106,7 @@ const useAuthStore = create<AuthStore>()(
           };
 
           try {
-            const response = await api.post('sign-up', {
+            const response = await api.post('external-auth/sign-up', {
               json: submitData,
             });
 
@@ -144,7 +144,7 @@ const useAuthStore = create<AuthStore>()(
             }
 
             // TODO: 서버로부터 받은 유저 정보 저장하기
-            const user = await api.get('info').json<{
+            const user = await api.get('external-auth/info').json<{
               success: boolean;
               data: UserInfo;
               error: ApiError | null;
