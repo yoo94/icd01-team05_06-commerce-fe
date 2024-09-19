@@ -20,7 +20,7 @@ const nextConfig = {
     return [
       {
         source: '/external-auth/:path*',
-        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_URL}/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_AUTH_URL}/:path*`,
       },
     ];
   },

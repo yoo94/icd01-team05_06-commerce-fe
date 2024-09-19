@@ -2,7 +2,7 @@ import ky from 'ky';
 import { TokenInfo, TokenResponse } from '@/types/auth-types';
 
 export const apiClient = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_EXTERNAL_URL,
+  prefixUrl: process.env.NEXT_PUBLIC_EXTERNAL_AUTH_URL,
 });
 
 export async function refreshAccessToken(token: TokenInfo): Promise<TokenInfo> {
