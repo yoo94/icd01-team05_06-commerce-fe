@@ -1,8 +1,7 @@
 import ky, { HTTPError } from 'ky';
 import { signOut, getSession } from 'next-auth/react';
 
-const api = ky.create({
-  prefixUrl: process.env.API_BASE_URL,
+const baseApi = ky.create({
   timeout: 10000,
   retry: {
     limit: 2,
@@ -74,4 +73,14 @@ const api = ky.create({
   },
 });
 
-export default api;
+export const authApi = baseApi.extend({
+  prefixUrl: process.env.AUTH_API_URL,
+});
+
+export const productApi = baseApi.extend({
+  prefixUrl: process.env.PRODUCT_API_URL,
+});
+
+export const orderApi = baseApi.extend({
+  prefixUrl: process.env.ORDER_API_URL,
+});
