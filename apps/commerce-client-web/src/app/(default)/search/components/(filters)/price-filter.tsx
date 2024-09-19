@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 

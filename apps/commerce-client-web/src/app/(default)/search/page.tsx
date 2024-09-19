@@ -1,73 +1,71 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
-import productsData from '@/data/products.json';
+import { Book } from '@/types/book-types';
 import FilterComponent from './components/(filters)/filter-component';
 import SearchResult from './components/(searchResult)/search-result';
+import mswApi from '@/lib/msw-api';
+import { filterBooksByCategoryName } from '@/lib/utils';
 
 interface SearchPageProps {
   searchParams: {
-    SearchWord?: string;
+    word?: string;
     price?: string;
     publisher?: string;
     category?: string;
+    tag?: string;
   };
 }
 
-const SearchPage = ({ searchParams }: SearchPageProps) => {
-  const [filteredProducts, setFilteredProducts] = useState(productsData);
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const booksData = await mswApi.get('books').json<Book[]>();
 
-  useEffect(() => {
-    const searchWord = searchParams.SearchWord ?? '';
-    const priceRange = searchParams.price ?? '';
-    const selectedPublisher = searchParams.publisher ?? '';
-    const selectedCategory = searchParams.category ?? '';
+  // Apply filters based on search parameters
+  const searchWord = searchParams.word ?? '';
+  const priceRange = searchParams.price ?? '';
+  const selectedPublisher = searchParams.publisher ?? '';
+  const selectedCategory = searchParams.category ?? '';
+  const selectedTag = searchParams.tag ?? '';
 
-    let filtered = productsData;
+  let filteredBooks = booksData;
 
-    // SearchWord 필터링
-    if (searchWord) {
-      filtered = filtered.filter((product) =>
-        product.title.toLowerCase().includes(searchWord.toLowerCase()),
-      );
-    }
+  // Filter by search word
+  if (searchWord) {
+    filteredBooks = filteredBooks.filter((book) =>
+      book.title.toLowerCase().includes(searchWord.toLowerCase()),
+    );
+  }
 
-    // Price 필터링
-    if (priceRange) {
-      const [minPrice, maxPrice] = priceRange.split('-').map(Number);
-      filtered = filtered.filter(
-        (product) => product.price >= minPrice && product.price <= maxPrice,
-      );
-    }
+  // Filter by price range
+  if (priceRange) {
+    const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+    filteredBooks = filteredBooks.filter((book) => {
+      const discountedPrice = book.price - (book.discount ?? 0); // Calculate discounted price
+      return discountedPrice >= minPrice && discountedPrice <= maxPrice;
+    });
+  }
 
-    // Publisher 필터링
-    if (selectedPublisher) {
-      const publishers = selectedPublisher.split(',');
-      filtered = filtered.filter((product) => publishers.includes(product.publisher));
-    }
+  // Filter by publisher
+  if (selectedPublisher) {
+    const publishers = selectedPublisher.split(',');
+    filteredBooks = filteredBooks.filter((book) => publishers.includes(book.publisher));
+  }
 
-    // Category 필터링
-    if (selectedCategory) {
-      const categories = selectedCategory.split(',');
-      filtered = filtered.filter((product) => categories.includes(product.category.name));
-    }
-    setFilteredProducts(filtered);
-  }, [searchParams]);
+  // Filter by category
+  if (selectedCategory) {
+    const selectedCategories = selectedCategory.split(',')[0];
 
-  const handleAddToCart = (id: number) => {
-    console.log(`Add to cart clicked for product ${id}`);
-  };
+    filteredBooks = filterBooksByCategoryName(filteredBooks, selectedCategories);
+  }
 
-  const handleBuyNow = (id: number) => {
-    console.log(`Buy now clicked for product ${id}`);
-  };
+  // Filter by tag
+  if (selectedTag) {
+    const tags = selectedTag.split(',');
+    filteredBooks = filteredBooks.filter((book) => tags.some((tag) => book.tags.includes(tag)));
+  }
 
   return (
     <div className="flex">
       {/* Sidebar with filters */}
       <div className="hidden w-1/5 p-4 lg:block">
-        <FilterComponent products={productsData} />
+        <FilterComponent books={filteredBooks} />
       </div>
 
       {/* Main content area */}
@@ -75,11 +73,7 @@ const SearchPage = ({ searchParams }: SearchPageProps) => {
         <h1 className="mb-4 text-xl font-bold">상품 목록</h1>
 
         {/* Render the search results */}
-        <SearchResult
-          products={filteredProducts}
-          onAddToCart={handleAddToCart}
-          onBuyNow={handleBuyNow}
-        />
+        <SearchResult books={filteredBooks} />
       </div>
     </div>
   );

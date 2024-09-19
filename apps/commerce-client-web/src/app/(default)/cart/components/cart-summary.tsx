@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import useCartStore from '@/stores/use-cart-store';
 
 const CartSummary = () => {

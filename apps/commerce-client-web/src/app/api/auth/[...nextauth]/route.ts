@@ -1,15 +1,11 @@
 import NextAuth, { ExtendedUser, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginResponse } from '@/types/auth-types';
+import { LoginResponse, UserInfo } from '@/types/auth-types';
 import ky from 'ky';
-
-type ApiError = {
-  message: string;
-  code?: number;
-};
+import { ApiError } from '@/types/api-types';
 
 const apiClient = ky.create({
-  prefixUrl: process.env.API_BASE_URL, // Use your API URL here
+  prefixUrl: process.env.API_BASE_URL,
 });
 
 const authOptions: NextAuthOptions = {
@@ -65,7 +61,7 @@ const authOptions: NextAuthOptions = {
             })
             .json<{
               success: boolean;
-              data: { id: number; name: string; email: string };
+              data: UserInfo;
               error: ApiError | null;
             }>();
 
@@ -101,59 +97,6 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        const extendedUser = user as ExtendedUser;
-
-        return {
-          ...token,
-          ...extendedUser,
-          error: undefined,
-        };
-      }
-
-      if (
-        typeof token.accessTokenExpiresIn === 'number' &&
-        Date.now() < token.accessTokenExpiresIn
-      ) {
-        return token;
-      }
-
-      if (!token.refreshToken) {
-        throw new TypeError('Missing refresh_token');
-      }
-
-      try {
-        const refreshData = await apiClient
-          .post('refresh', {
-            json: { refreshToken: token.refreshToken },
-          })
-          .json<{ success: boolean; data: { accessToken: string }; error: ApiError | null }>();
-
-        if (!refreshData.success || !refreshData.data.accessToken) {
-          console.error(
-            'Error refreshing access token:',
-            refreshData.error?.message || 'Unknown error',
-          );
-          throw new Error(refreshData.error?.message || 'Failed to refresh access token');
-        }
-
-        const { accessToken } = refreshData.data;
-
-        return {
-          ...token,
-          accessToken,
-          accessTokenExpiresIn: Date.now() + 60 * 60 * 1000,
-          error: undefined,
-        };
-      } catch (error) {
-        console.error('Error refreshing access token', error);
-        return {
-          ...token,
-          error: 'RefreshTokenError',
-        };
-      }
-    },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
