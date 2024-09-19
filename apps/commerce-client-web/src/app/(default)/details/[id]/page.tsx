@@ -1,204 +1,115 @@
-'use client';
-import React, { useEffect, useState, useRef, Suspense } from 'react';
+import { DetailBook } from '@/types/book-types';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import products from '@/data/products.json'; // Adjust path as necessary
-import { Product } from '@/types/product-types';
-import { parseAndRoundPrice } from '@/lib/utils';
-import Breadcrumb from './components/breadcrumb';
+import Breadcrumb from '@/components/common/breadcrumb';
+import { calculationDiscountRate, parseAndRoundPrice } from '@/lib/utils';
+import mswApi from '@/lib/msw-api';
+import DetailButtonActions from './components/detail-button-actions';
+import BookInfo from './components/book-info/book-info';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import StarRating from '@/components/common/star-rating';
+import RefundExchangePolicy from './components/refund-exchage-policy';
 
-// 카테고리 한글명 변환 객체
-const categoryTranslation: { [key: string]: string } = {
-  DOMESTIC: '국내도서',
-  DOMESTIC_POETRY: '국내 시',
-  FOREIGN: '외국도서',
-  FOREIGN_HISTORY: '외국 역사',
-  FOREIGN_POETRY: '외국 시',
-};
+interface BookDetailsPageProps {
+  params: { id: string };
+}
 
-const ProductDetailsPage = () => {
-  const params = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
+// Main Server Component for the Book Details Page
+const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
+  const bookId = parseInt(params.id, 10);
 
-  const bookInfoRef = useRef<HTMLDivElement>(null);
-  const reviewsRef = useRef<HTMLDivElement>(null);
-  const shippingRef = useRef<HTMLDivElement>(null);
-  const productInfoRef = useRef<HTMLDivElement>(null);
+  // Fetch Book Data from the API
+  const book = await mswApi(`books/${bookId}`).json<DetailBook>();
 
-  // 비동기적으로 BookInfoPage 가져오기
-  const BookInfoPage = React.lazy(
-    () => import('@/app/(default)/details/[id]/components/book-info'),
-  );
-
-  useEffect(() => {
-    if (params?.id) {
-      const productId = Array.isArray(params.id)
-        ? parseInt(params.id[0], 10)
-        : parseInt(params.id, 10);
-      const foundProduct = products.find((p) => p.id === productId) || null;
-      setProduct(foundProduct);
-    }
-  }, [params]);
-
-  const handleIncrease = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-
-  const handleDecrease = () => {
-    setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
-  };
-
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  if (!product) {
-    return <div>Product not found</div>;
-  }
-
-  const parentCategoryName =
-    categoryTranslation[product.category.parentCategory.name] ||
-    product.category.parentCategory.name;
-  const categoryName = categoryTranslation[product.category.name] || product.category.name;
-
-  const breadcrumbItems = [
-    { label: parentCategoryName, href: `/category/${product.category.parentCategory.id}` },
-    { label: categoryName, href: `/category/${product.category.id}` },
-  ];
-
-  const originalPrice = parseAndRoundPrice(product.price);
-  const discountedPrice = product.discount
-    ? parseAndRoundPrice(product.price - product.discount)
-    : null;
+  const originalPrice = parseAndRoundPrice(book.price);
+  const discountedPrice = book.discount ? parseAndRoundPrice(book.price - book.discount) : null;
+  const discountRate = calculationDiscountRate(book.price, book.discount);
 
   return (
     <div className="mx-auto max-w-5xl p-4">
-      <Breadcrumb items={breadcrumbItems} />
-
+      <Breadcrumb category={book.category} />
       <div className="flex">
+        {/* Book Image Section */}
         <div className="w-1/3">
-          <Image src={product.coverImage} alt={product.title} width={300} height={400} />
+          <div className="relative h-48 md:h-80">
+            <Image
+              src={book.coverImage}
+              alt={book.title}
+              fill
+              style={{ objectFit: 'fill' }}
+              className="rounded-lg"
+            />
+          </div>
+          {/* Button to open preview link */}
+          <Button variant="outline" className="w-full border-slate-300">
+            <Link href={book.previewLink} target="_blank">
+              미리보기
+            </Link>
+          </Button>
         </div>
 
-        <div className="w-2/3 pl-6">
-          <h1 className="mb-2 text-xl font-semibold">{product.title}</h1>
+        {/* Top Section */}
+        <div className="flex w-2/3 flex-col items-start pl-6">
+          <div className="flex w-full flex-col gap-y-2 border-b pb-4">
+            <div className="flex gap-x-2">
+              <div className="border px-2.5 py-1 text-xs font-light">소득공제</div>
+              <div className="border px-2.5 py-1 text-xs font-light">무료배송</div>
+            </div>
+            <h1 className="mb-2 text-lg font-semibold">{book.title}</h1>
+            <p className="text-xs font-extralight text-slate-500">
+              {book.author} | {book.publisher} | {book.pubdate}
+            </p>
+            <div className="flex items-center gap-x-2">
+              <StarRating rating={book.rating} />
+              <span className="font-bold text-gray-500">{book.rating}</span>
+            </div>
+          </div>
 
           <div className="mb-6 mt-4">
-            {product.discount > 0 ? (
-              <>
-                <p className="text-slate-400 line-through">
-                  정가: <span>{originalPrice}원</span>
-                </p>
-                <p className="text-lg font-semibold">판매가: {discountedPrice}원</p>
-              </>
+            {book.discount > 0 ? (
+              <div className="py-4">
+                <div className="grid grid-cols-[120px_1fr] items-center gap-y-2 text-sm">
+                  {/* Original Price */}
+                  <div className="w-28 font-extralight text-slate-500">정가</div>
+                  <div className="text-left font-extrabold line-through">{originalPrice}원</div>
+                  {/* Discounted Price */}
+                  <div className="w-28 font-extralight text-slate-500">판매가</div>
+                  <div className="text-destructive text-left text-base">
+                    <span className="font-extrabold">{discountedPrice}원</span>
+                    <span className="ml-1 text-xs font-light">({discountRate}%)</span>
+                  </div>
+                </div>
+              </div>
             ) : (
               <p className="text-lg font-semibold text-gray-900">품절</p>
             )}
           </div>
 
-          <p className="mb-4 text-gray-700">{product.description}</p>
-        </div>
-
-        <div className="ml-6 w-1/4">
-          <div className="rounded-lg border p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <button
-                className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
-                onClick={handleDecrease}
-              >
-                -
-              </button>
-              <span>{quantity}</span>
-              <button
-                className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
-                onClick={handleIncrease}
-              >
-                +
-              </button>
+          <div className="grid w-full grid-cols-[120px_1fr] gap-y-2 border-t py-4 text-sm">
+            {/* Shipping Information */}
+            <div className="font-extralight text-slate-500">배송안내</div>
+            <div className="text-left text-sm font-extralight text-slate-500">
+              주문 후 2-3일 이내 도착
             </div>
-            <Button variant="secondary" className="w-full">
-              장바구니
-            </Button>
-            <Button className="mt-2.5 w-full">바로구매</Button>
+            {/* Shipping Cost */}
+            <div className="font-extralight text-slate-500">배송비</div>
+            <div className="text-left text-sm font-extralight text-slate-500">무료배송</div>
           </div>
+        </div>
+
+        {/* Cart Actions Section */}
+        <div className="ml-6 w-1/4">
+          <DetailButtonActions book={book} />
         </div>
       </div>
 
+      {/* Bottom Section */}
       <div className="mt-8 border-t pt-4">
-        <ul className="flex space-x-4 text-sm">
-          <li>
-            <button
-              className="text-gray-700 hover:underline"
-              onClick={() => scrollToSection(bookInfoRef)}
-            >
-              도서정보
-            </button>
-          </li>
-          <li>
-            <button
-              className="text-gray-700 hover:underline"
-              onClick={() => scrollToSection(reviewsRef)}
-            >
-              리뷰/한줄평
-            </button>
-          </li>
-          <li>
-            <button
-              className="text-gray-700 hover:underline"
-              onClick={() => scrollToSection(shippingRef)}
-            >
-              배송/반품/교환
-            </button>
-          </li>
-          <li>
-            <button
-              className="text-gray-700 hover:underline"
-              onClick={() => scrollToSection(productInfoRef)}
-            >
-              품목정보
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div className="mt-8">
-        <div ref={bookInfoRef}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <BookInfoPage description={product.description} />
-          </Suspense>
-        </div>
-
-        <div ref={reviewsRef} className="mt-8">
-          <h2 className="mb-2 text-xl font-semibold">리뷰/한줄평</h2>
-          <div>
-            {product.reviews && product.reviews.length > 0 ? (
-              product.reviews.map((review, index) => (
-                <p key={index} className="mb-2">
-                  {review}
-                </p>
-              ))
-            ) : (
-              <p>아직 리뷰가 없습니다.</p>
-            )}
-          </div>
-        </div>
-
-        <div ref={shippingRef} className="mt-8">
-          <h2 className="mb-2 text-xl font-semibold">배송/반품/교환</h2>
-          <div>배송/반품/교환 정보가 여기에 표시됩니다.</div>
-        </div>
-
-        <div ref={productInfoRef} className="mt-8">
-          <h2 className="mb-2 text-xl font-semibold">품목정보</h2>
-          <div>품목정보가 여기에 표시됩니다.</div>
-        </div>
+        <BookInfo book={book} />
+        <RefundExchangePolicy />
       </div>
     </div>
   );
 };
 
-export default ProductDetailsPage;
+export default BookDetailsPage;

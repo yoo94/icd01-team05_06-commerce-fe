@@ -1,23 +1,22 @@
-import React from 'react';
+'use client';
+
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
-import { Product } from '@/types/product-types';
+import { Book } from '@/types/book-types';
 import { parseAndRoundPrice } from '@/lib/utils';
+import AddToCartButton from '@/app/(default)/cart/components/cart-add-button'; // Import the useCartStore hook
 
-// ProductCardProps 타입 정의
-export type ProductCardProps = {
+export type BookCardProps = {
   id: number;
-  product: Product;
-  onAddToCart: () => void;
-  onBuyNow: () => void;
+  book: Book;
 };
 
-const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) => {
+const BookCard = ({ id, book }: BookCardProps) => {
   const router = useRouter(); // useRouter 훅 사용
   const maxLength = 70; // 최대 출력할 글자 수
 
-  const roundedPrice = parseAndRoundPrice(product.price); // 유틸리티 함수 사용
+  const roundedPrice = parseAndRoundPrice(book.price); // 유틸리티 함수 사용
 
   const handleNavigate = () => {
     router.push(`/details/${id}`);
@@ -29,15 +28,15 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
 
   return (
     <div
-      className="hover:border-primary flex w-full shrink cursor-pointer flex-col rounded-md border p-4 shadow-sm hover:shadow-md sm:w-auto md:flex-row" // flex-wrap과 w-full 추가
+      className="hover:border-primary flex w-full shrink cursor-pointer flex-col rounded-md border p-4 shadow-sm hover:shadow-md sm:w-auto md:flex-row"
       onClick={handleNavigate}
     >
       <div className="flex">
         {/* Left Side: Image */}
         <div className="relative h-44 w-32 shrink-0">
           <Image
-            src={product.coverImage}
-            alt={product.title}
+            src={book.coverImage}
+            alt={book.title}
             fill
             style={{ objectFit: 'cover' }}
             className="rounded-lg"
@@ -47,14 +46,14 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
         {/* Center: Title, Price, Tags */}
         <div className="mx-4 flex grow flex-col justify-between">
           <div className="flex flex-col gap-y-1.5 py-2">
-            <h2 className="max-w-96 truncate text-sm font-semibold">{product.title}</h2>
+            <h2 className="max-w-96 truncate text-sm font-semibold">{book.title}</h2>
             <p className="text-xs font-light text-slate-600">
-              {product.author} | {product.publisher} | {product.pubdate}
+              {book.author} | {book.publisher} | {book.pubdate}
             </p>
             <p className="mt-2 text-sm">
-              {product.discount > 0 ? (
+              {book.discount > 0 ? (
                 <>
-                  <span className="mr-1 font-extrabold">{product.discount.toLocaleString()}원</span>
+                  <span className="mr-1 font-extrabold">{book.discount.toLocaleString()}원</span>
                   <span className="text-xs text-slate-400 line-through">
                     {roundedPrice.toLocaleString()}원
                   </span>
@@ -64,11 +63,11 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
               )}
             </p>
             <p className="hidden text-xs font-light text-slate-500 md:block">
-              {truncateDescription(product.description, maxLength)}
+              {truncateDescription(book.description, maxLength)}
             </p>
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
-            {product.tags.map((tag, index) => (
+            {book.tags.map((tag, index) => (
               <span
                 key={index}
                 className="gap-2 rounded bg-slate-100 px-2 py-1 text-xs font-light text-slate-400"
@@ -81,24 +80,8 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
       </div>
       {/* Right Side: Buttons */}
       <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddToCart();
-          }}
-          variant="secondary"
-          className="w-24"
-        >
-          장바구니
-        </Button>
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onBuyNow();
-          }}
-          variant="default"
-          className="w-24"
-        >
+        <AddToCartButton book={book} quantity={1} />
+        <Button variant="default" className="w-24">
           바로구매
         </Button>
       </div>
@@ -106,4 +89,4 @@ const ProductCard = ({ id, product, onAddToCart, onBuyNow }: ProductCardProps) =
   );
 };
 
-export default ProductCard;
+export default BookCard;

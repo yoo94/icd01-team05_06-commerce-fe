@@ -1,11 +1,12 @@
-import React from 'react';
+'use client';
+
 import useCartStore from '@/stores/use-cart-store';
 
 const CartSummary = () => {
   const { items } = useCartStore();
   const totalPrice = items
     .filter((item) => item.selected)
-    .reduce((acc, item) => acc + parseInt(String(item.price)) * item.selectNum, 0)
+    .reduce((acc, item) => acc + parseInt(String(item.price - item.discount)) * item.selectNum, 0)
     .toLocaleString();
 
   return (

@@ -20,7 +20,7 @@ const LoginPage = async () => {
           size="lg"
           asChild
         >
-          <Link href="/join">회원가입</Link>
+          <Link href="/signup">회원가입</Link>
         </Button>
       </div>
     </>

@@ -1,9 +1,12 @@
-import React from 'react';
+'use client';
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
+import Modal from '@/components/common/modal';
+import DaumPostcode from 'react-daum-postcode';
 
 interface OrderType {
   name: string;
@@ -11,13 +14,63 @@ interface OrderType {
   address: string;
   detailAddress: string;
   memo: string;
+  zonecode: string;
 }
 
 interface PaymentShippingInfoProps {
   order: OrderType;
   onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
+
+interface PaymentPostAddressModalProps {
+  zonecode: string;
+  address: string;
+}
+
+const PaymentPostAddressModal = ({
+  isOpen,
+  onClose,
+  onComplete,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onComplete: (data: PaymentPostAddressModalProps) => void;
+}) => {
+  return (
+    <Modal open={isOpen} onClose={onClose}>
+      <DaumPostcode
+        onComplete={(data) => {
+          onComplete(data);
+          onClose();
+        }}
+      />
+    </Modal>
+  );
+};
+
 const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 우편번호 및 주소 데이터 업데이트 함수
+  const handleCompletePostcode = (data: PaymentPostAddressModalProps) => {
+    const { zonecode, address } = data;
+
+    // 우편번호와 주소를 각각 필드에 업데이트
+    onOrderChange({
+      target: {
+        name: 'zonecode',
+        value: zonecode,
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+
+    onOrderChange({
+      target: {
+        name: 'address',
+        value: address,
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -53,7 +106,15 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
           </div>
           <div>
             <Label>우편번호</Label>
-            <Input type="text" placeholder="우편번호" className="flex-1" />
+            <Input
+              className="cursor-pointer"
+              type="text"
+              placeholder="우편번호"
+              name="zonecode" // 우편번호 필드
+              value={order.zonecode} // 우편번호 값 반영
+              readOnly={true}
+              onClick={() => setIsModalOpen(true)} // 클릭 시 모달 열기
+            />
           </div>
           <div>
             <Label>주소</Label>
@@ -61,8 +122,9 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
               type="text"
               placeholder="주소"
               name="address"
-              value={order.address}
+              value={order.address} // 주소 값 반영
               onChange={onOrderChange}
+              readOnly={true}
             />
           </div>
           <div>
@@ -86,6 +148,11 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
           </div>
         </div>
       </CardContent>
+      <PaymentPostAddressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onComplete={handleCompletePostcode}
+      />
     </Card>
   );
 };
