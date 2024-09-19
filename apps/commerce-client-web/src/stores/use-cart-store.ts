@@ -21,7 +21,7 @@ const useCartStore = create<CartState>()(
       addBook: (book: Book, quantity?: number) =>
         set((state) => {
           // Check if the book already exists in the cart
-          if (!book || !book.id) {
+          if (!book || !book.id || !quantity) {
             return state;
           }
           const existingBook = state.items.find((item) => item.id === book.id);
