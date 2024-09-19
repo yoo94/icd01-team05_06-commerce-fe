@@ -1,33 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import useCartStore from '@/stores/use-cart-store';
 import { Book } from '@/types/book-types';
-import { useRouter } from 'next/navigation';
+import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 
 interface CartActionsProps {
   book: Book;
 }
 
-const CartActions = ({ book }: CartActionsProps) => {
-  const { addBook, updateBookQuantity, items } = useCartStore();
-  const router = useRouter(); // next/router 훅 사용
-
-  const cartItem = items.find((item) => item.id === book.id);
-  const quantity = cartItem ? cartItem.selectNum : 0;
-
-  const handleAddToCartAndRedirect = () => {
-    addBook(book);
-    router.push('/cart'); // 장바구니로 이동
-  };
+const DetailButtonActions = ({ book }: CartActionsProps) => {
+  // 수량을 로컬 상태로 관리
+  const [quantity, setQuantity] = useState(1);
 
   const handleIncreaseQuantity = () => {
-    updateBookQuantity(book.id, quantity + 1);
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const handleDecreaseQuantity = () => {
     if (quantity > 1) {
-      updateBookQuantity(book.id, quantity - 1);
+      setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
 
@@ -49,12 +41,11 @@ const CartActions = ({ book }: CartActionsProps) => {
           +
         </button>
       </div>
-      <Button variant="secondary" className="w-full" onClick={handleAddToCartAndRedirect}>
-        장바구니
-      </Button>
+      {/* AddToCartButton에 로컬 상태 quantity를 전달 */}
+      <AddToCartButton book={book} quantity={quantity} />
       <Button className="mt-2.5 w-full">바로구매</Button>
     </div>
   );
 };
 
-export default CartActions;
+export default DetailButtonActions;
