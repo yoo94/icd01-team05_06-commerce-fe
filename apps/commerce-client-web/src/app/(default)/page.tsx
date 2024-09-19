@@ -9,7 +9,7 @@ import {
 import BookSection from './components/book-section';
 import { Book } from '@/types/book-types';
 import { Card, CardContent } from '@/components/ui/card';
-import mswApi from '@/lib/msw-api';
+import { productApi } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,9 +27,9 @@ const Home = async () => {
   ];
 
   const [newReleasesResponse, recommendedBooksResponse, bestSellersResponse] = await Promise.all([
-    mswApi.get('books/new-releases').json<Book[]>(),
-    mswApi.get('books/recommended').json<Book[]>(),
-    mswApi.get('books/best-sellers').json<Book[]>(),
+    productApi.get('books/new-releases').json<Book[]>(),
+    productApi.get('books/recommended').json<Book[]>(),
+    productApi.get('books/best-sellers').json<Book[]>(),
   ]);
 
   const newReleases: Book[] = Array.isArray(newReleasesResponse) ? newReleasesResponse : [];

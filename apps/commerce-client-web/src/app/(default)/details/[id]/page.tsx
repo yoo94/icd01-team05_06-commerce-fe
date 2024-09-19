@@ -2,13 +2,13 @@ import { DetailBook } from '@/types/book-types';
 import Image from 'next/image';
 import Breadcrumb from '@/components/common/breadcrumb';
 import { calculationDiscountRate, parseAndRoundPrice } from '@/lib/utils';
-import mswApi from '@/lib/msw-api';
 import CartActions from './components/cart-actions';
 import BookInfo from './components/book-info/book-info';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import StarRating from '@/components/common/star-rating';
 import RefundExchangePolicy from './components/refund-exchage-policy';
+import { productApi } from '@/lib/api';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -19,7 +19,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   const bookId = parseInt(params.id, 10);
 
   // Fetch Book Data from the API
-  const book = await mswApi(`books/${bookId}`).json<DetailBook>();
+  const book = await productApi(`books/${bookId}`).json<DetailBook>();
 
   const originalPrice = parseAndRoundPrice(book.price);
   const discountedPrice = book.discount ? parseAndRoundPrice(book.price - book.discount) : null;
