@@ -9,6 +9,8 @@ import PaymentAgreement from './components/payment-agreement';
 import PaymentUserInfo from './components/payment-userInfo';
 import useCartStore from '@/stores/use-cart-store';
 import { CartItem } from '@/types/cart-types';
+import { DetailBook } from '@/types/book-types';
+import mswApi from '@/lib/msw-api';
 
 const mockUser = {
   name: '유재석',
@@ -31,16 +33,35 @@ const PaymentPage = () => {
   const [order, setOrder] = useState(mockOrder);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const productId = searchParams.get('productId');
+    const fetchBookData = async () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const productId = searchParams.get('productId');
 
-    if (productId) {
-      const id = Number(productId);
-      const product = items.find((item) => item.id === id);
-      if (product) setBooks([product]);
-    } else {
-      setBooks(getSelectedBook());
-    }
+      if (productId) {
+        const bookId = Number(productId);
+        try {
+          const book = await mswApi(`books/${bookId}`).json<DetailBook>();
+
+          if (book) {
+            const cartItem: CartItem = {
+              ...book,
+              selectNum: 1,
+              selected: true,
+              shippingInfo: '무료배송',
+              imageUrl: book.coverImage || undefined,
+            };
+
+            setBooks([cartItem]);
+          }
+        } catch (error) {
+          console.error('Failed to fetch book:', error);
+        }
+      } else {
+        setBooks(getSelectedBook());
+      }
+    };
+
+    fetchBookData();
   }, [getSelectedBook, items]);
 
   const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
