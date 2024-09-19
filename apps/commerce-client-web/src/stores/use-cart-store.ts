@@ -5,7 +5,7 @@ import { persist } from 'zustand/middleware';
 
 export interface CartState {
   items: CartItem[];
-  addBook: (book: Book, quantity: number) => void;
+  addBook: (book: Book, quantity?: number) => void;
   removeBook: (id: number) => void;
   removeAllBook: () => void;
   updateBookQuantity: (id: number, selectNum: number) => void;
@@ -18,7 +18,7 @@ const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      addBook: (book: Book, quantity?: number) =>
+      addBook: (book: Book, quantity: number = 1) =>
         set((state) => {
           // Check if the book already exists in the cart
           if (!book || !book.id) {
@@ -29,7 +29,7 @@ const useCartStore = create<CartState>()(
             // Increment the quantity if the book exists
             return {
               items: state.items.map((item) =>
-                item.id === book.id ? { ...item, selectNum: item.selectNum + quantity ?? 1 } : item,
+                item.id === book.id ? { ...item, selectNum: item.selectNum + quantity } : item,
               ),
             };
           } else {
@@ -39,7 +39,7 @@ const useCartStore = create<CartState>()(
                 ...state.items,
                 {
                   ...book,
-                  selectNum: quantity ?? 1,
+                  selectNum: quantity,
                   selected: true,
                   shippingInfo: '무료',
                 } as CartItem, // Ensure the new item is typed as CartItem
