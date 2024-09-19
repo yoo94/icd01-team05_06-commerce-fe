@@ -1,26 +1,16 @@
-import React from 'react';
-import ProductCard from './product-card';
-import { Product } from '@/types/product-types';
+import BookCard from './book-card';
+import { Book } from '@/types/book-types';
 
 // SearchResultProps 타입 정의
 export type SearchResultProps = {
-  products: Product[];
-  onBuyNow: (id: number) => void;
-  onAddToCart: (id: number) => void;
+  books: Book[];
 };
 
-const SearchResult = ({ products, onBuyNow }: SearchResultProps) => {
+const SearchResult = ({ books }: SearchResultProps) => {
   return (
     <div className="space-y-4">
-      {products.map((product) => {
-        return (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            product={product}
-            onBuyNow={() => onBuyNow(product.id)}
-          />
-        );
+      {books.map((book) => {
+        return <BookCard key={book.id} id={book.id} book={book} />;
       })}
     </div>
   );

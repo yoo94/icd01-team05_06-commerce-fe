@@ -1,20 +1,28 @@
+'use client';
+
 import useCartStore from '@/stores/use-cart-store';
 import { useToast } from '@/components/ui/use-toast';
-import { Product } from '@/types/product-types';
+import { Book } from '@/types/book-types';
 import { Button } from '@/components/ui/button';
 import { ToastAction } from '@/components/ui/toast';
 import Link from 'next/link';
 
-const AddToCartButton = ({ product, quantity }: { product: Product; quantity: number }) => {
-  const addProduct = useCartStore((state) => state.addProduct);
+interface AddToCartButtonProps {
+  book: Book;
+  quantity: number;
+}
+
+const AddToCartButton = ({ book, quantity }: AddToCartButtonProps) => {
+  const addBook = useCartStore((state) => state.addBook);
+
   const { toast } = useToast();
 
   const handleAddToCart = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-    addProduct(product, quantity);
+    addBook(book, quantity);
     toast({
       title: 'add to cart!',
-      description: `${product.title}이(가) ${quantity ?? 1}개가 장바구니에 추가되었습니다.`,
+      description: `${book.title}이(가) ${quantity}개가 장바구니에 추가되었습니다.`,
       action: (
         <div className="mt-4 flex w-full justify-end">
           <ToastAction altText="바로가기" className="border-slate-600">

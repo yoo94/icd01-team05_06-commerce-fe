@@ -1,15 +1,14 @@
-import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CartItem } from '@/types/cart-types';
 
 interface PaymentSummaryProps {
-  products: CartItem[];
+  books: CartItem[];
   shippingCost?: number; // 배송비를 선택적 프롭스로 추가
 }
 
-const PaymentSummary = ({ products, shippingCost = 0 }: PaymentSummaryProps) => {
-  const totalPrice = products
-    .reduce((acc, product) => acc + Number(product.price) * product.selectNum, 0)
+const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
+  const totalPrice = books
+    .reduce((acc, book) => acc + Number(book.price) * book.selectNum, 0)
     .toLocaleString();
 
   const totalAmount = (Number(totalPrice.replace(/,/g, '')) + shippingCost).toLocaleString();

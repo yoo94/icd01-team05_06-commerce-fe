@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { useRouter, useSearchParams } from 'next/navigation'; // useRouter, useSearchParams 가져오기
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 

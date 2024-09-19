@@ -1,34 +1,18 @@
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ShoppingCart } from 'lucide-react';
-import useAuthStore from '@/stores/use-auth-store';
-import { useSession } from 'next-auth/react';
+import { ShoppingCart, User2 } from 'lucide-react';
 
 const HeaderButton = () => {
-  const { data: session } = useSession();
-  const { logout } = useAuthStore();
-
-  const isAuthenticated = !!session;
-
   return (
     <>
       <Link href={'/cart'}>
-        <ShoppingCart />
+        <ShoppingCart className="size-7" />
       </Link>
-      {isAuthenticated ? (
-        <>
-          <Button variant={'outline'} onClick={logout}>
-            로그아웃
-          </Button>
-          <Button asChild>
-            <Link href={'/myPage'}>마이페이지</Link>
-          </Button>
-        </>
-      ) : (
-        <Button asChild>
-          <Link href={'/login'}>로그인</Link>
-        </Button>
-      )}
+      <Link
+        href={'/my-page'}
+        className="flex size-10 items-center justify-center rounded-full bg-lime-500 text-white shadow-md"
+      >
+        <User2 className="size-6" />
+      </Link>
     </>
   );
 };
