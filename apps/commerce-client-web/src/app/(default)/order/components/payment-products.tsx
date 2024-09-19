@@ -14,7 +14,7 @@ const PaymentProducts = ({ products }: PaymentProductsProps) => {
       <CardContent>
         {products?.map((product) => (
           <div key={product.id} className="mb-4 flex items-center space-x-4">
-            <img src={product.imageUrl} alt={product.title} className="size-16 rounded" />
+            <img src={product.coverImage} alt={product.title} className="size-16 rounded" />
             <div>
               <p className="font-medium">{product.title}</p>
               <p className="text-gray-500">{product.selectNum}개</p>

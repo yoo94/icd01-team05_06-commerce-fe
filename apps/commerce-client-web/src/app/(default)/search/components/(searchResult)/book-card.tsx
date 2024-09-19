@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { Button } from '@/components/ui/button';
 import { Book } from '@/types/book-types';
 import { parseAndRoundPrice } from '@/lib/utils';
-import useCartStore from '@/stores/use-cart-store'; // Import the useCartStore hook
+import AddToCartButton from '@/app/(default)/cart/components/cart-add-button'; // Import the useCartStore hook
 
 export type BookCardProps = {
   id: number;
@@ -14,7 +14,6 @@ export type BookCardProps = {
 
 const BookCard = ({ id, book }: BookCardProps) => {
   const router = useRouter(); // useRouter 훅 사용
-  const { addBook } = useCartStore(); // Destructure addBook from useCartStore
   const maxLength = 70; // 최대 출력할 글자 수
 
   const roundedPrice = parseAndRoundPrice(book.price); // 유틸리티 함수 사용
@@ -25,17 +24,6 @@ const BookCard = ({ id, book }: BookCardProps) => {
 
   const truncateDescription = (desc: string, maxLength: number) => {
     return desc.length > maxLength ? desc.substring(0, maxLength) + '...' : desc;
-  };
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the click event from propagating to the parent
-    addBook(book); // Add book to the cart
-  };
-
-  const handleBuyNow = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the click event from propagating to the parent
-    addBook(book); // Add book to the cart
-    router.push('/checkout'); // Redirect to the checkout page or handle accordingly
   };
 
   return (
@@ -92,10 +80,8 @@ const BookCard = ({ id, book }: BookCardProps) => {
       </div>
       {/* Right Side: Buttons */}
       <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
-        <Button onClick={handleAddToCart} variant="secondary" className="w-24">
-          장바구니
-        </Button>
-        <Button onClick={handleBuyNow} variant="default" className="w-24">
+        <AddToCartButton book={book} quantity={1} />
+        <Button variant="default" className="w-24">
           바로구매
         </Button>
       </div>

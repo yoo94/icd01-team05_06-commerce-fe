@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import PreviousReviews from './previous-reviews';
 import NewReviewForm from './new-review-form';
