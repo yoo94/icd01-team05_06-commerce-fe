@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -38,8 +39,8 @@ const SliderBanner = ({ images }: SliderBannerProps) => {
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((image, index) => (
-          <div className="w-full flex-none" key={index}>
-            <img src={image.src} alt={image.alt} className="h-auto w-full" />
+          <div className="h-96 w-full flex-none" key={index}>
+            <Image src={image.src} alt={image.alt} fill />
           </div>
         ))}
       </div>

@@ -1,88 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import useAuthStore from '@/stores/use-auth-store';
 
-// 타입 정의
-type SubSubMenuItem = {
-  title: string;
-  href: string;
-};
+interface HamburgerMenuProps {
+  mainMenu: MainMenu[];
+}
 
-type SubMenuItem = {
-  title: string;
-  subSubMenu: SubSubMenuItem[];
-};
+const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
+  const { data: session } = useSession();
+  const { logout } = useAuthStore();
 
-type MenuItemWithSubMenu = {
-  title: string;
-  subMenu: SubMenuItem[];
-};
+  const isAuthenticated = !!session;
 
-type MenuItemWithHref = {
-  title: string;
-  href: string;
-};
-
-type MenuItem = MenuItemWithSubMenu | MenuItemWithHref;
-
-const mock: MenuItem[] = [
-  {
-    title: 'Home',
-    href: '/',
-  },
-  {
-    title: '전체 카테고리',
-    subMenu: [
-      {
-        title: '가전',
-        subSubMenu: [
-          { title: 'Sub Menu 1-1', href: '/menu/1-1' },
-          { title: 'Sub Menu 1-2', href: '/menu/1-2' },
-        ],
-      },
-      {
-        title: '식품',
-        subSubMenu: [
-          { title: 'Sub Menu 2-1', href: '/menu/2-1' },
-          { title: 'Sub Menu 2-2', href: '/menu/2-2' },
-        ],
-      },
-      {
-        title: '의류',
-        subSubMenu: [
-          { title: 'Sub Menu 3-1', href: '/menu/3-1' },
-          { title: 'Sub Menu 3-2', href: '/menu/3-2' },
-        ],
-      },
-      {
-        title: '기타',
-        subSubMenu: [
-          { title: 'Sub Menu 4-1', href: '/menu/4-1' },
-          { title: 'Sub Menu 4-2', href: '/menu/4-2' },
-        ],
-      },
-    ],
-  },
-  {
-    title: '베스트',
-    href: '/menu/2',
-  },
-  {
-    title: '세일',
-    href: '/menu/3',
-  },
-];
-
-// 타입 가드 함수
-const isMenuItemWithSubMenu = (menu: MenuItem): menu is MenuItemWithSubMenu => {
-  return 'subMenu' in menu;
-};
-
-const HamburgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState<number | null>(null);
-  const [activeSubSubMenu, setActiveSubSubMenu] = useState<number | null>(null);
+  const [activeCategories, setActiveCategories] = useState<number | null>(null);
+  const [activeItems, setActiveItems] = useState<number | null>(null);
+  const [activeSubItems, setActiveSubItems] = useState<number | null>(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -90,23 +28,38 @@ const HamburgerMenu: React.FC = () => {
 
   const closeMenu = () => {
     setIsOpen(false);
+    setActiveCategories(null);
+    setActiveItems(null);
+    setActiveSubItems(null);
   };
 
-  const toggleSubMenu = (index: number) => {
-    if (activeSubMenu === index) {
-      setActiveSubMenu(null);
-      setActiveSubSubMenu(null);
+  const toggleCategories = (index: number) => {
+    if (activeCategories === index) {
+      setActiveCategories(null);
+      setActiveItems(null);
+      setActiveSubItems(null);
     } else {
-      setActiveSubMenu(index);
-      setActiveSubSubMenu(null);
+      setActiveCategories(index);
+      setActiveItems(null);
+      setActiveSubItems(null);
     }
   };
 
-  const toggleSubSubMenu = (index: number) => {
-    if (activeSubSubMenu === index) {
-      setActiveSubSubMenu(null);
+  const toggleItems = (index: number) => {
+    if (activeItems === index) {
+      setActiveItems(null);
+      setActiveSubItems(null);
     } else {
-      setActiveSubSubMenu(index);
+      setActiveItems(index);
+      setActiveSubItems(null);
+    }
+  };
+
+  const toggleSubItems = (index: number) => {
+    if (activeSubItems === index) {
+      setActiveSubItems(null);
+    } else {
+      setActiveSubItems(index);
     }
   };
 
@@ -118,71 +71,113 @@ const HamburgerMenu: React.FC = () => {
         aria-label="Toggle menu"
       >
         <span
-          className={`block h-0.5 w-6 bg-current transition-transform${isOpen ? ' translate-y-1.5 rotate-45' : ''}`}
+          className={`block h-0.5 w-6 bg-current transition-transform${
+            isOpen ? ' translate-y-1.5 rotate-45' : ''
+          }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-current transition-opacity ${isOpen ? ' opacity-0' : ' opacity-100'}`}
+          className={`block h-0.5 w-6 bg-current transition-opacity ${
+            isOpen ? ' opacity-0' : ' opacity-100'
+          }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-current transition-transform${isOpen ? ' -translate-y-1.5 -rotate-45' : ''}`}
+          className={`block h-0.5 w-6 bg-current transition-transform${
+            isOpen ? ' -translate-y-1.5 -rotate-45' : ''
+          }`}
         />
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white">
-          <div className="flex h-14 items-center justify-end border-b px-4">
-            <button className="mr-2 p-4 text-2xl" onClick={toggleMenu}>
-              &times;
-            </button>
+        <div className="fixed inset-0 top-14 z-50 flex flex-col border-t bg-white">
+          <div className="container flex justify-center space-x-5 px-8 pb-4 pt-8">
+            {isAuthenticated ? (
+              <>
+                <Button variant={'outline'} onClick={logout}>
+                  로그아웃
+                </Button>
+                <Button asChild>
+                  <Link href={'/myPage'}>마이페이지</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button asChild className="max-w-40 flex-1 rounded-full">
+                  <Link href={'/login'}>로그인</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-primary text-primary max-w-40 flex-1 rounded-full"
+                >
+                  <Link href={'/join'}>회원가입</Link>
+                </Button>
+              </>
+            )}
           </div>
-          <ul className="flex flex-col space-y-2 p-4">
-            {mock.map((menu, index) => (
+          <ul className="container flex flex-col space-y-2 p-4">
+            {mainMenu.map((menu, index) => (
               <li key={index}>
-                {isMenuItemWithSubMenu(menu) ? (
-                  <div>
-                    <button
-                      className="w-full rounded-md p-2 text-left text-gray-700 hover:bg-gray-100"
-                      onClick={() => toggleSubMenu(index)}
-                    >
-                      {menu.title}
-                    </button>
-                    {activeSubMenu === index && (
-                      <ul className="ml-4 mt-2 space-y-2">
-                        {menu.subMenu.map((subMenuItem, subIndex) => (
-                          <li key={subIndex}>
-                            <div>
-                              <button
-                                className="w-full rounded-md p-2 text-left text-gray-600 hover:bg-gray-200"
-                                onClick={() => toggleSubSubMenu(subIndex + index * 100)}
-                              >
-                                {subMenuItem.title}
-                              </button>
-                              {activeSubSubMenu === subIndex + index * 100 && (
-                                <ul className="ml-4 mt-2 space-y-2">
-                                  {subMenuItem.subSubMenu.map((subSubMenuItem, subSubIndex) => (
-                                    <li key={subSubIndex}>
-                                      <Link href={subSubMenuItem.href} onClick={closeMenu}>
-                                        <span className="block rounded-md p-2 text-gray-500 hover:bg-gray-300">
-                                          {subSubMenuItem.title}
-                                        </span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ) : (
-                  <Link href={menu.href} onClick={closeMenu}>
-                    <span className="block rounded-md p-2 text-gray-700 hover:bg-gray-100">
-                      {menu.title}
-                    </span>
-                  </Link>
-                )}
+                <div>
+                  <button
+                    className="w-full rounded-md p-2 text-left text-slate-700 hover:bg-slate-100"
+                    onClick={() => toggleCategories(index)}
+                  >
+                    {menu.title}
+                  </button>
+                  {menu.categories && activeCategories === index && (
+                    <ul className="ml-4 mt-2 space-y-2">
+                      {menu.categories.map((category, categoryIndex) => (
+                        <li key={categoryIndex}>
+                          <div>
+                            <button
+                              className="w-full rounded-md p-2 text-left text-slate-600 hover:bg-slate-200"
+                              onClick={() => toggleItems(categoryIndex)}
+                            >
+                              {category.title}
+                            </button>
+                            {category.items && activeItems === categoryIndex && (
+                              <ul className="ml-4 mt-2 space-y-2">
+                                {category.items.map((item, itemIndex) => (
+                                  <li key={itemIndex}>
+                                    <div>
+                                      <button
+                                        className="w-full rounded-md p-2 text-left text-slate-600 hover:bg-slate-300"
+                                        onClick={() => toggleSubItems(itemIndex)}
+                                      >
+                                        {item.title}
+                                      </button>
+                                      {item.items && activeSubItems === itemIndex && (
+                                        <ul className="ml-4 mt-2 space-y-2">
+                                          {item.items.map((subItem, subItemIndex) => (
+                                            <li key={subItemIndex}>
+                                              <Link
+                                                href={{
+                                                  pathname: '/search',
+                                                  query: {
+                                                    category: subItem.title,
+                                                  },
+                                                }}
+                                                onClick={closeMenu}
+                                              >
+                                                <span className="block rounded-md p-2 font-light text-slate-600 hover:bg-slate-200">
+                                                  {subItem.title}
+                                                </span>
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

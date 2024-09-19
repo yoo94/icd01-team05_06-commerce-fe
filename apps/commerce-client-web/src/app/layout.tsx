@@ -1,6 +1,5 @@
-import React from 'react';
 import type { Metadata } from 'next';
-import Providers from './providers';
+import AppProviders from '@/provider/app-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -16,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Providers>{children}</Providers>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

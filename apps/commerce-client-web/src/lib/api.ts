@@ -2,7 +2,7 @@ import ky, { HTTPError } from 'ky';
 import { signOut, getSession } from 'next-auth/react';
 
 const api = ky.create({
-  prefixUrl: process.env.EXTERNAL_API_URL,
+  prefixUrl: process.env.API_BASE_URL,
   timeout: 10000,
   retry: {
     limit: 2,
@@ -12,6 +12,7 @@ const api = ky.create({
     beforeRequest: [
       async (request) => {
         const session = await getSession();
+
         if (session?.accessToken) {
           request.headers.set('Authorization', `Bearer ${session.accessToken}`);
         }
@@ -42,7 +43,6 @@ const api = ky.create({
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ refreshToken: session.refreshToken }),
           });
 
           if (!refreshResponse.ok) {

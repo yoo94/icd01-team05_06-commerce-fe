@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PaymentProducts from './components/payment-products';
 import PaymentSummary from './components/payment-summary';
 import OrderShippingInfo from './components/payment-shippinginfo';
@@ -22,17 +22,18 @@ const mockOrder = {
   address: '서울',
   detailAddress: '강남구',
   memo: '놓고 가주세여',
+  zonecode: '12345',
 };
 
 const PaymentPage = () => {
-  const { getSelectedProduct } = useCartStore();
-  const [products, setProducts] = useState<CartItem[]>([]);
+  const { getSelectedBook } = useCartStore();
+  const [books, setBooks] = useState<CartItem[]>([]);
   const [user, setUser] = useState(mockUser);
   const [order, setOrder] = useState(mockOrder);
 
   useEffect(() => {
-    setProducts(getSelectedProduct());
-  }, [getSelectedProduct]);
+    setBooks(getSelectedBook());
+  }, [getSelectedBook]);
 
   const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,10 +52,10 @@ const PaymentPage = () => {
       {/* 그리드 설정: 기본 1열, md(768px) 이상 2열 */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         {/* 주문 상품 정보 */}
-        <PaymentProducts products={products} />
+        <PaymentProducts products={books} />
 
         {/* 주문 요약 */}
-        <PaymentSummary products={products} />
+        <PaymentSummary books={books} />
 
         {/* 주문자 정보 */}
         <PaymentUserInfo user={user} onUserChange={handleUserChange} />
