@@ -1,19 +1,27 @@
-interface TokenInfo {
+export interface TokenInfo {
   accessToken: string;
-  refreshToken: string;
   accessTokenExpiresIn: number;
+  refreshToken: string;
   refreshTokenExpiresIn: number;
 }
 
-interface LoginResponse {
-  tokenInfo: TokenInfo;
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  error: ApiError | null;
 }
 
-interface UserInfo {
+export interface ApiError {
+  message: string;
+  code?: number;
+}
+
+export interface UserInfo {
   id: number;
   email: string;
   name: string;
   phone: number;
 }
 
-export type { TokenInfo, LoginResponse, UserInfo };
+// Reuse for both login and refresh responses
+export type TokenResponse = ApiResponse<{ tokenInfo: TokenInfo }>;

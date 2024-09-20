@@ -17,12 +17,12 @@ const PaymentUserInfo = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>주문자 정보</CardTitle>
+        <CardTitle className="border-b pb-5 text-base">주문자 정보</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <Label>이름</Label>
+            <Label className="mb-1 block text-xs text-slate-500">이름</Label>
             <Input
               type="text"
               placeholder="이름"
@@ -32,7 +32,7 @@ const PaymentUserInfo = () => {
             />
           </div>
           <div>
-            <Label>연락처</Label>
+            <Label className="mb-1 block text-xs text-slate-500">연락처</Label>
             <Input
               type="text"
               placeholder="연락처"
@@ -42,7 +42,7 @@ const PaymentUserInfo = () => {
             />
           </div>
           <div>
-            <Label>이메일</Label>
+            <Label className="mb-1 block text-xs text-slate-500">이메일</Label>
             <Input
               type="email"
               placeholder="이메일"

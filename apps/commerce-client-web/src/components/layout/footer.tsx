@@ -26,7 +26,7 @@ const socialIcons = [
 const Footer = () => {
   return (
     <footer className="w-full border-t">
-      <div className="container mx-auto flex flex-col-reverse gap-y-4 py-10 md:flex-row md:justify-between">
+      <div className="container mx-auto  flex max-w-screen-xs flex-col-reverse gap-y-4 py-10 sm:max-w-screen-md md:max-w-screen-lg md:flex-row md:justify-between">
         {/* Left Section: Logo and Links */}
         <div className="flex flex-col gap-y-4">
           <h1>

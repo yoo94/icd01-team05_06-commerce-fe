@@ -17,12 +17,12 @@ interface HeaderMenubarProps {
 
 const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
   return (
-    <Menubar className="flex space-x-6 border-0">
+    <Menubar className="flex justify-start space-x-6 border-0">
       {mainMenu.map((menu, index) => (
         <MenubarMenu key={index}>
           {menu.categories ? (
             <>
-              <MenubarTrigger className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors">
+              <MenubarTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                 {menu.title}
               </MenubarTrigger>
               <MenubarContent className="mt-2 rounded-lg bg-white p-2 shadow-lg">
@@ -94,7 +94,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
                 }}
                 passHref
               >
-                <span className="text-muted-foreground hover:text-primary cursor-pointer text-sm font-medium transition-colors">
+                <span className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                   {menu.title}
                 </span>
               </Link>

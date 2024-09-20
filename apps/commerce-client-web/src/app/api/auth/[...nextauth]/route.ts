@@ -1,17 +1,12 @@
 import NextAuth, { ExtendedUser, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { LoginResponse, UserInfo } from '@/types/auth-types';
-import ky from 'ky';
 import { ApiError } from '@/types/api-types';
-
-const apiClient = ky.create({
-  prefixUrl: process.env.API_BASE_URL,
-});
+import { apiClient, refreshAccessToken } from '@/utils/auth-utils';
+import { TokenInfo, TokenResponse } from '@/types/auth-types';
 
 const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
-    verifyRequest: '/login?verify=1',
     error: '/login',
   },
   providers: [
@@ -28,7 +23,7 @@ const authOptions: NextAuthOptions = {
             .post('login', {
               json: credentials,
             })
-            .json<{ success: boolean; data: LoginResponse; error: ApiError | null }>();
+            .json<TokenResponse>();
 
           if (!result.success || !result.data) {
             console.error('Login failed:', result.error?.message || 'Unknown error');
@@ -42,15 +37,7 @@ const authOptions: NextAuthOptions = {
             throw new Error('No access token returned from the server');
           }
 
-          const currentTime = Date.now();
-          const accessTokenExpiresIn =
-            tokenInfo.accessTokenExpiresIn - currentTime > 0
-              ? tokenInfo.accessTokenExpiresIn - currentTime
-              : 0;
-          const refreshTokenExpiresIn =
-            tokenInfo.refreshTokenExpiresIn - currentTime > 0
-              ? tokenInfo.refreshTokenExpiresIn - currentTime
-              : 0;
+          console.log('External server accessToken', tokenInfo.accessToken);
 
           // Step 2: Fetch user information using the access token
           const userInfoResponse = await apiClient
@@ -61,7 +48,7 @@ const authOptions: NextAuthOptions = {
             })
             .json<{
               success: boolean;
-              data: UserInfo;
+              data: { id: number; name: string; email: string };
               error: ApiError | null;
             }>();
 
@@ -79,30 +66,50 @@ const authOptions: NextAuthOptions = {
             id: id.toString(),
             name,
             email,
-            accessToken: tokenInfo.accessToken,
-            refreshToken: tokenInfo.refreshToken,
-            accessTokenExpiresIn,
-            refreshTokenExpiresIn,
+            ...tokenInfo,
           };
 
           return user;
         } catch (error) {
-          if (error instanceof Error) {
-            throw new Error(error.message);
-          }
+          console.error('Error in authorization:', error);
+          throw new Error('Failed to authenticate');
         }
-
-        return null;
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user as ExtendedUser) {
+        const extendedUser = user as ExtendedUser;
+
+        return {
+          ...token,
+          accessToken: extendedUser.accessToken,
+          refreshToken: extendedUser.refreshToken,
+          accessTokenExpiresIn: extendedUser.accessTokenExpiresIn,
+          refreshTokenExpiresIn: extendedUser.refreshTokenExpiresIn,
+          userId: extendedUser.id,
+        };
+      }
+
+      if (Date.now() < token.accessTokenExpiresIn) {
+        return token;
+      }
+
+      const refreshedToken = await refreshAccessToken(token as TokenInfo);
+
+      return {
+        ...refreshedToken,
+        userId: token.userId,
+      };
+    },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
+      session.tokenInfo = {
+        ...token,
+      };
       session.error = token.error;
       session.user = {
-        id: token.id,
+        id: token.userId,
         name: token.name,
         email: token.email,
       };

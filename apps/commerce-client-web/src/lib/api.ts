@@ -1,8 +1,8 @@
 import ky, { HTTPError } from 'ky';
 import { signOut, getSession } from 'next-auth/react';
+import { refreshAccessToken } from '@/utils/auth-utils';
 
 const api = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API,
   timeout: 10000,
   retry: {
     limit: 2,
@@ -13,16 +13,16 @@ const api = ky.create({
       async (request) => {
         const session = await getSession();
 
-        if (session?.accessToken) {
-          request.headers.set('Authorization', `Bearer ${session.accessToken}`);
+        if (session?.tokenInfo.accessToken) {
+          request.headers.set('Authorization', `Bearer ${session?.tokenInfo.accessToken}`);
         }
       },
     ],
     beforeRetry: [
       async ({ request, error, retryCount }) => {
-        const responseError = error as HTTPError; // Cast error to ky.HTTPError to access response
+        const responseError = error as HTTPError;
 
-        if (responseError.response?.status !== 401) return ky.stop; // Only handle 401 errors
+        if (responseError.response?.status !== 401) return ky.stop; // Only retry on 401 Unauthorized
 
         if (retryCount >= 1) {
           console.error('Failed to refresh token, logging out.');
@@ -31,27 +31,16 @@ const api = ky.create({
         }
 
         const session = await getSession();
-        if (!session?.refreshToken) {
+        if (!session?.tokenInfo.refreshToken) {
           console.error('No refresh token available, logging out.');
           await signOut({ callbackUrl: '/' });
           return ky.stop;
         }
 
         try {
-          const refreshResponse = await fetch(`${process.env.API_BASE_URL}/refresh`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          const newTokens = await refreshAccessToken(session?.tokenInfo);
 
-          if (!refreshResponse.ok) {
-            throw new Error('Failed to refresh token');
-          }
-
-          const newTokens = await refreshResponse.json();
-
-          // Update tokens in next-auth session
+          // Update the session with the new access and refresh tokens
           await fetch('/api/auth/session', {
             method: 'PATCH',
             headers: {
@@ -63,9 +52,10 @@ const api = ky.create({
             }),
           });
 
+          // Set the new access token on the request
           request.headers.set('Authorization', `Bearer ${newTokens.accessToken}`);
-        } catch (refreshError) {
-          console.error('Error refreshing access token:', refreshError);
+        } catch (error) {
+          console.error('Error refreshing access token:', error);
           await signOut({ callbackUrl: '/' });
           return ky.stop;
         }
