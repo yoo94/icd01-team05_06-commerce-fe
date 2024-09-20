@@ -1,8 +1,8 @@
 import { Book } from '@/types/book-types';
 import FilterComponent from './components/(filters)/filter-component';
 import SearchResult from './components/(searchResult)/search-result';
-import mswApi from '@/lib/msw-api';
 import { filterBooksByCategoryName } from '@/lib/utils';
+import api from '@/lib/api';
 
 interface SearchPageProps {
   searchParams: {
@@ -15,7 +15,7 @@ interface SearchPageProps {
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const booksData = await mswApi.get('books').json<Book[]>();
+  const booksData = await api.get('api/books').json<Book[]>();
 
   // Apply filters based on search parameters
   const searchWord = searchParams.word ?? '';
