@@ -2,7 +2,6 @@ import { DetailBook } from '@/types/book-types';
 import Image from 'next/image';
 import Breadcrumb from '@/components/common/breadcrumb';
 import { calculationDiscountRate } from '@/lib/utils';
-import mswApi from '@/lib/msw-api';
 import DetailButtonActions from './components/detail-button-actions';
 import BookInfo from './components/book-info/book-info';
 import { Button } from '@/components/ui/button';
@@ -76,7 +75,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
                   <div className="text-left font-extrabold line-through">{originalPrice}원</div>
                   {/* Discounted Price */}
                   <div className="w-28 font-extralight text-slate-500">판매가</div>
-                  <div className="text-left text-base text-destructive">
+                  <div className="text-destructive text-left text-base">
                     <span className="font-extrabold">{discountedPrice}원</span>
                     <span className="ml-1 text-xs font-light">({discountRate}%)</span>
                   </div>

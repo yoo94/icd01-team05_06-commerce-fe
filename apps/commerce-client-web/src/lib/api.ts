@@ -3,6 +3,7 @@ import { signOut, getSession } from 'next-auth/react';
 import { refreshAccessToken } from '@/utils/auth-utils';
 
 const api = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_API,
   timeout: 10000,
   retry: {
     limit: 2,
