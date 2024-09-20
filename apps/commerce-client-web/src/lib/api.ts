@@ -2,7 +2,7 @@ import ky, { HTTPError } from 'ky';
 import { signOut, getSession } from 'next-auth/react';
 
 const api = ky.create({
-  prefixUrl: process.env.API_BASE_URL,
+  prefixUrl: process.env.NEXT_PUBLIC_API,
   timeout: 10000,
   retry: {
     limit: 2,
