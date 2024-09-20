@@ -1,7 +1,7 @@
 import ky from 'ky';
 
 const mswApi = ky.create({
-  prefixUrl: 'http://localhost:3000/api/',
+  prefixUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/`,
   timeout: 10000,
   retry: {
     limit: 2,
