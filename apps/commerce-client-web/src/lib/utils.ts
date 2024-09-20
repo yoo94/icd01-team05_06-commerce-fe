@@ -14,9 +14,7 @@ const parseAndRoundPrice = (price: string | number): number => {
 };
 
 const calculationDiscountRate = (price: number, discount: number): string => {
-  const intergerPrice = Math.floor(price);
-
-  const discountRate = (discount / intergerPrice) * 100;
+  const discountRate = ((price - discount) / price) * 100;
 
   return discountRate.toFixed(0);
 };

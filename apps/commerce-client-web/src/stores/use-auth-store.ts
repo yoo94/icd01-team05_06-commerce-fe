@@ -3,6 +3,8 @@ import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // pe
 import { useUserStore } from './use-user-store';
 import api from '@/lib/api';
 import { signIn, signOut } from 'next-auth/react';
+import { UserInfo } from '@/types/auth-types';
+import { ApiError } from '@/types/api-types';
 
 export interface SignupFormData {
   name: string;
@@ -104,7 +106,7 @@ const useAuthStore = create<AuthStore>()(
           };
 
           try {
-            const response = await api.post('sign-up', {
+            const response = await api.post('external-auth/sign-up', {
               json: submitData,
             });
 
@@ -142,13 +144,13 @@ const useAuthStore = create<AuthStore>()(
             }
 
             // TODO: 서버로부터 받은 유저 정보 저장하기
-            // const user = await api.get('info').json<{
-            //   success: boolean;
-            //   data: UserInfo;
-            //   error: ApiError | null;
-            // }>();
+            const user = await api.get('external-auth/info').json<{
+              success: boolean;
+              data: UserInfo;
+              error: ApiError | null;
+            }>();
 
-            // useUserStore.getState().setUserDetails(user.data);
+            useUserStore.getState().setUserDetails(user.data);
 
             resetLoginData();
           } catch (error) {

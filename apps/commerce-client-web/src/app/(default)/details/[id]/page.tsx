@@ -1,7 +1,7 @@
 import { DetailBook } from '@/types/book-types';
 import Image from 'next/image';
 import Breadcrumb from '@/components/common/breadcrumb';
-import { calculationDiscountRate, parseAndRoundPrice } from '@/lib/utils';
+import { calculationDiscountRate } from '@/lib/utils';
 import mswApi from '@/lib/msw-api';
 import DetailButtonActions from './components/detail-button-actions';
 import BookInfo from './components/book-info/book-info';
@@ -22,8 +22,8 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   // Fetch Book Data from the API
   const book = await mswApi(`books/${bookId}`).json<DetailBook>();
 
-  const originalPrice = parseAndRoundPrice(book.price);
-  const discountedPrice = book.discount ? parseAndRoundPrice(book.price - book.discount) : null;
+  const originalPrice = Number(book.price).toLocaleString();
+  const discountedPrice = Number(book.discount).toLocaleString();
   const discountRate = calculationDiscountRate(book.price, book.discount);
 
   return (
@@ -75,7 +75,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
                   <div className="text-left font-extrabold line-through">{originalPrice}원</div>
                   {/* Discounted Price */}
                   <div className="w-28 font-extralight text-slate-500">판매가</div>
-                  <div className="text-destructive text-left text-base">
+                  <div className="text-left text-base text-destructive">
                     <span className="font-extrabold">{discountedPrice}원</span>
                     <span className="ml-1 text-xs font-light">({discountRate}%)</span>
                   </div>

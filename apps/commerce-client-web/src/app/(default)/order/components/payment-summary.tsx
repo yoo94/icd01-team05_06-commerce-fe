@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { CartItem } from '@/types/cart-types';
 
 interface PaymentSummaryProps {
@@ -7,8 +7,19 @@ interface PaymentSummaryProps {
 }
 
 const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
-  const totalPrice = books
+  const originalPrice = books
     .reduce((acc, book) => acc + Number(book.price) * book.selectNum, 0)
+    .toLocaleString();
+
+  const discount = books
+    .reduce((acc, book) => acc + (Number(book.discount) || 0) * book.selectNum, 0)
+    .toLocaleString();
+
+  const totalPrice = books
+    .reduce(
+      (acc, book) => acc + (Number(book.price) - (Number(book.discount) || 0)) * book.selectNum,
+      0,
+    )
     .toLocaleString();
 
   const totalAmount = (Number(totalPrice.replace(/,/g, '')) + shippingCost).toLocaleString();
@@ -16,22 +27,30 @@ const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>주문 요약</CardTitle>
+        <CardTitle className="border-b pb-5 text-base">주문 요약</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-between">
-          <p>상품가격</p>
-          <p>{totalPrice}원</p>
-        </div>
-        <div className="flex justify-between">
-          <p>배송비</p>
-          <p>+무료</p>
-        </div>
-        <div className="mt-4 flex justify-between font-bold">
-          <p>총 주문금액</p>
-          <p>{totalAmount}원</p>
+        {/* 테이블 형식으로 변경 */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* 상품가격 */}
+          <div className="text-sm font-light">상품가격</div>
+          <div className="text-right">{originalPrice}원</div>
+
+          {/* 배송비 */}
+          <div className="text-sm font-light">배송비</div>
+          <div className="text-primary text-right">
+            {shippingCost > 0 ? `${shippingCost}원` : '무료배송'}
+          </div>
+
+          {/* 할인 금액 */}
+          <div className="text-sm font-light">할인금액</div>
+          <div className="text-right text-blue-500">-{discount}원</div>
         </div>
       </CardContent>
+      <CardFooter className="flex items-center justify-between pt-10 font-bold">
+        <p>총 주문금액</p>
+        <p>{totalAmount}원</p>
+      </CardFooter>
     </Card>
   );
 };
