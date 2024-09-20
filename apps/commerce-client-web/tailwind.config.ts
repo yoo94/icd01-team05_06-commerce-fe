@@ -17,6 +17,13 @@ const config = {
     extend: {
       screens: {
         xs: '480px',
+        md: '768px',
+        lg: '1024px',
+      },
+      maxWidth: {
+        'screen-xs': '480px',
+        'screen-md': '768px',
+        'screen-lg': '1024px',
       },
       fontFamily: {
         nanumeneo: ['NanumSquareNeo', 'sans-serif'],
