@@ -1,19 +1,19 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
-interface UserType {
-  name: string;
-  phnum: string;
-  email: string;
-}
-
-interface PaymentUserInfoProps {
-  user: UserType;
-  onUserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const PaymentUserInfo = ({ user, onUserChange }: PaymentUserInfoProps) => {
+const mockUser = {
+  name: '유재석',
+  phnum: '01024129368',
+  email: 'ddd@naver.com',
+};
+const PaymentUserInfo = () => {
+  const [user, setUser] = useState(mockUser);
+  const onUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
   return (
     <Card className="w-full">
       <CardHeader>

@@ -8,25 +8,18 @@ import { Textarea } from '@/components/ui/textarea';
 import Modal from '@/components/common/modal';
 import DaumPostcode from 'react-daum-postcode';
 
-interface OrderType {
-  name: string;
-  phnum: string;
-  address: string;
-  detailAddress: string;
-  memo: string;
-  zonecode: string;
-}
-
-interface PaymentShippingInfoProps {
-  order: OrderType;
-  onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
-
 interface PaymentPostAddressModalProps {
-  zonecode: string;
+  zonecode?: string;
   address: string;
 }
-
+const mockOrder = {
+  name: '패스트파이브',
+  phnum: '01024129368',
+  address: '서울',
+  detailAddress: '강남구',
+  memo: '놓고 가주세여',
+  zonecode: '',
+};
 const PaymentPostAddressModal = ({
   isOpen,
   onClose,
@@ -48,9 +41,13 @@ const PaymentPostAddressModal = ({
   );
 };
 
-const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps) => {
+const PaymentShippingInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [order, setOrder] = useState(mockOrder);
+  const onOrderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setOrder((prev) => ({ ...prev, [name]: value }));
+  };
   // 우편번호 및 주소 데이터 업데이트 함수
   const handleCompletePostcode = (data: PaymentPostAddressModalProps) => {
     const { zonecode, address } = data;

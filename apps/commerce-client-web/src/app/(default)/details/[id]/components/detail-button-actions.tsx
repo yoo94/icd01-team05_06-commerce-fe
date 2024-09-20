@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Book } from '@/types/book-types';
 import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
+import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
 
 interface CartActionsProps {
   book: Book;
@@ -43,7 +43,8 @@ const DetailButtonActions = ({ book }: CartActionsProps) => {
       </div>
       {/* AddToCartButton에 로컬 상태 quantity를 전달 */}
       <AddToCartButton book={book} quantity={quantity} />
-      <Button className="mt-2.5 w-full">바로구매</Button>
+      <PaymentAddButton text={'바로구매'} book={book} />
+      {/* <Button className="mt-2.5 w-full">바로구매</Button> */}
     </div>
   );
 };

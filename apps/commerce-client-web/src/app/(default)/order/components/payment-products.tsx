@@ -3,17 +3,17 @@ import { CartItem } from '@/types/cart-types';
 import Image from 'next/image';
 
 interface PaymentProductsProps {
-  products: CartItem[];
+  books: CartItem[];
 }
 
-const PaymentProducts = ({ products }: PaymentProductsProps) => {
+const PaymentProducts = ({ books }: PaymentProductsProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="border-b pb-5 text-base">주문 상품 정보</CardTitle>
       </CardHeader>
       <CardContent>
-        {products?.map((product) => (
+        {books?.map((product) => (
           <div key={product.id} className="mb-4 flex items-center space-x-4">
             {/* 상품 이미지 */}
             <Image
