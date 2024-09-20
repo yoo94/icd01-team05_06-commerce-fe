@@ -30,7 +30,7 @@ const PaymentPageClient = ({ serverBooks }: PaymentPageClientProps) => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="mb-8 text-center text-2xl font-semibold">결제하기</h1>
+      <h1 className="mb-8 text-left text-xl font-semibold">결제 정보</h1>
 
       {/* 그리드 설정: 기본 1열, md(768px) 이상 2열 */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
