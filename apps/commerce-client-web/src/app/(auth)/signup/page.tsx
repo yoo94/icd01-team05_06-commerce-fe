@@ -23,7 +23,7 @@ const steps = ['약관동의', '정보입력', '가입완료'];
 const JoinPage = () => {
   const [step, setStep] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
-  const { signupData, submitSignup } = useAuthStore();
+  const { submitSignup } = useAuthStore();
   const [isAgreedPrivacy, setIsAgreedPrivacy] = useState(false);
   const [isAgreedTerms, setIsAgreedTerms] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -82,7 +82,7 @@ const JoinPage = () => {
       {step === 1 && (
         <SignUpForm onSubmit={submitSignup} onValidChange={handleFormValidityChange} />
       )}
-      {step === 2 && <CompletionStep userName={signupData.name} />}
+      {step === 2 && <CompletionStep />}
       <div className="mt-8 flex justify-between gap-x-4">
         {step < 2 ? (
           <>

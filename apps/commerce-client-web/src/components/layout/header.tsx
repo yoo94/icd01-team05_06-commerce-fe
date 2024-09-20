@@ -8,13 +8,13 @@ import HamburgerMenu from './header-hamburgermenu';
 import TopBar from './top-bar';
 import SearchBar from './search-bar';
 
-import mswApi from '@/lib/msw-api';
 import { transformServerCategories } from '@/lib/utils';
 import { MainMenu, MenuCategory } from '@/types/menu-types';
 import { Category } from '@/types/category-types';
+import api from '@/lib/api';
 
 const Header = async () => {
-  const serverData = await mswApi.get('categories').json<Category[]>();
+  const serverData = await api.get('api/categories').json<Category[]>();
 
   const categories: MenuCategory[] = transformServerCategories(serverData);
 

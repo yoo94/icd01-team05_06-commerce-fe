@@ -1,7 +1,7 @@
 import PaymentPageClient from '@/app/(default)/order/components/payment-page-client';
-import mswApi from '@/lib/msw-api';
 import { CartItem } from '@/types/cart-types';
 import { DetailBook } from '@/types/book-types';
+import api from '@/lib/api';
 
 interface PaymentPageProps {
   searchParams: { productId?: string };
@@ -13,7 +13,7 @@ const PaymentPage = async ({ searchParams }: PaymentPageProps) => {
   if (searchParams.productId) {
     const bookId = Number(searchParams.productId);
     try {
-      const book = await mswApi(`books/${bookId}`).json<DetailBook>();
+      const book = await api(`api/books/${bookId}`).json<DetailBook>();
       if (book) {
         const cartItem: CartItem = {
           ...book,
