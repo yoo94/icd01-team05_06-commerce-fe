@@ -4,7 +4,7 @@ import { ApiError } from '@/types/api-types';
 import { apiClient, refreshAccessToken } from '@/utils/auth-utils';
 import { TokenInfo, TokenResponse } from '@/types/auth-types';
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
     error: '/login',
