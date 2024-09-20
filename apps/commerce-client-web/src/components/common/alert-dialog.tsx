@@ -36,7 +36,9 @@ const AlertDialogComponent = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>확인</AlertDialogAction>
+          <AlertDialogAction onClick={onConfirm} className="self-end bg-slate-500">
+            확인
+          </AlertDialogAction>
           <AlertDialogAction onClick={onThirdAction}>{thirdButtonName}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -30,38 +30,43 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
     const currentPath = window.location.pathname;
     const selectedProducts = getSelectedProduct();
 
+    // 장바구니에서 구매하는 경우
     if (currentPath === '/cart' && selectedProducts.length > 0) {
+      router.push('/order');
+    }
+    // 책이 있는 경우 다이얼로그를 띄움
+    else if (book) {
       if (selectedProducts.length > 0) {
-        router.push('/order');
+        setShowDialog(true); // 다이얼로그 띄우기
       } else {
-        alert('장바구니에서 상품을 선택해주세요.');
+        router.push(`/order?productId=${book.id}`); // 바로 구매
       }
-    } else if (book) {
-      if (selectedProducts.length > 0) {
-        setShowDialog(true);
-      } else {
-        router.push(`/order?productId=${book.id}`);
-      }
-    } else {
+    }
+    // 상품이 없는 경우
+    else {
       alert('상품을 선택해주세요.');
     }
   };
 
+  // 장바구니 상품과 함께 구매
   const handleDialogConfirm = () => {
-    setShowDialog(false);
+    setShowDialog(false); // 다이얼로그 닫기
     if (!book) return;
-    addBook(book);
-    router.push('/order');
-  };
-  const handleDialogBuyJustOne = () => {
-    setShowDialog(false);
-    if (!book || !book.id) return;
-    router.push(`/order?productId=${book.id}`);
-  };
-  const handleDialogCancel = () => {
-    setShowDialog(false);
+    addBook(book); // 선택한 책을 장바구니에 추가
+    router.push('/cart'); // 결제 페이지로 이동
   };
 
+  // 선택한 상품만 바로 구매
+  const handleDialogBuyJustOne = () => {
+    setShowDialog(false); // 다이얼로그 닫기
+    if (!book || !book.id) return;
+    router.push(`/order?productId=${book.id}`); // 해당 책만 결제
+  };
+
+  // 취소 동작, 다이얼로그만 닫고 페이지 이동 없음
+  const handleDialogCancel = () => {
+    setShowDialog(false); // 다이얼로그 닫기만 함
+  };
   return (
     <>
       <Button onClick={goPayment} className="w-full">
@@ -72,7 +77,7 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
       {showDialog && (
         <AlertDialogComponent
           title="장바구니에 상품이 있습니다"
-          description="장바구니에 담긴 상품과 함께 구매하시겠습니까?"
+          description="장바구니 확인 후 함께 구매하시겠습니까?"
           onConfirm={handleDialogConfirm}
           onCancel={handleDialogCancel}
           thirdButtonName={'바로구매'}
