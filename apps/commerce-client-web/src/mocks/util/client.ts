@@ -24,8 +24,8 @@ function createClient(baseUrl: string | undefined): typeof http {
   };
 }
 
-export const authClient = createClient(process.env.AUTH_API_URL);
+export const authClient = createClient(process.env.NEXT_PUBLIC_AUTH_API_URL);
 
-export const productClient = createClient(process.env.PRODUCT_API_URL);
+export const productClient = createClient(process.env.NEXT_PUBLIC_PRODUCT_API_URL);
 
-export const orderClient = createClient(process.env.ORDER_API_URL);
+export const orderClient = createClient(process.env.NEXT_PUBLIC_ORDER_API_URL);
