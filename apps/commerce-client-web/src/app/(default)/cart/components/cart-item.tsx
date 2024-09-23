@@ -26,7 +26,7 @@ const CartItem = ({ item }: CartItemProps) => {
       </TableCell>
       <TableCell className="flex items-center space-x-4">
         <Image
-          src={item.imageUrl}
+          src={item.imageUrl ?? ''}
           fill
           width={200}
           height={300}
