@@ -5,23 +5,12 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormItem, FormControl, FormLabel, FormMessage } from '@/components/ui/form';
-import useAuthStore from '@/stores/use-auth-store';
+import useAuthStore, { SignupFormData } from '@/stores/use-auth-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '@/schemas/signup-schema';
 
-interface SignUpFormValues {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phone: string;
-  postalCode: string;
-  address: string;
-  addressDetail: string;
-}
-
 interface SignUpFormProps {
-  onSubmit: (values: SignUpFormValues) => void;
+  onSubmit: (values: SignupFormData) => void;
   onValidChange: (isValid: boolean) => void;
 }
 

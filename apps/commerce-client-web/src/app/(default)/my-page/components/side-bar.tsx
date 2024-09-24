@@ -11,8 +11,8 @@ const menuItems = [
   {
     title: '회원정보',
     items: [
-      { title: '배송주소록', route: '/shipping-address' },
-      { title: '회원정보관리', route: '/user-info' },
+      { title: '배송주소록', route: '/my-page/shipping-address' },
+      { title: '회원정보관리', route: '/my-page/user-info' },
       { title: '마케팅 수신 및 정보 제공 동의 관리', route: '/marketing-consent' },
     ],
   },
@@ -36,8 +36,10 @@ const SideBar = () => {
       ))}
       <div className="mt-8 flex flex-col gap-4">
         {sideBarButtons.map((button, index) => (
-          <Button key={index} asChild>
-            <Link href={button.route}>{button.title}</Link>
+          <Button key={index} asChild variant="secondary">
+            <Link className="text-xs text-slate-600" href={button.route}>
+              {button.title}
+            </Link>
           </Button>
         ))}
       </div>
