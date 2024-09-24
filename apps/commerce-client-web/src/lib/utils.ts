@@ -1,4 +1,4 @@
-import { Category, SubCategory, SubSubCategory } from '@/types/category-types';
+import { Category } from '@/types/category-types';
 import { Book, BookCategory } from '@/types/book-types';
 import { MenuCategory } from '@/types/menu-types';
 import { type ClassValue, clsx } from 'clsx';
@@ -21,18 +21,20 @@ const calculationDiscountRate = (price: number, discount: number): string => {
   return discountRate.toFixed(0);
 };
 
-const transformServerCategories = (data: Category[]): MenuCategory[] => {
-  return data.map((category: Category) => ({
-    title: category.name,
-    items:
-      category.subCategory?.map((sub: SubCategory) => ({
-        title: sub.name,
-        items:
-          sub.subCategory?.map((subSub: SubSubCategory) => ({
-            title: subSub.name,
-          })) ?? [],
-      })) ?? [],
-  }));
+const transformServerCategories = (data: Category): MenuCategory[] => {
+  return (
+    data.childCategories?.map((category: Category) => ({
+      title: category.name,
+      items:
+        category.childCategories?.map((sub: Category) => ({
+          title: sub.name,
+          items:
+            sub.childCategories?.map((subSub: Category) => ({
+              title: subSub.name,
+            })) ?? [],
+        })) ?? [],
+    })) ?? []
+  );
 };
 
 const hasCategoryName = (category: BookCategory, nameToFind: string): boolean => {

@@ -11,11 +11,12 @@ import { transformServerCategories } from '@/lib/utils';
 import { MainMenu, MenuCategory } from '@/types/menu-types';
 import { Category } from '@/types/category-types';
 import { productApi } from '@/lib/api';
+import { ApiResponse } from '@/types/api-types';
 
 const Header = async () => {
-  const serverData = await productApi.get('categories').json<Category[]>();
+  const serverData = await productApi.get('categories').json<ApiResponse<Category>>();
 
-  const categories: MenuCategory[] = transformServerCategories(serverData);
+  const categories: MenuCategory[] = transformServerCategories(serverData.data);
 
   const mainMenu: MainMenu[] = [
     {
