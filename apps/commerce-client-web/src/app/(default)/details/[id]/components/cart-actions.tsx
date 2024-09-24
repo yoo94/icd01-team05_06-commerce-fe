@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import useCartStore from '@/stores/use-cart-store';
-import { Book } from '@/types/book-types';
 import { useRouter } from 'next/navigation';
+import { Product } from '@/types/product-types';
 
 interface CartActionsProps {
-  book: Book;
+  book: Product;
 }
 
 const CartActions = ({ book }: CartActionsProps) => {

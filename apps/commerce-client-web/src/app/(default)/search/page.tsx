@@ -1,8 +1,9 @@
-import { Book } from '@/types/book-types';
 import FilterComponent from './components/(filters)/filter-component';
 import SearchResult from './components/(searchResult)/search-result';
 import { filterBooksByCategoryName } from '@/lib/utils';
 import { productApi } from '@/lib/api';
+import { ApiResponse } from '@/types/api-types';
+import { ProductsResponse } from '@/types/product-types';
 
 interface SearchPageProps {
   searchParams: {
@@ -14,17 +15,21 @@ interface SearchPageProps {
   };
 }
 
+const defaultPage = 1;
+const defaultSize = 20;
+
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const booksData = await productApi.get('books').json<Book[]>();
+  const booksData = await productApi
+    .get(`products?page=${defaultPage}&size=${defaultSize}`)
+    .json<ApiResponse<ProductsResponse>>();
 
   // Apply filters based on search parameters
   const searchWord = searchParams.word ?? '';
   const priceRange = searchParams.price ?? '';
   const selectedPublisher = searchParams.publisher ?? '';
   const selectedCategory = searchParams.category ?? '';
-  const selectedTag = searchParams.tag ?? '';
 
-  let filteredBooks = booksData;
+  let filteredBooks = booksData.data.products;
 
   // Filter by search word
   if (searchWord) {
@@ -37,7 +42,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (priceRange) {
     const [minPrice, maxPrice] = priceRange.split('-').map(Number);
     filteredBooks = filteredBooks.filter((book) => {
-      const discountedPrice = book.price - (book.discount ?? 0); // Calculate discounted price
+      const { discountedPrice } = book;
       return discountedPrice >= minPrice && discountedPrice <= maxPrice;
     });
   }
@@ -55,11 +60,12 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     filteredBooks = filterBooksByCategoryName(filteredBooks, selectedCategories);
   }
 
+  // TODO: Product에는 tag가 없음
   // Filter by tag
-  if (selectedTag) {
-    const tags = selectedTag.split(',');
-    filteredBooks = filteredBooks.filter((book) => tags.some((tag) => book.tags.includes(tag)));
-  }
+  // if (selectedTag) {
+  //   const tags = selectedTag.split(',');
+  //   filteredBooks = filteredBooks.filter((book) => tags.some((tag) => book.tags.includes(tag)));
+  // }
 
   return (
     <div className="flex">

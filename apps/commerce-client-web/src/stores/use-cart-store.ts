@@ -1,11 +1,11 @@
 import { CartItem } from '@/types/cart-types';
-import { Book } from '@/types/book-types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { Product } from '@/types/product-types';
 
 export interface CartState {
   items: CartItem[];
-  addBook: (book: Book) => void;
+  addBook: (book: Product) => void;
   removeBook: (id: number) => void;
   removeAllBook: () => void;
   updateBookQuantity: (id: number, selectNum: number) => void;
@@ -18,7 +18,7 @@ const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      addBook: (book: Book) =>
+      addBook: (book: Product) =>
         set((state) => {
           // Check if the book already exists in the cart
           const existingBook = state.items.find((item) => item.id === book.id);

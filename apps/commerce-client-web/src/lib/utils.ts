@@ -1,8 +1,8 @@
 import { Category } from '@/types/category-types';
-import { Book, BookCategory } from '@/types/book-types';
 import { MenuCategory } from '@/types/menu-types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { Product, ProductCategory } from '@/types/product-types';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -37,17 +37,18 @@ const transformServerCategories = (data: Category): MenuCategory[] => {
   );
 };
 
-const hasCategoryName = (category: BookCategory, nameToFind: string): boolean => {
+const hasCategoryName = (category: ProductCategory, nameToFind: string): boolean => {
   if (category.name === nameToFind) return true;
 
-  if (category.subCategory) {
-    return hasCategoryName(category.subCategory, nameToFind);
-  }
+  // TODO: ProductCategory에는 subCategory가 없음
+  // if (category.subCategory) {
+  //   return hasCategoryName(category.subCategory, nameToFind);
+  // }
 
   return false;
 };
 
-const filterBooksByCategoryName = (books: Book[], categoryName: string): Book[] => {
+const filterBooksByCategoryName = (books: Product[], categoryName: string): Product[] => {
   return books.filter((book) => hasCategoryName(book.category, categoryName));
 };
 
