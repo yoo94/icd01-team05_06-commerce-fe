@@ -3,6 +3,8 @@ import { productClient } from '@/mocks/util/client';
 import books from '@/data/books.json';
 import detailBooks from '@/data/detail-books.json';
 import categories from '@/data/categories.json';
+import products from '@/data/products.json';
+import { withResponse } from '@/mocks/util/response';
 
 type BookTag = '화제의 신간' | '추천 도서' | '베스트 셀러';
 
@@ -42,6 +44,10 @@ export const handlers = [
   }),
 
   productClient.get('categories', () => {
-    return HttpResponse.json(categories);
+    return HttpResponse.json(withResponse(categories));
+  }),
+
+  productClient.get('products', () => {
+    return HttpResponse.json(withResponse(products));
   }),
 ];
