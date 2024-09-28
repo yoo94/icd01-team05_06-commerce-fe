@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CartItem } from '@/types/cart-types';
 
 interface PaymentSummaryProps {
@@ -12,12 +12,17 @@ const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
     .toLocaleString();
 
   const discount = books
-    .reduce((acc, book) => acc + (Number(book.discount) || 0) * book.selectNum, 0)
+    .reduce(
+      (acc, book) => acc + (Number(book.price - book.discountedPrice) || 0) * book.selectNum,
+      0,
+    )
     .toLocaleString();
 
   const totalPrice = books
     .reduce(
-      (acc, book) => acc + (Number(book.price) - (Number(book.discount) || 0)) * book.selectNum,
+      (acc, book) =>
+        acc +
+        (Number(book.price) - (Number(book.price - book.discountedPrice) || 0)) * book.selectNum,
       0,
     )
     .toLocaleString();

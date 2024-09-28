@@ -2,13 +2,13 @@
 
 import useCartStore from '@/stores/use-cart-store';
 import { useToast } from '@/components/ui/use-toast';
-import { Book } from '@/types/book-types';
 import { Button } from '@/components/ui/button';
 import { ToastAction } from '@/components/ui/toast';
 import Link from 'next/link';
+import { Product } from '@/types/product-types';
 
 interface AddToCartButtonProps {
-  book: Book;
+  book: Product;
   quantity: number;
 }
 

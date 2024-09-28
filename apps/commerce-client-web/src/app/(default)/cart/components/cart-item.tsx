@@ -14,9 +14,7 @@ interface CartItemProps {
 
 const CartItem = ({ item }: CartItemProps) => {
   const { removeBook, updateBookQuantity, updateBookSelection } = usecartstore();
-  const totalPrice = (
-    parseInt(String(item.price - item.discount)) * item.selectNum
-  ).toLocaleString();
+  const totalPrice = (parseInt(String(item.discountedPrice)) * item.selectNum).toLocaleString();
 
   return (
     <TableRow className="hover:bg-gray-50">
@@ -34,7 +32,6 @@ const CartItem = ({ item }: CartItemProps) => {
           height={64}
           className="mr-5 rounded"
         />
-
         {item.title}
       </TableCell>
       <TableCell className="text-left">

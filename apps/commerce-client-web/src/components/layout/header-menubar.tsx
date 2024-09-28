@@ -22,7 +22,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
         <MenubarMenu key={index}>
           {menu.categories ? (
             <>
-              <MenubarTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              <MenubarTrigger className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors">
                 {menu.title}
               </MenubarTrigger>
               <MenubarContent className="mt-2 rounded-lg bg-white p-2 shadow-lg">
@@ -94,7 +94,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
                 }}
                 passHref
               >
-                <span className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                <span className="text-muted-foreground hover:text-primary cursor-pointer text-sm font-medium transition-colors">
                   {menu.title}
                 </span>
               </Link>
