@@ -8,25 +8,18 @@ import { Textarea } from '@/components/ui/textarea';
 import Modal from '@/components/common/modal';
 import DaumPostcode from 'react-daum-postcode';
 
-interface OrderType {
-  name: string;
-  phnum: string;
-  address: string;
-  detailAddress: string;
-  memo: string;
-  zonecode: string;
-}
-
-interface PaymentShippingInfoProps {
-  order: OrderType;
-  onOrderChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
-
 interface PaymentPostAddressModalProps {
-  zonecode: string;
+  zonecode?: string;
   address: string;
 }
-
+const mockOrder = {
+  name: '패스트파이브',
+  phnum: '01024129368',
+  address: '서울',
+  detailAddress: '강남구',
+  memo: '놓고 가주세여',
+  zonecode: '',
+};
 const PaymentPostAddressModal = ({
   isOpen,
   onClose,
@@ -48,9 +41,13 @@ const PaymentPostAddressModal = ({
   );
 };
 
-const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps) => {
+const PaymentShippingInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [order, setOrder] = useState(mockOrder);
+  const onOrderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setOrder((prev) => ({ ...prev, [name]: value }));
+  };
   // 우편번호 및 주소 데이터 업데이트 함수
   const handleCompletePostcode = (data: PaymentPostAddressModalProps) => {
     const { zonecode, address } = data;
@@ -74,7 +71,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>배송 정보</CardTitle>
+        <CardTitle className="border-b pb-5 text-base">배송 정보</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex items-center">
@@ -85,7 +82,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
         </div>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <Label>수령인</Label>
+            <Label className="mb-1 block text-xs text-slate-500">수령인</Label>
             <Input
               type="text"
               placeholder="수령인"
@@ -95,7 +92,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
             />
           </div>
           <div>
-            <Label>연락처</Label>
+            <Label className="mb-1 block text-xs text-slate-500">연락처</Label>
             <Input
               type="text"
               placeholder="연락처"
@@ -105,7 +102,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
             />
           </div>
           <div>
-            <Label>우편번호</Label>
+            <Label className="mb-1 block text-xs text-slate-500">우편번호</Label>
             <Input
               className="cursor-pointer"
               type="text"
@@ -117,7 +114,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
             />
           </div>
           <div>
-            <Label>주소</Label>
+            <Label className="mb-1 block text-xs text-slate-500">주소</Label>
             <Input
               type="text"
               placeholder="주소"
@@ -128,7 +125,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
             />
           </div>
           <div>
-            <Label>상세주소</Label>
+            <Label className="mb-1 block text-xs text-slate-500">상세주소</Label>
             <Input
               type="text"
               placeholder="상세주소"
@@ -138,7 +135,7 @@ const PaymentShippingInfo = ({ order, onOrderChange }: PaymentShippingInfoProps)
             />
           </div>
           <div>
-            <Label>배송 메모</Label>
+            <Label className="mb-1 block text-xs text-slate-500">배송 메모</Label>
             <Textarea
               placeholder="배송 메모를 입력하세요."
               name="memo"

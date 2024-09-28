@@ -28,7 +28,7 @@ const TopBar = () => {
 
   return (
     <div className="hidden bg-[#F4F4F4] py-3 text-right text-xs md:block">
-      <div className="container mx-auto flex justify-end space-x-4 px-4 text-slate-500">
+      <div className="max-w-screen-xs container mx-auto flex justify-end space-x-4 px-4 text-slate-500 sm:max-w-screen-md md:h-fit md:max-w-screen-lg">
         <NavLinks links={links} fontSize="text-xs" />
       </div>
     </div>

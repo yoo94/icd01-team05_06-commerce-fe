@@ -1,6 +1,7 @@
 import { HttpResponse } from 'msw';
 import { productClient } from '@/mocks/util/client';
 import books from '@/data/books.json';
+import orders from '@/data/orders.json';
 import detailBooks from '@/data/detail-books.json';
 import categories from '@/data/categories.json';
 import products from '@/data/products.json';
@@ -30,6 +31,10 @@ export const handlers = [
 
   productClient.get('books', () => {
     return HttpResponse.json(books);
+  }),
+
+  productClient.get(`orders`, () => {
+    return HttpResponse.json(orders);
   }),
 
   productClient.get('books/:id', (req) => {

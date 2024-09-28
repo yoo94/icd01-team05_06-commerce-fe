@@ -17,7 +17,7 @@ interface HeaderMenubarProps {
 
 const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
   return (
-    <Menubar className="flex space-x-6 border-0">
+    <Menubar className="flex justify-start space-x-6 border-0">
       {mainMenu.map((menu, index) => (
         <MenubarMenu key={index}>
           {menu.categories ? (

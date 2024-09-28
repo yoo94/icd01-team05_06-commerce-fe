@@ -22,35 +22,35 @@ type PreviousReviewsProps = {
 const PreviousReviews = ({ reviews }: PreviousReviewsProps) => {
   return (
     <div className="mb-8">
-      <h2 className="mb-4 text-xl font-semibold">리뷰/한줄평({reviews.length})</h2>
+      <h2 className="mb-4 text-lg font-semibold">리뷰/한줄평({reviews.length})</h2>
       {reviews.length > 0 ? (
         reviews.map((review) => (
-          <div key={review.id} className="mb-4 border-b border-gray-300 pb-4">
+          <div key={review.id} className="mb-4 border-b border-slate-300 pb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {[...Array(5)].map((_, index) => (
                   <Star
                     key={index}
-                    className={`size-4 ${
-                      index < review.rating ? 'text-yellow-500' : 'text-gray-300'
+                    className={`size-3.5 ${
+                      index < review.rating ? 'fill-yellow-500 text-yellow-500' : 'text-slate-300'
                     }`}
                   />
                 ))}
-                <h3 className="ml-2 font-bold">{review.user.username}</h3>
+                <h3 className="ml-2 text-sm font-bold">{review.user.username}</h3>
               </div>
-              <span className="text-sm text-gray-400">
+              <span className="text-xs text-gray-400">
                 {new Date(review.createdAt).toLocaleDateString()}
               </span>
             </div>
-            <p className="mt-2 text-gray-600">{review.comment}</p>
-            <div className="mt-2 flex justify-end space-x-4 text-sm">
+            <p className="mt-2 text-sm font-light text-slate-600">{review.comment}</p>
+            <div className="mt-2 flex justify-end space-x-4 text-xs">
               <button className="text-blue-500 hover:underline">좋아요 0</button>
               <button className="text-blue-500 hover:underline">공감 0</button>
             </div>
           </div>
         ))
       ) : (
-        <p className="text-gray-500">리뷰가 없습니다.</p>
+        <p className="text-slate-500">리뷰가 없습니다.</p>
       )}
     </div>
   );

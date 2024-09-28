@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import TailwindcssAnimate from 'tailwindcss-animate';
 
 const config = {
   darkMode: ['class'],
@@ -17,6 +18,13 @@ const config = {
     extend: {
       screens: {
         xs: '480px',
+        md: '768px',
+        lg: '1024px',
+      },
+      maxWidth: {
+        'screen-xs': '480px',
+        'screen-md': '768px',
+        'screen-lg': '1024px',
       },
       fontFamily: {
         nanumeneo: ['NanumSquareNeo', 'sans-serif'],
@@ -77,7 +85,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [TailwindcssAnimate],
 } satisfies Config;
 
 export default config;

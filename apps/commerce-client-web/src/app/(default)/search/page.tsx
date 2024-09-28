@@ -28,6 +28,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const priceRange = searchParams.price ?? '';
   const selectedPublisher = searchParams.publisher ?? '';
   const selectedCategory = searchParams.category ?? '';
+  // const selectedTag = searchParams.tag ?? '';
 
   let filteredBooks = booksData.data.products;
 

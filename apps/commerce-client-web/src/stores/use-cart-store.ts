@@ -5,7 +5,7 @@ import { Product } from '@/types/product-types';
 
 export interface CartState {
   items: CartItem[];
-  addBook: (book: Product) => void;
+  addBook: (book: Product, quantity?: number) => void;
   removeBook: (id: number) => void;
   removeAllBook: () => void;
   updateBookQuantity: (id: number, selectNum: number) => void;
@@ -18,15 +18,18 @@ const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      addBook: (book: Product) =>
+      addBook: (book: Product, quantity: number = 1) =>
         set((state) => {
           // Check if the book already exists in the cart
+          if (!book || !book.id || !quantity) {
+            return state;
+          }
           const existingBook = state.items.find((item) => item.id === book.id);
           if (existingBook) {
             // Increment the quantity if the book exists
             return {
               items: state.items.map((item) =>
-                item.id === book.id ? { ...item, selectNum: item.selectNum + 1 } : item,
+                item.id === book.id ? { ...item, selectNum: item.selectNum + quantity } : item,
               ),
             };
           } else {
@@ -34,7 +37,12 @@ const useCartStore = create<CartState>()(
             return {
               items: [
                 ...state.items,
-                { ...book, selectNum: 1, selected: true, shippingInfo: '무료' } as CartItem, // Ensure the new item is typed as CartItem
+                {
+                  ...book,
+                  selectNum: quantity,
+                  selected: true,
+                  shippingInfo: '무료',
+                } as CartItem, // Ensure the new item is typed as CartItem
               ],
             };
           }

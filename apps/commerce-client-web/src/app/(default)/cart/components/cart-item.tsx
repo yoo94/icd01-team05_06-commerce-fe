@@ -14,7 +14,7 @@ interface CartItemProps {
 
 const CartItem = ({ item }: CartItemProps) => {
   const { removeBook, updateBookQuantity, updateBookSelection } = usecartstore();
-  const totalPrice = (parseInt(String(item.price)) * item.selectNum).toLocaleString();
+  const totalPrice = (parseInt(String(item.discountedPrice)) * item.selectNum).toLocaleString();
 
   return (
     <TableRow className="hover:bg-gray-50">
@@ -24,14 +24,13 @@ const CartItem = ({ item }: CartItemProps) => {
           onCheckedChange={(checked: boolean) => updateBookSelection(item.id, checked)}
         />
       </TableCell>
-      <TableCell className="flex items-center space-x-4">
+      <TableCell className="flex items-center space-x-4 font-light">
         <Image
-          src={item.imageUrl ?? ''}
-          fill
-          width={200}
-          height={300}
+          src={item.coverImage}
           alt={item.title}
-          className="rounded"
+          width={120}
+          height={64}
+          className="mr-5 rounded"
         />
         {item.title}
       </TableCell>
@@ -44,13 +43,13 @@ const CartItem = ({ item }: CartItemProps) => {
           className="w-20 rounded border text-center"
         />
       </TableCell>
-      <TableCell className="text-left font-bold">{totalPrice}원</TableCell>
-      <TableCell className="text-left">{item.shippingInfo || '무료'}</TableCell>
-      <TableCell className="text-left">
+      <TableCell className="whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>
+      <TableCell className="text-center">{item.shippingInfo || '무료'}</TableCell>
+      <TableCell className="text-center">
         <Button
           variant="outline"
           onClick={() => removeBook(item.id)}
-          className="text-red-600 hover:bg-red-50"
+          className="text-xs text-slate-500 hover:bg-red-50"
         >
           삭제
         </Button>

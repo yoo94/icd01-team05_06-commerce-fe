@@ -1,24 +1,36 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CartItem } from '@/types/cart-types';
+import Image from 'next/image';
 
 interface PaymentProductsProps {
-  products: CartItem[];
+  books: CartItem[];
 }
 
-const PaymentProducts = ({ products }: PaymentProductsProps) => {
+const PaymentProducts = ({ books }: PaymentProductsProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>주문 상품 정보</CardTitle>
+        <CardTitle className="border-b pb-5 text-base">주문 상품 정보</CardTitle>
       </CardHeader>
       <CardContent>
-        {products?.map((product) => (
+        {books?.map((product) => (
           <div key={product.id} className="mb-4 flex items-center space-x-4">
-            <img src={product.imageUrl} alt={product.title} className="size-16 rounded" />
-            <div>
-              <p className="font-medium">{product.title}</p>
-              <p className="text-gray-500">{product.selectNum}개</p>
-              <p className="font-bold">{product.price}</p>
+            {/* 상품 이미지 */}
+            <Image
+              src={product.coverImage}
+              alt={product.title}
+              width={80}
+              height={50}
+              className="rounded"
+            />
+
+            {/* 상품 정보 */}
+            <div className="flex grow items-center justify-between gap-x-4">
+              <p className="flex-1 text-sm font-extralight">{product.title}</p>{' '}
+              {/* 텍스트 오버플로우 */}
+              <p className="text-sm">{product.selectNum}개</p>
+              <p className="font-bold">{Number(product.price).toLocaleString()}원</p>{' '}
+              {/* 가격에 toLocaleString 적용 */}
             </div>
           </div>
         ))}

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Breadcrumb from '@/components/common/breadcrumb';
 import { calculationDiscountRate, parseAndRoundPrice } from '@/lib/utils';
-import CartActions from './components/cart-actions';
 import BookInfo from './components/book-info/book-info';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -10,6 +9,7 @@ import RefundExchangePolicy from './components/refund-exchage-policy';
 import { productApi } from '@/lib/api';
 import { ApiResponse } from '@/types/api-types';
 import { Product } from '@/types/product-types';
+import ReviewSection from './components/review/review-section';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -43,7 +43,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
             />
           </div>
           {/* Button to open preview link */}
-          <Button variant="outline" className="mt-4 w-full border-slate-300">
+          <Button variant="outline" className="w-full border-slate-300">
             <Link href={book.previewLink} target="_blank">
               미리보기
             </Link>
@@ -100,14 +100,13 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
         </div>
 
         {/* Cart Actions Section */}
-        <div className="ml-6 w-1/4">
-          <CartActions book={book} />
-        </div>
+        <div className="ml-6 w-1/4">{/*<DetailButtonActions book={book} />*/}</div>
       </div>
 
       {/* Bottom Section */}
       <div className="mt-8 border-t pt-4">
         <BookInfo book={book} />
+        <ReviewSection id={book.id} />
         <RefundExchangePolicy />
       </div>
     </div>
