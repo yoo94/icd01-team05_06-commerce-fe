@@ -1,18 +1,7 @@
-interface Category {
+export interface Category {
   id: number;
+  parentId: number | null;
   name: string;
-  subCategory: SubCategory[];
+  depth: number;
+  childCategories: Category[] | null;
 }
-
-interface SubCategory {
-  id: number;
-  name: string;
-  subCategory?: SubSubCategory[];
-}
-
-interface SubSubCategory {
-  id: number;
-  name: string;
-}
-
-export type { Category, SubCategory, SubSubCategory };

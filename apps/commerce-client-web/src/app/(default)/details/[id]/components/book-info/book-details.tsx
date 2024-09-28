@@ -1,7 +1,7 @@
-import { Book } from '@/types/book-types';
+import { Product } from '@/types/product-types';
 
 type BookDetailsProps = {
-  book: Book;
+  book: Product;
 };
 
 const BookDetails = ({ book }: BookDetailsProps) => {
@@ -12,7 +12,7 @@ const BookDetails = ({ book }: BookDetailsProps) => {
         <tbody>
           <tr>
             <td className="w-32 border bg-slate-100 px-4 py-2 font-bold">발행일</td>
-            <td className="border px-4 py-2 font-extralight">{book.pubdate}</td>
+            <td className="border px-4 py-2 font-extralight">{book.publishDate}</td>
           </tr>
           <tr>
             <td className="w-32 border bg-slate-100 px-4 py-2 font-bold">쪽수</td>
