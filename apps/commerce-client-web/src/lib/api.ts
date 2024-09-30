@@ -1,26 +1,45 @@
 import ky, { HTTPError } from 'ky';
 import { getSession, signOut } from 'next-auth/react';
 import { refreshAccessToken } from '@/utils/auth-utils';
+import { cookies } from 'next/headers';
 
 export const baseApi = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_API,
+});
+
+export const publicApi = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_EXTERNAL_API_URL,
+  timeout: 10000,
+  retry: {
+    limit: 2,
+    statusCodes: [401],
+  },
+});
+
+export const privateApi = ky.create({
   timeout: 10000,
   retry: {
     limit: 2,
     statusCodes: [401],
   },
   hooks: {
-    // getSession()을 호출하면 NEXTAUTH_URL/api/auth/session으로 요청을 보냄
-    // 빌드 단계에서는 이 요청이 무조건 실패하기 때문에 에러 발생
-    // 토큰을 넣어주는 다른 방식을 생각해봐야 할 듯
-    // beforeRequest: [
-    //   async (request) => {
-    //     const session = await getSession();
-    //
-    //     if (session?.tokenInfo.accessToken) {
-    //       request.headers.set('Authorization', `Bearer ${session?.tokenInfo.accessToken}`);
-    //     }
-    //   },
-    // ],
+    beforeRequest: [
+      async (request) => {
+        try {
+          const token = cookies().get('jwt_token')?.value;
+
+          console.log('JWT from cookies:', token);
+
+          if (token) {
+            request.headers.set('Authorization', `Bearer ${token}`);
+          } else {
+            console.error('No JWT token found in cookies');
+          }
+        } catch (error) {
+          console.error('Error setting access token:', error);
+        }
+      },
+    ],
     beforeRetry: [
       async ({ request, error, retryCount }) => {
         const responseError = error as HTTPError;
@@ -67,14 +86,14 @@ export const baseApi = ky.create({
   },
 });
 
-export const authApi = baseApi.extend({
+export const authApi = privateApi.extend({
   prefixUrl: process.env.NEXT_PUBLIC_AUTH_API_URL,
 });
 
-export const productApi = baseApi.extend({
+export const productApi = privateApi.extend({
   prefixUrl: process.env.NEXT_PUBLIC_PRODUCT_API_URL,
 });
 
-export const orderApi = baseApi.extend({
+export const orderApi = privateApi.extend({
   prefixUrl: process.env.NEXT_PUBLIC_ORDER_API_URL,
 });

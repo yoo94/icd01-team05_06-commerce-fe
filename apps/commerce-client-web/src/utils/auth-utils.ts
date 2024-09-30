@@ -1,13 +1,9 @@
-import ky from 'ky';
+import { authApi } from '@/lib/api';
 import { TokenInfo, TokenResponse } from '@/types/auth-types';
-
-export const apiClient = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_EXTERNAL_AUTH_URL,
-});
 
 export async function refreshAccessToken(token: TokenInfo): Promise<TokenInfo> {
   try {
-    const res = await apiClient
+    const res = await authApi
       .post('refresh', {
         headers: {
           'Content-Type': 'application/json',

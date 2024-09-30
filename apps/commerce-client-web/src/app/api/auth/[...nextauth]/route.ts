@@ -1,8 +1,9 @@
 import NextAuth, { ExtendedUser, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { ApiError } from '@/types/api-types';
-import { apiClient, refreshAccessToken } from '@/utils/auth-utils';
+import { refreshAccessToken } from '@/utils/auth-utils';
 import { TokenInfo, TokenResponse } from '@/types/auth-types';
+import { publicApi } from '@/lib/api';
 
 const authOptions: NextAuthOptions = {
   pages: {
@@ -19,8 +20,8 @@ const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           // Step 1: Authenticate and retrieve JWT tokens
-          const result = await apiClient
-            .post('login', {
+          const result = await publicApi
+            .post('auth/v1/login', {
               json: credentials,
             })
             .json<TokenResponse>();
@@ -40,8 +41,8 @@ const authOptions: NextAuthOptions = {
           console.log('External server accessToken', tokenInfo.accessToken);
 
           // Step 2: Fetch user information using the access token
-          const userInfoResponse = await apiClient
-            .get('info', {
+          const userInfoResponse = await publicApi
+            .get('auth/v1/info', {
               headers: {
                 Authorization: `Bearer ${tokenInfo.accessToken}`,
               },
