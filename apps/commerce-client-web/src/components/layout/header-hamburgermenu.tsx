@@ -4,18 +4,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import useAuthStore from '@/stores/use-auth-store';
+import { handleLogout } from '@/services/auth-service';
 
 interface HamburgerMenuProps {
   mainMenu: MainMenu[];
 }
 
 const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
-  const { data: session } = useSession();
-  const { logout } = useAuthStore();
-
-  const isAuthenticated = !!session;
+  const { isLoggedIn } = useAuthStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategories, setActiveCategories] = useState<number | null>(null);
@@ -90,9 +87,9 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
       {isOpen && (
         <div className="fixed inset-0 top-14 z-50 flex flex-col border-t bg-white">
           <div className="container flex justify-center space-x-5 px-8 pb-4 pt-8">
-            {isAuthenticated ? (
+            {isLoggedIn ? (
               <>
-                <Button variant={'outline'} onClick={logout}>
+                <Button variant={'outline'} onClick={handleLogout}>
                   로그아웃
                 </Button>
                 <Button asChild>

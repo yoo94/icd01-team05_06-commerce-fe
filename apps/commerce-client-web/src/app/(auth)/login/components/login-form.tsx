@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import useAuthStore from '@/stores/use-auth-store';
+import { handleLogin } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 
 interface LoginFormValues {
@@ -33,7 +34,7 @@ interface LoginFormValues {
 
 const LoginForm = () => {
   const router = useRouter();
-  const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
+  const { loginData, setLoginData, setSaveId, saveId, setLoginState } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -48,10 +49,10 @@ const LoginForm = () => {
     async (value: LoginFormValues) => {
       setIsLoading(true);
       setLoginData(value);
-
+      router.push('/');
       try {
-        await submitLogin();
-        router.push('/');
+        await handleLogin(value.email, value.password);
+        setLoginState(true);
       } catch (error) {
         console.error('Error during login:', error);
         setShowAlertDialog(true);
@@ -59,7 +60,7 @@ const LoginForm = () => {
         reset();
       }
     },
-    [reset, setLoginData, submitLogin],
+    [reset, setLoginData],
   );
 
   const handleSaveIdChange = (checked: boolean) => {

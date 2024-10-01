@@ -1,19 +1,10 @@
+import { ApiResponse } from './api-types';
+
 export interface TokenInfo {
   accessToken: string;
   accessTokenExpiresIn: number;
   refreshToken: string;
   refreshTokenExpiresIn: number;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  error: ApiError | null;
-}
-
-export interface ApiError {
-  message: string;
-  code?: number;
 }
 
 export interface UserInfo {

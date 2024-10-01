@@ -1,14 +1,8 @@
-import { authApi } from '@/lib/api';
-import { ApiResponse, UserInfo } from '@/types/auth-types';
+import { getUserInfo } from '@/services/auth-service';
+import { UserInfo } from '@/types/auth-types';
 
 const Page = async () => {
-  const response = await authApi.get('info').json<ApiResponse<UserInfo>>();
-
-  if (!response.success) {
-    throw new Error(response.error?.message);
-  }
-
-  const userInfo = response.data;
+  const userInfo: UserInfo = await getUserInfo();
 
   return (
     <div className="mx-auto">
