@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
 import useAuthStore from '@/stores/use-auth-store';
-import { handleLogout } from '@/services/auth-service';
+import { logout } from '@/app/actions/auth';
 
 interface HamburgerMenuProps {
   mainMenu: MainMenu[];
@@ -89,7 +89,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
           <div className="container flex justify-center space-x-5 px-8 pb-4 pt-8">
             {isLoggedIn ? (
               <>
-                <Button variant={'outline'} onClick={handleLogout}>
+                <Button variant={'outline'} onClick={logout}>
                   로그아웃
                 </Button>
                 <Button asChild>

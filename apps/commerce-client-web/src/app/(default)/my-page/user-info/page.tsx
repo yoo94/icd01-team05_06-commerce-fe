@@ -1,4 +1,4 @@
-import { getUserInfo } from '@/services/auth-service';
+import { getUserInfo } from '@/app/actions/auth';
 import { UserInfo } from '@/types/auth-types';
 
 const Page = async () => {

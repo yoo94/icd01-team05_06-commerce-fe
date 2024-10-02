@@ -2,13 +2,13 @@
 
 import useAuthStore from '@/stores/use-auth-store';
 import NavLinks from '@/components/common/nav-links';
-import { handleLogout } from '@/services/auth-service';
+import { logout } from '@/app/actions/auth';
 
 const TopBar = () => {
   const { isLoggedIn, setLoginState } = useAuthStore();
-  const logout = async () => {
+  const handleLogout = async () => {
     try {
-      await handleLogout();
+      await logout();
       setLoginState(false);
     } catch (error) {
       console.error('Failed to logout:', error);
@@ -17,7 +17,7 @@ const TopBar = () => {
 
   const links = isLoggedIn
     ? [
-        { href: '#', label: '로그아웃', onClick: logout },
+        { href: '#', label: '로그아웃', onClick: handleLogout },
         {
           href: '#',
           label: '고객센터',

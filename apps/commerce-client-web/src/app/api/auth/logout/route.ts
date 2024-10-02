@@ -1,13 +1,14 @@
+import { externalApi } from '@/lib/api';
+import { ApiResponse } from '@/types/api-types';
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticatedApiRequest } from '@/lib/api-herper';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    const logoutResponse = await authenticatedApiRequest(request, 'auth/v1/logout');
+    const result = await externalApi.post('auth/v1/logout').json<ApiResponse<null>>();
 
-    return NextResponse.json(logoutResponse, { status: 201 });
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
     console.error('Error during logout:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error }, { status: 500 });
   }
 }

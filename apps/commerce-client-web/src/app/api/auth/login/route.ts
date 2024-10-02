@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { externalApi } from '@/lib/api';
-import { TokenInfo, TokenResponse } from '@/types/auth-types';
-import { cookies } from 'next/headers';
+import { TokenResponse } from '@/types/auth-types';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await req.json(); // Parse request body in NextRequest
+    const body = await request.json(); // Parse request body in NextRequest
     const { email, password } = body;
 
     // Step 1: Sign up the user with the external API
@@ -19,30 +18,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: result.error?.message || 'Login failed' }, { status: 400 });
     }
 
-    const tokenInfo: TokenInfo = result.data.tokenInfo;
-
-    // Step 2: Set cookies for JWT and refresh token after successful login
-    const cookieStore = cookies();
-
-    // Set accessToken
-    cookieStore.set('accessToken', tokenInfo.accessToken, {
-      maxAge: tokenInfo.accessTokenExpiresIn, // Token expiry time
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-    });
-
-    // Set refreshToken
-    cookieStore.set('refreshToken', tokenInfo.refreshToken, {
-      maxAge: tokenInfo.refreshTokenExpiresIn, // Token expiry time
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-    });
-
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
     console.error('Error during signup:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error }, { status: 500 });
   }
 }
