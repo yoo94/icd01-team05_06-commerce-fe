@@ -2,14 +2,17 @@
 
 import useAuthStore from '@/stores/use-auth-store';
 import NavLinks from '@/components/common/nav-links';
-import { logout } from '@/app/actions/auth';
+import { logout } from '@/app/actions/auth-action';
+import { useRouter } from 'next/navigation';
 
 const TopBar = () => {
+  const router = useRouter();
   const { isLoggedIn, setLoginState } = useAuthStore();
   const handleLogout = async () => {
     try {
       await logout();
       setLoginState(false);
+      router.push('/');
     } catch (error) {
       console.error('Failed to logout:', error);
     }

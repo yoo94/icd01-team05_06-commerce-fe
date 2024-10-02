@@ -5,6 +5,6 @@ export type ApiError = {
 
 export interface ApiResponse<Data> {
   success: boolean;
-  data: Data;
+  data: Data | null;
   error: ApiError | null;
 }

@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
 import { useRouter } from 'next/navigation';
-import { login } from '@/app/actions/auth';
+import { login } from '@/app/actions/auth-action';
 
 const LoginForm = () => {
   const router = useRouter();

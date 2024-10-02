@@ -5,19 +5,31 @@ import { Button } from '@/components/ui/button';
 import { MainMenu } from '@/types/menu-types';
 import Link from 'next/link';
 import useAuthStore from '@/stores/use-auth-store';
-import { logout } from '@/app/actions/auth';
+import { logout } from '@/app/actions/auth-action';
+import { useRouter } from 'next/navigation';
 
 interface HamburgerMenuProps {
   mainMenu: MainMenu[];
 }
 
 const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
-  const { isLoggedIn } = useAuthStore();
+  const router = useRouter();
+  const { isLoggedIn, setLoginState } = useAuthStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategories, setActiveCategories] = useState<number | null>(null);
   const [activeItems, setActiveItems] = useState<number | null>(null);
   const [activeSubItems, setActiveSubItems] = useState<number | null>(null);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+      setLoginState(false);
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -89,7 +101,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
           <div className="container flex justify-center space-x-5 px-8 pb-4 pt-8">
             {isLoggedIn ? (
               <>
-                <Button variant={'outline'} onClick={logout}>
+                <Button variant={'outline'} onClick={handleLogout}>
                   로그아웃
                 </Button>
                 <Button asChild>
