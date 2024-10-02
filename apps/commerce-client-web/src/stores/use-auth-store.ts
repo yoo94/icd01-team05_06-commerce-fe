@@ -88,11 +88,9 @@ const useAuthStore = create<AuthStore>()(
           })),
         setSaveId: (save) => set({ saveId: save }),
         setLoginState: (state) => set({ isLoggedIn: state }),
-
-        // Check if JWT is in cookies, and set login state accordingly
         checkLoginState: () => {
           const token = getCookie('accessToken');
-          set({ isLoggedIn: !!token }); // Set true if token exists, otherwise false
+          set({ isLoggedIn: !!token });
         },
       }),
       {
