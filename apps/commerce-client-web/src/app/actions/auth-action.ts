@@ -1,20 +1,17 @@
 'use server';
 
 import { externalApi } from '@/lib/api';
-import { LoginFormData } from '@/stores/use-auth-store';
+import { LoginFormData, SignupFormData } from '@/stores/use-auth-store';
 import { ApiResponse } from '@/types/api-types';
 import { TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
 import { getHeadersWithToken } from './action-helper';
 import { removeTokenInfo, setTokenInfo } from '@/lib/cookies';
 
-// 로그인 액션 함수
 export const login = async (formData: LoginFormData) => {
-  const { email, password } = formData;
-
   try {
     const response = await externalApi
       .post('auth/v1/login', {
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -29,6 +26,29 @@ export const login = async (formData: LoginFormData) => {
   } catch (error) {
     console.error('Error during login:', error);
     throw new Error('Login failed');
+  }
+};
+
+// TODO : 작동되는지 확인 여부 필요
+export const signUp = async (formData: SignupFormData) => {
+  try {
+    const response = await externalApi
+      .post('auth/v1/sign-up', {
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .json<TokenResponse>();
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error?.message || 'SignUp failed');
+    }
+
+    setTokenInfo(response.data.tokenInfo);
+  } catch (error) {
+    console.error('Error during signup:', error);
+    throw new Error('Signup failed');
   }
 };
 

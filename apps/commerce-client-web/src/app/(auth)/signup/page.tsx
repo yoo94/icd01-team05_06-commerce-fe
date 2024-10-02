@@ -16,8 +16,8 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import Link from 'next/link';
-import { handleLogin, handleSignup } from '@/services/auth-service';
-import useAuthStore from '@/stores/use-auth-store';
+import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
+import { login, signUp } from '@/app/actions/auth-action';
 
 const steps = ['약관동의', '정보입력', '가입완료'];
 
@@ -58,8 +58,12 @@ const JoinPage = () => {
       setStep(step + 1);
     } else if (step === 1 && isFormValid) {
       try {
-        await handleSignup(signupData);
-        await handleLogin(signupData.email, signupData.password);
+        await signUp(signupData);
+        const loginData: LoginFormData = {
+          email: signupData.email,
+          password: signupData.password,
+        };
+        await login(loginData);
         setStep(step + 1);
       } catch (error) {
         console.error('Error during signup:', error);
@@ -83,7 +87,7 @@ const JoinPage = () => {
       )}
       {step === 1 && (
         <SignUpForm
-          onSubmit={async () => await handleSignup(signupData)}
+          onSubmit={async () => await signUp(signupData)}
           onValidChange={handleFormValidityChange}
         />
       )}

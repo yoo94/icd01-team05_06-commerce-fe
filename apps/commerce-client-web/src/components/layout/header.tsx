@@ -18,7 +18,7 @@ const Header = async () => {
 
   // 서버로부터 카테고리 데이터를 받아오지 못한 경우
   if (!serverData.success || !serverData.data) {
-    throw new Error(serverData.error?.message || 'Failed to load categories');
+    return null;
   }
 
   const categories: MenuCategory[] = transformServerCategories(serverData.data);
