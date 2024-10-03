@@ -6,6 +6,7 @@ import { ApiResponse } from '@/types/api-types';
 import { TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
 import { getHeadersWithToken } from './action-helper';
 import { removeTokenInfo, setTokenInfo } from '@/lib/cookies';
+// import { redirect } from 'next/navigation';
 
 export const login = async (formData: LoginFormData) => {
   try {
@@ -23,6 +24,9 @@ export const login = async (formData: LoginFormData) => {
     }
 
     setTokenInfo(response.data.tokenInfo);
+
+    // TODO: redirect 시, 발생하는 오류 해결하기
+    // redirect('/');
   } catch (error) {
     console.error('Error during login:', error);
     throw new Error('Login failed');
@@ -72,6 +76,9 @@ export const logout = async () => {
 
     // Clear cookies on logout
     removeTokenInfo();
+
+    // TODO: redirect 시, 발생하는 오류 해결하기
+    // redirect('/');
   } catch (error) {
     console.error('Error during logout:', error);
     throw new Error('Failed to logout');
