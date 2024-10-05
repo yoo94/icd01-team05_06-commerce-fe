@@ -23,6 +23,10 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   const response = await productApi(`books/${bookId}`).json<ApiResponse<Product>>();
   const book = response.data;
 
+  if (!book) {
+    return <div>책 정보를 찾을 수 없습니다.</div>;
+  }
+
   const originalPrice = parseAndRoundPrice(book.price);
   const discountedPrice = parseAndRoundPrice(book.discountedPrice);
   const discountRate = calculationDiscountRate(book.price, book.price - book.discountedPrice);

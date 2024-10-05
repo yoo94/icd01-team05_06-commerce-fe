@@ -30,6 +30,10 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const selectedCategory = searchParams.category ?? '';
   // const selectedTag = searchParams.tag ?? '';
 
+  if (!booksData.success || !booksData.data) {
+    return <div>상품 정보를 찾을 수 없습니다.</div>;
+  }
+
   let filteredBooks = booksData.data.products;
 
   // Filter by search word
