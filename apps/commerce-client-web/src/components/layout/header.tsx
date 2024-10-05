@@ -7,16 +7,21 @@ import HeaderMenubar from './header-menubar';
 import HamburgerMenu from './header-hamburgermenu';
 import TopBar from './top-bar';
 import SearchBar from './search-bar';
-
 import { transformServerCategories } from '@/lib/utils';
 import { MainMenu, MenuCategory } from '@/types/menu-types';
 import { Category } from '@/types/category-types';
-import api from '@/lib/api';
+import { productApi } from '@/lib/api';
+import { ApiResponse } from '@/types/api-types';
 
 const Header = async () => {
-  const serverData = await api.get('api/categories').json<Category[]>();
+  const serverData = await productApi.get('categories').json<ApiResponse<Category>>();
 
-  const categories: MenuCategory[] = transformServerCategories(serverData);
+  // 서버로부터 카테고리 데이터를 받아오지 못한 경우
+  if (!serverData.success || !serverData.data) {
+    return null;
+  }
+
+  const categories: MenuCategory[] = transformServerCategories(serverData.data);
 
   const mainMenu: MainMenu[] = [
     {
@@ -35,11 +40,11 @@ const Header = async () => {
   ];
 
   return (
-    <header className="w-full border-b bg-background">
+    <header className="bg-background w-full border-b">
       {/* 상단 고정 헤더 */}
       <TopBar />
       {/* 메인 헤더 */}
-      <div className="container mx-auto flex h-14 max-w-screen-xs items-center justify-between p-4 sm:max-w-screen-md md:h-fit md:max-w-screen-lg">
+      <div className="max-w-screen-xs container mx-auto flex h-14 items-center justify-between p-4 sm:max-w-screen-md md:h-fit md:max-w-screen-lg">
         {/* 로고 */}
         <div className="shrink-0">
           <Link href="/" className="hidden md:flex">
@@ -82,7 +87,7 @@ const Header = async () => {
       </div>
 
       {/* 메뉴바 (모바일에서 숨김) */}
-      <div className="container mx-auto mt-4 hidden max-w-screen-xs sm:max-w-screen-md md:block md:h-fit md:max-w-screen-lg">
+      <div className="max-w-screen-xs container mx-auto mt-4 hidden sm:max-w-screen-md md:block md:h-fit md:max-w-screen-lg">
         <HeaderMenubar mainMenu={mainMenu} />
       </div>
     </header>

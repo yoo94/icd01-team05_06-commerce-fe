@@ -1,15 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { Book } from '@/types/book-types';
+import { useRouter } from 'next/navigation'; // useRouter 훅 가져오기
 import { parseAndRoundPrice } from '@/lib/utils';
-import AddToCartButton from '@/app/(default)/cart/components/cart-add-button'; // Import the useCartStore hook
-import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
+import { Product } from '@/types/product-types'; // Import the useCartStore hook
 
 export type BookCardProps = {
   id: number;
-  book: Book;
+  book: Product;
 };
 
 const BookCard = ({ id, book }: BookCardProps) => {
@@ -46,12 +44,14 @@ const BookCard = ({ id, book }: BookCardProps) => {
             <div className="flex flex-col gap-y-1.5 py-2">
               <h2 className="max-w-96 truncate text-sm font-semibold">{book.title}</h2>
               <p className="text-xs font-light text-slate-600">
-                {book.author} | {book.publisher} | {book.pubdate}
+                {book.author} | {book.publisher} | {book.publishDate}
               </p>
               <p className="mt-2 text-sm">
-                {book.discount > 0 ? (
+                {book.price > book.discountedPrice ? (
                   <>
-                    <span className="mr-1 font-extrabold">{book.discount.toLocaleString()}원</span>
+                    <span className="mr-1 font-extrabold">
+                      {book.discountedPrice.toLocaleString()}원
+                    </span>
                     <span className="text-xs text-slate-400 line-through">
                       {roundedPrice.toLocaleString()}원
                     </span>
@@ -65,22 +65,22 @@ const BookCard = ({ id, book }: BookCardProps) => {
               </p>
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
-              {book.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="gap-2 rounded bg-slate-100 px-2 py-1 text-xs font-light text-slate-400"
-                >
-                  #{tag}
-                </span>
-              ))}
+              {/*{book.tags.map((tag, index) => (*/}
+              {/*  <span*/}
+              {/*    key={index}*/}
+              {/*    className="gap-2 rounded bg-slate-100 px-2 py-1 text-xs font-light text-slate-400"*/}
+              {/*  >*/}
+              {/*    #{tag}*/}
+              {/*  </span>*/}
+              {/*))}*/}
             </div>
           </div>
         </div>
       </>
       {/* Right Side: Buttons */}
       <div className="mt-4 flex flex-row items-end justify-around space-y-2 md:ml-auto md:mt-0 md:flex-col md:justify-start">
-        <AddToCartButton book={book} quantity={1} />
-        <PaymentAddButton text={'바로구매'} book={book} />
+        {/*<AddToCartButton book={book} quantity={1} />*/}
+        {/*<PaymentAddButton text={'바로구매'} book={book} />*/}
       </div>
     </div>
   );

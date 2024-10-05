@@ -1,7 +1,7 @@
 import PaymentPageClient from '@/app/(default)/order/components/payment-page-client';
 import { CartItem } from '@/types/cart-types';
-import { DetailBook } from '@/types/book-types';
-import api from '@/lib/api';
+import { Product } from '@/types/product-types';
+import { productApi } from '@/lib/api';
 
 interface PaymentPageProps {
   searchParams: { productId?: string };
@@ -13,7 +13,7 @@ const PaymentPage = async ({ searchParams }: PaymentPageProps) => {
   if (searchParams.productId) {
     const bookId = Number(searchParams.productId);
     try {
-      const book = await api(`api/books/${bookId}`).json<DetailBook>();
+      const book = await productApi(`books/${bookId}`).json<Product>();
       if (book) {
         const cartItem: CartItem = {
           ...book,

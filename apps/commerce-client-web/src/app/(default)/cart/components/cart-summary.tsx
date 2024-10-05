@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Minus, Equal } from 'lucide-react';
+import { Equal, Minus, Plus } from 'lucide-react';
 import useCartStore from '@/stores/use-cart-store';
 
 const CartSummary = () => {
@@ -11,12 +11,17 @@ const CartSummary = () => {
     .reduce((acc, item) => acc + parseInt(String(item.price)) * item.selectNum, 0)
     .toLocaleString();
   const totalDiscount = selectedItems
-    .reduce((acc, item) => acc + parseInt(String(item.discount)) * item.selectNum, 0)
+    .reduce(
+      (acc, item) => acc + parseInt(String(item.price - item.discountedPrice)) * item.selectNum,
+      0,
+    )
     .toLocaleString();
   const finalPrice = selectedItems
     .reduce(
       (acc, item) =>
-        acc + (parseInt(String(item.price)) - parseInt(String(item.discount))) * item.selectNum,
+        acc +
+        (parseInt(String(item.price)) - parseInt(String(item.price - item.discountedPrice))) *
+          item.selectNum,
       0,
     )
     .toLocaleString();
@@ -65,7 +70,8 @@ const CartSummary = () => {
         {/* 가격 정보 */}
         <div className="grid grid-cols-4 gap-4 p-4 text-center text-lg font-bold">
           <div>{totalItemPrice}원</div>
-          <div>0원</div> {/* 추가금액은 0으로 설정 */}
+          <div>0원</div>
+          {/* 추가금액은 0으로 설정 */}
           <div>{totalDiscount}원</div>
           <div className="text-red-600">{finalPrice}원</div>
         </div>

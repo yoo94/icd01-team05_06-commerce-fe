@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import useCartStore from '@/stores/use-cart-store';
 import { useRouter } from 'next/navigation';
-import { Book } from '@/types/book-types';
-import AlertDialogComponent from '@/components/common/alert-dialog'; // 경고 다이얼로그
+import AlertDialogComponent from '@/components/common/alert-dialog';
+import { Product } from '@/types/product-types'; // 경고 다이얼로그
 
 interface PaymentForOrderButtonProps {
   text: string;
-  book?: Book;
+  book?: Product;
 }
 
 const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
@@ -21,8 +21,9 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const goPayment = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
 
+    // TODO: 품절 여부 조건 재확인 필요
     // 품절된 상품인지 확인
-    if (book && book.discount < 1) {
+    if (book && book.discountedPrice < 1) {
       alert('품절상품입니다');
       return;
     }

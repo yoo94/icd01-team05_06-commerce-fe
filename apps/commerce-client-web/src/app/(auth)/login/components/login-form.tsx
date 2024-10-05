@@ -23,34 +23,31 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import useAuthStore from '@/stores/use-auth-store';
+import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
 import { useRouter } from 'next/navigation';
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
+import { login } from '@/app/actions/auth-action';
 
 const LoginForm = () => {
   const router = useRouter();
-  const { loginData, setLoginData, submitLogin, setSaveId, saveId } = useAuthStore();
+  const { loginData, setLoginData, setSaveId, saveId, setLoginState } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
-  const methods = useForm<LoginFormValues>({
+  const methods = useForm<LoginFormData>({
     defaultValues: loginData,
   });
 
   const { reset } = methods;
 
   const handleFinish = useCallback(
-    async (value: LoginFormValues) => {
+    async (value: LoginFormData) => {
       setIsLoading(true);
       setLoginData(value);
-
       try {
-        await submitLogin();
+        await login(value);
+        setLoginState(true);
+        setLoginData({ email: '', password: '' });
         router.push('/');
       } catch (error) {
         console.error('Error during login:', error);
@@ -59,7 +56,7 @@ const LoginForm = () => {
         reset();
       }
     },
-    [reset, setLoginData, submitLogin],
+    [reset, setLoginData],
   );
 
   const handleSaveIdChange = (checked: boolean) => {
