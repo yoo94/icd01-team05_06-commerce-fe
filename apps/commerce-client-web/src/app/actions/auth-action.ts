@@ -28,6 +28,9 @@ export const login = async (formData: LoginFormData) => {
     // TODO: redirect 시, 발생하는 오류 해결하기
     // redirect('/');
   } catch (error) {
+    if ((error as Error).message === 'NEXT_REDIRECT') {
+      return;
+    }
     console.error('Error during login:', error);
     throw new Error('Login failed');
   }
@@ -57,9 +60,9 @@ export const signUp = async (formData: SignupFormData) => {
 };
 
 export const logout = async () => {
-  try {
-    const headers = await getHeadersWithToken();
+  const headers = await getHeadersWithToken();
 
+  try {
     if (!headers) {
       throw new Error('No token found');
     }
@@ -86,9 +89,9 @@ export const logout = async () => {
 };
 
 export const getUserInfo = async (): Promise<UserInfo> => {
-  try {
-    const headers = await getHeadersWithToken(); // Automatically refreshes token if expired
+  const headers = await getHeadersWithToken();
 
+  try {
     if (!headers) {
       throw new Error('No token found');
     }
