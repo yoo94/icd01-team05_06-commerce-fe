@@ -8,6 +8,7 @@ const publicRoutes = ['/login', '/signup'];
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
   const accessToken = cookies().get('accessToken')?.value;
 
   console.log('Current Path:', path);
@@ -17,7 +18,7 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
 
-  if (publicRoutes.includes(path) && !accessToken) {
+  if (isPublicRoute && accessToken) {
     return NextResponse.redirect(new URL('/', request.nextUrl));
   }
 
@@ -41,15 +42,6 @@ export const config = {
         { type: 'header', key: 'purpose', value: 'prefetch' },
       ],
     },
-
-    {
-      source: '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
-      has: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
-      ],
-    },
-
     {
       source: '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
       has: [{ type: 'header', key: 'x-present' }],

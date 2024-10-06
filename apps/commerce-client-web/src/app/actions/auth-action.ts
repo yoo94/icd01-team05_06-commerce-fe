@@ -6,7 +6,7 @@ import { ApiResponse } from '@/types/api-types';
 import { TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
 import { getHeadersWithToken } from './action-helper';
 import { removeTokenInfo, setTokenInfo } from '@/lib/cookies';
-// import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export const login = async (formData: LoginFormData) => {
   try {
@@ -25,8 +25,7 @@ export const login = async (formData: LoginFormData) => {
 
     setTokenInfo(response.data.tokenInfo);
 
-    // TODO: redirect 시, 발생하는 오류 해결하기
-    // redirect('/');
+    redirect('/');
   } catch (error) {
     if ((error as Error).message === 'NEXT_REDIRECT') {
       return;
@@ -81,8 +80,11 @@ export const logout = async () => {
     removeTokenInfo();
 
     // TODO: redirect 시, 발생하는 오류 해결하기
-    // redirect('/');
+    redirect('/');
   } catch (error) {
+    if ((error as Error).message === 'NEXT_REDIRECT') {
+      return;
+    }
     console.error('Error during logout:', error);
     throw new Error('Failed to logout');
   }
@@ -130,7 +132,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<TokenInf
       throw new Error(response.error?.message || 'Failed to refresh token');
     }
 
-    return response.data.tokenInfo as TokenInfo; // Return new token info
+    return response.data.tokenInfo;
   } catch (error) {
     console.error('Error refreshing access token:', error);
     throw new Error('Failed to refresh access token');
