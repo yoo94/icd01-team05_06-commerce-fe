@@ -7,6 +7,7 @@ import { TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
 import { getHeadersWithToken } from './action-helper';
 import { removeTokenInfo, setTokenInfo } from '@/lib/cookies';
 import { redirect } from 'next/navigation';
+import { UserInfoFormData } from '@/stores/use-user-store';
 
 export const login = async (formData: LoginFormData) => {
   try {
@@ -79,7 +80,6 @@ export const logout = async () => {
     // Clear cookies on logout
     removeTokenInfo();
 
-    // TODO: redirect 시, 발생하는 오류 해결하기
     redirect('/');
   } catch (error) {
     if ((error as Error).message === 'NEXT_REDIRECT') {
@@ -104,8 +104,6 @@ export const getUserInfo = async (): Promise<UserInfo> => {
       })
       .json<ApiResponse<UserInfo>>();
 
-    console.log('User info:', user);
-
     if (!user.success || !user.data) {
       throw new Error(user.error?.message);
     }
@@ -114,6 +112,35 @@ export const getUserInfo = async (): Promise<UserInfo> => {
   } catch (error) {
     console.error('Failed to fetch user info:', error);
     throw new Error('Failed to fetch user info');
+  }
+};
+
+export const updateUserInfo = async (userInfo: UserInfoFormData): Promise<boolean> => {
+  const headers = await getHeadersWithToken();
+
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
+
+    const response = await externalApi
+      .put('auth/v1/update', {
+        body: JSON.stringify(userInfo),
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers,
+        },
+      })
+      .json<ApiResponse<null>>();
+
+    if (!response.success) {
+      throw new Error(response.error?.message || 'Failed to update user info');
+    }
+
+    return response.success;
+  } catch (error) {
+    console.error('Error updating user info:', error);
+    throw new Error('Failed to update user info');
   }
 };
 
@@ -129,12 +156,13 @@ export const refreshAccessToken = async (refreshToken: string): Promise<TokenInf
       .json<TokenResponse>();
 
     if (!response.success || !response.data) {
-      throw new Error(response.error?.message || 'Failed to refresh token');
+      throw new Error(response.error?.message || 'Failed to refresh access token');
     }
 
     return response.data.tokenInfo;
   } catch (error) {
     console.error('Error refreshing access token:', error);
-    throw new Error('Failed to refresh access token');
+    removeTokenInfo();
+    redirect('/');
   }
 };
