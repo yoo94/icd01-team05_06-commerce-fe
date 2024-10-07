@@ -1,8 +1,6 @@
 import { DateRange, SortBy } from '@/types/order-types';
 import { getOrders } from '@/app/actions/order-action';
 import OrderPagination from '@/app/(default)/my-page/orders/components/order-pagination';
-import SortOptionSelect from './sort-option-select';
-import OrderStatusSelect from './order-status-select';
 import OrderTable from './order-table';
 
 interface OrderInfoProps {
@@ -22,16 +20,6 @@ const OrderInfo = async ({ page }: OrderInfoProps) => {
 
   return (
     <div className="flex flex-col gap-2 text-sm">
-      <div className="flex justify-end gap-4">
-        <div className="flex items-center gap-2">
-          <span>정렬기준</span>
-          <SortOptionSelect />
-        </div>
-        <div className="flex items-center gap-2">
-          <span>주문상태</span>
-          <OrderStatusSelect />
-        </div>
-      </div>
       <OrderTable orders={orders} />
       <OrderPagination
         currentPage={paginationInfo.currentPage}
