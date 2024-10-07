@@ -21,24 +21,24 @@ export const SignupSchema = z
 
     confirmPassword: z.string().min(1, '비밀번호 확인을 입력해주세요'),
 
+    phone: z
+      .string()
+      .regex(/^\d+$/, '전화번호는 숫자만 입력 가능합니다') // 숫자만 허용
+      .min(10, '전화번호는 최소 10자 이상이어야 합니다')
+      .max(11, '전화번호는 최대 11자까지 입력 가능합니다'),
+
     postalCode: z
       .string()
       .regex(/^\d+$/, '우편번호는 숫자만 입력 가능합니다')
       .min(1, '우편번호를 입력해주세요')
       .max(10, '우편번호는 최대 10자까지 입력 가능합니다'),
 
-    address: z
+    streetAddress: z
       .string()
       .min(1, '기본 주소를 입력해주세요')
       .max(100, '기본 주소는 최대 100자까지 입력 가능합니다'),
 
-    addressDetail: z.string().max(100, '상세 주소는 최대 100자까지 입력 가능합니다').optional(),
-
-    phone: z
-      .string()
-      .regex(/^\d+$/, '전화번호는 숫자만 입력 가능합니다') // 숫자만 허용
-      .min(10, '전화번호는 최소 10자 이상이어야 합니다')
-      .max(11, '전화번호는 최대 11자까지 입력 가능합니다'),
+    detailAddress: z.string().max(100, '상세 주소는 최대 100자까지 입력 가능합니다').optional(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {

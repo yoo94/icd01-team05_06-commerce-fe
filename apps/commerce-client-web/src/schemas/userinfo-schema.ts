@@ -1,19 +1,28 @@
 import { z } from 'zod';
 
 export const UserInfoSchema = z.object({
-  email: z.string().email({ message: '유효한 이메일을 입력해 주세요.' }),
-  nickname: z
+  name: z
     .string()
-    .min(1, { message: '닉네임을 입력해 주세요.' })
-    .max(20, { message: '닉네임은 20자 이내여야 합니다.' }),
-  name: z.string().min(1, { message: '이름을 입력해 주세요.' }),
-  gender: z.enum(['male', 'female'], { message: '성별을 선택해 주세요.' }),
+    .min(1, '이름을 입력해주세요')
+    .max(50, '이름은 최대 50자까지 입력 가능합니다')
+    .regex(/^[가-힣]+$/, '이름은 한글만 입력 가능합니다'),
+
   phone: z
     .string()
-    .min(10, { message: '전화번호는 최소 10자리여야 합니다.' })
-    .regex(/^\d+$/, { message: '전화번호는 숫자만 입력해 주세요.' }),
-  birthDate: z.string().min(1, { message: '생년월일을 입력해 주세요.' }),
-  postalCode: z.string().min(1, { message: '우편번호를 입력해 주세요.' }),
-  address: z.string().min(1, { message: '주소를 입력해 주세요.' }),
-  addressDetail: z.string().min(1, { message: '상세 주소를 입력해 주세요.' }),
+    .regex(/^\d+$/, '전화번호는 숫자만 입력 가능합니다')
+    .min(10, '전화번호는 최소 10자 이상이어야 합니다')
+    .max(11, '전화번호는 최대 11자까지 입력 가능합니다'),
+
+  postalCode: z
+    .string()
+    .regex(/^\d+$/, '우편번호는 숫자만 입력 가능합니다')
+    .min(1, '우편번호를 입력해주세요')
+    .max(10, '우편번호는 최대 10자까지 입력 가능합니다'),
+
+  streetAddress: z
+    .string()
+    .min(1, '기본 주소를 입력해주세요')
+    .max(100, '기본 주소는 최대 100자까지 입력 가능합니다'),
+
+  detailAddress: z.string().max(100, '상세 주소는 최대 100자까지 입력 가능합니다').optional(),
 });

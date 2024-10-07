@@ -1,84 +1,85 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { UserInfo } from '@/types/auth-types';
+import { UserSession } from '@/types/auth-types';
 
-// 서버에서 가져온 정보 중 form에 필요한 값만 사용하기 위한 타입
-export interface UserInfoFormValues {
-  id: string;
-  nickname: string;
+export interface UserInfoFormData {
+  password?: string;
   name: string;
-  email: string;
   phone: string;
-  gender: string;
-  birthDate: string;
   postalCode: string;
-  address: string;
-  addressDetail: string;
+  streetAddress: string;
+  detailAddress: string;
+}
+
+export interface PasswordFormData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 interface UserState {
-  userInfo: UserInfo | null;
-  userInfoFormValues: UserInfoFormValues;
-  setUserInfo: (details: UserInfo) => void;
-  setUserInfoFormValues: (values: UserInfoFormValues) => void;
-  clearUserInfo: () => void;
-  clearUserInfoFormValues: () => void;
+  userSession: UserSession | null;
+  userInfoData: UserInfoFormData;
+  passwordData: PasswordFormData;
+  setUserSession: (session: UserSession) => void;
+  setUserInfoData: (data: Partial<UserInfoFormData>) => void;
+  setPasswordData: (data: PasswordFormData) => void;
+  clearUserSession: () => void;
+  clearUserInfoData: () => void;
+  clearPasswordData: () => void;
 }
 
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      userInfo: null,
-      userInfoFormValues: {
-        id: '',
-        nickname: 'test_nickname',
+      userSession: null,
+      userInfoData: {
         name: '',
-        email: '',
         phone: '',
-        gender: 'female',
-        birthDate: '1990-01-01',
-        postalCode: '06544',
-        address: '서울특별시 서초구 신반포로 270 (반포동, 반포자이아파트)',
-        addressDetail: '1111동 1234호',
+        postalCode: '',
+        streetAddress: '',
+        detailAddress: '',
       },
-
-      setUserInfo: (details: UserInfo) => {
-        set({ userInfo: details });
+      passwordData: {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       },
-
-      setUserInfoFormValues: (values: UserInfoFormValues) => set({ userInfoFormValues: values }),
-
-      clearUserInfo: () => set({ userInfo: null }),
-
-      clearUserInfoFormValues: () =>
-        set({
-          userInfoFormValues: {
-            id: '',
-            nickname: 'test_nickname',
-            name: '',
-            email: '',
-            phone: '',
-            gender: 'female',
-            birthDate: '1990-01-01',
-            postalCode: '06544',
-            address: '서울특별시 서초구 신반포로 270 (반포동, 반포자이아파트)',
-            addressDetail: 'test_detail',
+      setUserSession: (session: UserSession) => set({ userSession: session }),
+      setUserInfoData: (data) =>
+        set((state) => ({
+          userInfoData: {
+            ...state.userInfoData,
+            ...data,
           },
-        }), // 폼 데이터 초기화
+        })),
+      setPasswordData: (data: PasswordFormData) => set({ passwordData: data }),
+      clearUserSession: () => set({ userSession: null }),
+      clearUserInfoData: () =>
+        set({
+          userInfoData: {
+            name: '',
+            phone: '',
+            postalCode: '',
+            streetAddress: '',
+            detailAddress: '',
+          },
+        }),
+      clearPasswordData: () =>
+        set({
+          passwordData: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: '',
+          },
+        }),
     }),
     {
       name: 'user-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ userInfo: state.userInfo }), // Persist login state and saveId
+      partialize: (state) => ({
+        userSession: state.userSession,
+      }),
     },
   ),
 );
-
-export const getFilteredUserInfo = (userInfo: UserInfoFormValues): UserInfo => {
-  return {
-    id: Number(userInfo.id),
-    email: userInfo.email,
-    phone: Number(userInfo.phone),
-    name: userInfo.name,
-  };
-};

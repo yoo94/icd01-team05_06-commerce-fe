@@ -9,8 +9,8 @@ export interface SignupFormData {
   confirmPassword: string;
   phone: string;
   postalCode: string;
-  address: string;
-  addressDetail: string;
+  streetAddress: string;
+  detailAddress: string;
 }
 
 export interface LoginFormData {
@@ -21,6 +21,7 @@ export interface LoginFormData {
 interface AuthStore {
   signupData: SignupFormData;
   loginData: LoginFormData;
+
   saveId: boolean;
   isLoggedIn: boolean;
   setSignupData: (data: Partial<SignupFormData>) => void;
@@ -44,12 +45,17 @@ const useAuthStore = create<AuthStore>()(
           confirmPassword: '',
           phone: '',
           postalCode: '',
-          address: '',
-          addressDetail: '',
+          streetAddress: '',
+          detailAddress: '',
         },
         loginData: {
           email: '',
           password: '',
+        },
+        passwordData: {
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
         },
         isLoggedIn: false, // Default login state is false
         setSignupData: (data) =>
@@ -75,8 +81,8 @@ const useAuthStore = create<AuthStore>()(
               confirmPassword: '',
               phone: '',
               postalCode: '',
-              address: '',
-              addressDetail: '',
+              streetAddress: '',
+              detailAddress: '',
             },
           }),
         resetLoginData: () =>
