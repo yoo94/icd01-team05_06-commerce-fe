@@ -9,6 +9,51 @@ import useAuthStore, { SignupFormData } from '@/stores/use-auth-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '@/schemas/signup-schema';
 
+// InputField 컴포넌트 정의
+interface InputFieldProps {
+  name: keyof SignupFormData;
+  label: string;
+  type: string;
+  placeholder: string;
+  maxLength?: number;
+  onClick?: () => void;
+  errors?: string;
+  handleInputChange: (name: keyof SignupFormData, value: string) => void;
+}
+
+const InputField = ({
+  name,
+  label,
+  type = 'text',
+  placeholder,
+  maxLength,
+  onClick,
+  errors,
+  handleInputChange,
+}: InputFieldProps) => (
+  <FormItem>
+    <FormLabel htmlFor={name}>{label}</FormLabel>
+    <FormControl>
+      <div className="flex">
+        <Input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          onChange={(e) => handleInputChange(name, e.target.value)}
+          className={onClick ? 'grow' : ''}
+        />
+        {onClick && (
+          <Button type="button" variant="secondary" className="ml-2 w-32" onClick={onClick}>
+            조회
+          </Button>
+        )}
+      </div>
+    </FormControl>
+    {errors && <FormMessage>{errors}</FormMessage>}
+  </FormItem>
+);
+
 interface SignUpFormProps {
   onSubmit: (values: SignupFormData) => void;
   onValidChange: (isValid: boolean) => void;
@@ -18,7 +63,7 @@ const SignUpForm = ({ onSubmit, onValidChange }: SignUpFormProps) => {
   const { signupData, setSignupData } = useAuthStore();
 
   const methods = useForm({
-    resolver: zodResolver(SignupSchema), // Zod 스키마 연결
+    resolver: zodResolver(SignupSchema),
     defaultValues: signupData,
     mode: 'onChange',
   });
@@ -42,144 +87,86 @@ const SignUpForm = ({ onSubmit, onValidChange }: SignUpFormProps) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4 flex flex-col gap-y-4">
         {/* 이름 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="name">이름</FormLabel>
-          <FormControl>
-            <Input
-              type="text"
-              id="name"
-              placeholder="이름을 입력해 주세요."
-              {...methods.register('name', {
-                onChange: (e) => handleInputChange('name', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.name?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="name"
+          label="이름"
+          type="text"
+          placeholder="이름을 입력해 주세요."
+          errors={errors.name?.message}
+          handleInputChange={handleInputChange}
+        />
 
         {/* 이메일 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="email">이메일</FormLabel>
-          <FormControl>
-            <Input
-              type="email"
-              id="email"
-              placeholder="이메일을 입력해 주세요."
-              {...methods.register('email', {
-                onChange: (e) => handleInputChange('email', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.email?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="email"
+          label="이메일"
+          type="email"
+          placeholder="이메일을 입력해 주세요."
+          errors={errors.email?.message}
+          handleInputChange={handleInputChange}
+        />
 
         {/* 비밀번호 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="password">비밀번호</FormLabel>
-          <FormControl>
-            <Input
-              type="password"
-              id="password"
-              placeholder="비밀번호를 입력해 주세요."
-              {...methods.register('password', {
-                onChange: (e) => handleInputChange('password', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.password?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="password"
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력해 주세요."
+          errors={errors.password?.message}
+          handleInputChange={handleInputChange}
+        />
 
         {/* 비밀번호 확인 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="confirmPassword">비밀번호 확인</FormLabel>
-          <FormControl>
-            <Input
-              type="password"
-              id="confirmPassword"
-              placeholder="비밀번호를 다시 입력해 주세요."
-              {...methods.register('confirmPassword', {
-                onChange: (e) => handleInputChange('confirmPassword', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.confirmPassword?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="confirmPassword"
+          label="비밀번호 확인"
+          type="password"
+          placeholder="비밀번호를 다시 입력해 주세요."
+          errors={errors.confirmPassword?.message}
+          handleInputChange={handleInputChange}
+        />
 
         {/* 전화번호 입력 필드 */}
-        <FormItem>
-          <FormLabel>전화번호</FormLabel>
-          <FormControl>
-            <Input
-              type="text"
-              placeholder="숫자로 입력해주세요. ex) 01012345678"
-              {...methods.register('phone', {
-                onChange: (e) => handleInputChange('phone', e.target.value.replace(/\D/g, '')),
-              })}
-              maxLength={11} // 최대 11자리로 제한 (예: 01012345678)
-              className="w-full rounded border p-2 text-sm"
-            />
-          </FormControl>
-          <FormMessage>{errors.phone?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="phone"
+          label="전화번호"
+          type="text"
+          placeholder="숫자로 입력해주세요. ex) 01012345678"
+          maxLength={11}
+          errors={errors.phone?.message}
+          handleInputChange={(name, value) => handleInputChange(name, value.replace(/\D/g, ''))}
+        />
 
         {/* 우편번호 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="postalCode">우편번호</FormLabel>
-          <FormControl>
-            <div className="flex">
-              <Input
-                type="text"
-                id="postalCode"
-                placeholder="우편번호를 입력해 주세요."
-                {...methods.register('postalCode', {
-                  onChange: (e) => handleInputChange('postalCode', e.target.value),
-                })}
-                className="grow"
-              />
-              <Button
-                type="button"
-                variant="secondary"
-                className="ml-2 w-32"
-                onClick={() => alert('우편번호 조회')}
-              >
-                조회
-              </Button>
-            </div>
-          </FormControl>
-          <FormMessage>{errors.postalCode?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="postalCode"
+          label="우편번호"
+          type="text"
+          placeholder="우편번호를 입력해 주세요."
+          errors={errors.postalCode?.message}
+          handleInputChange={handleInputChange}
+          onClick={() => alert('우편번호 조회')}
+        />
 
         {/* 기본 주소 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="address">기본 주소</FormLabel>
-          <FormControl>
-            <Input
-              type="text"
-              id="address"
-              placeholder="기본 주소를 입력해 주세요."
-              {...methods.register('address', {
-                onChange: (e) => handleInputChange('address', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.address?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="streetAddress"
+          label="기본 주소"
+          type="text"
+          placeholder="기본 주소를 입력해 주세요."
+          errors={errors.streetAddress?.message}
+          handleInputChange={handleInputChange}
+        />
 
         {/* 상세 주소 입력 필드 */}
-        <FormItem>
-          <FormLabel htmlFor="addressDetail">상세 주소</FormLabel>
-          <FormControl>
-            <Input
-              type="text"
-              id="addressDetail"
-              placeholder="상세 주소를 입력해 주세요."
-              {...methods.register('addressDetail', {
-                onChange: (e) => handleInputChange('addressDetail', e.target.value),
-              })}
-            />
-          </FormControl>
-          <FormMessage>{errors.addressDetail?.message}</FormMessage>
-        </FormItem>
+        <InputField
+          name="detailAddress"
+          label="상세 주소"
+          type="text"
+          placeholder="상세 주소를 입력해 주세요."
+          errors={errors.detailAddress?.message}
+          handleInputChange={handleInputChange}
+        />
       </form>
     </FormProvider>
   );
