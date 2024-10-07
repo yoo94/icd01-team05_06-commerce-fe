@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
-import { DateRange, OrderStatus, SortBy } from '@/types/order-types';
-import { getOrders } from '@/app/actions/order-action';
+import { Order, OrderStatus } from '@/types/order-types';
 import {
   Table,
   TableBody,
@@ -10,9 +9,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-function formatDate(date: string) {
-  return format(date, 'yyyy.MM.dd');
+interface OrderTableProps {
+  orders: Order[];
 }
+
+const formatDate = (date: string) => format(date, 'yyyy.MM.dd');
 
 const orderStatusTitles: Record<OrderStatus, string> = {
   [OrderStatus.PENDING]: '주문 생성',
@@ -24,14 +25,7 @@ const orderStatusTitles: Record<OrderStatus, string> = {
   [OrderStatus.EXCHANGE]: '교환',
 };
 
-const OrderTable = async () => {
-  const { products: orders } = await getOrders({
-    dateRange: DateRange.LAST_6_MONTHS,
-    sortBy: SortBy.RECENT,
-    page: 0,
-    size: 20,
-  });
-
+const OrderTable = async ({ orders }: OrderTableProps) => {
   return (
     <Table>
       <TableHeader>
