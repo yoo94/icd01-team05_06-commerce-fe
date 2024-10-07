@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { FormControl, FormMessage } from '@/components/ui/form';
+import { FormControl, FormMessage, FormItem } from '@/components/ui/form';
 import {
   Dialog,
   DialogContent,
@@ -13,37 +13,54 @@ import {
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PasswordSchema } from '@/schemas/password-schema';
+import { PasswordFormData, useUserStore } from '@/stores/use-user-store';
 
-// 비밀번호 변경 다이얼로그 컴포넌트
 interface PasswordDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface PasswordFormValues {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+interface InputFieldProps {
+  name: keyof PasswordFormData;
+  type: string;
+  placeholder: string;
+  errors?: string;
 }
 
 const PasswordDialog = ({ isOpen, onClose }: PasswordDialogProps) => {
-  const methods = useForm<PasswordFormValues>({
-    resolver: zodResolver(PasswordSchema), // Zod 스키마 적용
+  const { passwordData, setPasswordData } = useUserStore();
+
+  const methods = useForm({
+    resolver: zodResolver(PasswordSchema),
+    defaultValues: passwordData,
     mode: 'onChange',
   });
 
-  // 비밀번호 변경 핸들러 (서버로 데이터 전송 가능)
-  const onSubmit = (data: PasswordFormValues) => {
-    // TODO: 서버로 비밀번호 변경 요청
-    console.log('비밀번호 변경 처리', data);
-    onClose();
-  };
-
   const {
     handleSubmit,
-    register,
-    formState: { errors },
+    formState: { errors, isValid },
   } = methods;
+
+  // 비밀번호 변경 핸들러
+  const onSubmit = (data: PasswordFormData) => {
+    console.log('비밀번호 변경 처리', data);
+    setPasswordData(data);
+    onClose(); // 비밀번호 변경 후 다이얼로그 닫기
+  };
+
+  const InputField = ({ name, type, placeholder, errors }: InputFieldProps) => (
+    <FormControl>
+      <FormItem>
+        <Input
+          className="text-sm"
+          type={type}
+          placeholder={placeholder}
+          {...methods.register(name)}
+        />
+        {errors && <FormMessage className="mt-1 text-xs">{errors}</FormMessage>}
+      </FormItem>
+    </FormControl>
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -53,27 +70,31 @@ const PasswordDialog = ({ isOpen, onClose }: PasswordDialogProps) => {
         </DialogHeader>
         <FormProvider {...methods}>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-            <FormControl>
-              <Input type="password" placeholder="현재 비밀번호" {...register('currentPassword')} />
-              <FormMessage className="mt-1 text-xs">{errors.currentPassword?.message}</FormMessage>
-            </FormControl>
-            <FormControl>
-              <Input type="password" placeholder="새로운 비밀번호" {...register('newPassword')} />
-              <FormMessage className="mt-1 text-xs">{errors.newPassword?.message}</FormMessage>
-            </FormControl>
-            <FormControl>
-              <Input
-                type="password"
-                placeholder="새로운 비밀번호 재입력"
-                {...register('confirmPassword')}
-              />
-              <FormMessage className="mt-1 text-xs">{errors.confirmPassword?.message}</FormMessage>
-            </FormControl>
+            <InputField
+              name="currentPassword"
+              type="password"
+              placeholder="현재 비밀번호"
+              errors={errors.currentPassword?.message}
+            />
+            <InputField
+              name="newPassword"
+              type="password"
+              placeholder="새로운 비밀번호"
+              errors={errors.newPassword?.message}
+            />
+            <InputField
+              name="confirmPassword"
+              type="password"
+              placeholder="새로운 비밀번호 재입력"
+              errors={errors.confirmPassword?.message}
+            />
             <DialogFooter>
               <Button variant="secondary" onClick={onClose}>
                 취소
               </Button>
-              <Button type="submit">변경</Button>
+              <Button disabled={!isValid} type="submit">
+                변경
+              </Button>
             </DialogFooter>
           </form>
         </FormProvider>
