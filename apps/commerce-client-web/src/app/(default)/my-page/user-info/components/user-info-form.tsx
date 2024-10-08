@@ -32,6 +32,7 @@ const UserInfoForm = ({ userInfo }: { userInfo: UserInfo }) => {
   const methods = useForm({
     resolver: zodResolver(UserInfoSchema), // Zod 스키마 연결
     defaultValues: userInfoData,
+    mode: 'onChange',
   });
 
   const {
@@ -51,8 +52,8 @@ const UserInfoForm = ({ userInfo }: { userInfo: UserInfo }) => {
         password: '',
       };
 
-      setUserInfoData(updatedUserInfoData);
-      reset(updatedUserInfoData);
+      setUserInfoData(updatedUserInfoData); // Update Zustand store only on first load.
+      reset(updatedUserInfoData); // Reset the form with fetched user data.
     }
   }, [userInfo, setUserInfoData, reset]);
 
@@ -103,7 +104,7 @@ const UserInfoForm = ({ userInfo }: { userInfo: UserInfo }) => {
               type={type}
               className={`text-sm ${isSmall ? 'w-40' : 'w-full'}`} // isSmall에 따라 클래스 변경
               placeholder={placeholder}
-              {...methods.register(name)}
+              {...methods.register(name)} // Let react-hook-form manage state internally.
               disabled={disabled}
             />
             {onClick && (
@@ -136,7 +137,7 @@ const UserInfoForm = ({ userInfo }: { userInfo: UserInfo }) => {
                   <span className="text-sm">{userInfo.email}</span>
                 </td>
               </tr>
-              <InputRow label="이름" name="name" isSmall disabled />
+              <InputRow label="이름" name="name" isSmall disabled errors={errors.name?.message} />
               <InputRow
                 label="전화번호"
                 name="phone"
@@ -162,8 +163,9 @@ const UserInfoForm = ({ userInfo }: { userInfo: UserInfo }) => {
                 name="postalCode"
                 isSmall
                 onClick={() => setIsPostAddressModalOpen(true)}
+                errors={errors.postalCode?.message}
               />
-              <InputRow label="주소" name="streetAddress" />
+              <InputRow label="주소" name="streetAddress" errors={errors.streetAddress?.message} />
               <InputRow
                 label="상세 주소"
                 name="detailAddress"
