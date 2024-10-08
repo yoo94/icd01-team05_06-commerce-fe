@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,21 @@ const CartItem: React.FC<CartItemProps> = ({
   onChangeQuantity,
   onRemoveItem,
 }) => {
+  const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
   const totalPrice = (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString();
+
+  // 입력 값이 변경될 때 로컬 상태 업데이트
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    setInputQuantity(value);
+  };
+
+  // 입력 필드가 포커스를 잃었을 때나 Enter 키를 눌렀을 때 수량 업데이트
+  const handleQuantityUpdate = () => {
+    if (inputQuantity !== item.quantity) {
+      onChangeQuantity(item.shoppingCartId, inputQuantity);
+    }
+  };
 
   return (
     <TableRow className="hover:bg-gray-50">
@@ -41,11 +55,15 @@ const CartItem: React.FC<CartItemProps> = ({
       <TableCell className="text-left">
         <Input
           type="number"
-          value={item.quantity}
+          value={inputQuantity}
           min={1}
           className="w-20 rounded border text-center"
-          onChange={(event) => {
-            onChangeQuantity(item.shoppingCartId, Number(event.target.value));
+          onChange={handleQuantityChange}
+          onBlur={handleQuantityUpdate} // 포커스가 나갔을 때 업데이트
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleQuantityUpdate(); // Enter 키를 눌렀을 때 업데이트
+            }
           }}
         />
       </TableCell>
