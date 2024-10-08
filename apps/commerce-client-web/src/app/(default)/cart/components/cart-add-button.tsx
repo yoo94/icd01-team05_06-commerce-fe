@@ -15,15 +15,11 @@ interface AddToCartButtonProps {
 const AddToCartButton = ({ book, quantity }: AddToCartButtonProps) => {
   const { toast } = useToast();
 
-  // 서버 액션을 호출하여 장바구니에 항목 추가
   const handleAddToCart = async (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
 
     try {
-      // 서버에 장바구니 추가 요청
       await addToCart(book.id, quantity);
-
-      // 성공 시 toast 메시지 표시
       toast({
         title: 'Added to cart!',
         description: `${book.title}이(가) ${quantity}개가 장바구니에 추가되었습니다.`,

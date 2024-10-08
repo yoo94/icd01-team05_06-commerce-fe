@@ -10,9 +10,17 @@ interface CartItemProps {
   item: CartItemType;
   checked: boolean; // 개별 체크박스의 선택 상태
   onCheckedChange: (checked: boolean) => void; // 체크박스 변경 핸들러
+  onChangeQuantity: (shoppingCartId: number, value: number) => void; // 수량 변경 핸들러
+  onRemoveItem: (shoppingCartId: number) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, checked, onCheckedChange }) => {
+const CartItem: React.FC<CartItemProps> = ({
+  item,
+  checked,
+  onCheckedChange,
+  onChangeQuantity,
+  onRemoveItem,
+}) => {
   const totalPrice = (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString();
 
   return (
@@ -36,12 +44,21 @@ const CartItem: React.FC<CartItemProps> = ({ item, checked, onCheckedChange }) =
           value={item.quantity}
           min={1}
           className="w-20 rounded border text-center"
+          onChange={(event) => {
+            onChangeQuantity(item.shoppingCartId, Number(event.target.value));
+          }}
         />
       </TableCell>
-      <TableCell className="whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>
+      <TableCell className="w-32 whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>
       <TableCell className="text-center">{item.shippingInfo || '무료'}</TableCell>
       <TableCell className="text-center">
-        <Button variant="outline" className="text-xs text-slate-500 hover:bg-red-50">
+        <Button
+          variant="outline"
+          className="text-xs text-slate-500 hover:bg-red-50"
+          onClick={() => {
+            onRemoveItem(item.shoppingCartId);
+          }}
+        >
           삭제
         </Button>
       </TableCell>
