@@ -1,71 +1,95 @@
-// stores/cart-store.ts
 import create from 'zustand';
 import { CartItem } from '@/types/cart-types';
-import { getCartItems, removeFromCart, updateCartItemQuantity } from '@/app/actions/cart-action';
+import {
+  getCartItems,
+  removeFromCart,
+  updateCartItemQuantity,
+  addToCart,
+} from '@/app/actions/cart-action';
 
 interface CartState {
   items: CartItem[];
   checkedItems: number[];
   fetchItems: () => Promise<void>;
-  updateQuantity: (shoppingCartId: number, quantity: number) => void;
+  addItemToCart: (productId: number, quantity: number) => Promise<void>;
+  updateQuantity: (shoppingCartId: number, quantity: number) => Promise<void>;
   toggleItemSelection: (itemId: number, isChecked: boolean) => void;
   selectAllItems: (isChecked: boolean) => void;
   removeCartItems: (shoppingCartId: number) => Promise<void>;
 }
 
-const useCartStore = create<CartState>((set, _get) => ({
-  items: [],
-  checkedItems: [],
+const useCartStore = create<CartState>((set, _get) => {
+  return {
+    items: [],
+    checkedItems: [],
 
-  // 서버에서 장바구니 항목을 가져옴
-  fetchItems: async () => {
-    const cartItems = await getCartItems();
-    set({ items: cartItems['products'], checkedItems: [] });
-  },
+    // 서버에서 장바구니 항목을 가져옴
+    fetchItems: async () => {
+      try {
+        const cartItems = await getCartItems();
+        set({ items: cartItems['products'], checkedItems: [] });
+      } catch (error) {
+        console.error('Failed to fetch items:', error);
+      }
+    },
 
-  // 수량 업데이트 메서드
-  updateQuantity: async (shoppingCartId, quantity) => {
-    await updateCartItemQuantity(shoppingCartId, quantity);
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.shoppingCartId === shoppingCartId ? { ...item, quantity } : item,
-      ),
-    }));
-  },
+    // 장바구니에 상품 추가
+    addItemToCart: async (productId, quantity) => {
+      try {
+        await addToCart(productId, quantity);
+      } catch (error) {
+        console.error('Failed to add item to cart:', error);
+      }
+    },
 
-  // 개별 항목 선택 상태 변경
-  toggleItemSelection: (itemId, isChecked) => {
-    set((state) => ({
-      checkedItems: isChecked
-        ? [...state.checkedItems, itemId]
-        : state.checkedItems.filter((id) => id !== itemId),
-    }));
-  },
-
-  // 전체 선택/해제 메서드
-  selectAllItems: (isChecked) => {
-    set((state) => ({
-      checkedItems: isChecked ? state.items.map((item) => item.productId) : [],
-    }));
-  },
-
-  // 개별 장바구니 항목 삭제 메서드
-  removeCartItems: async (shoppingCartId) => {
-    await removeFromCart(shoppingCartId);
-
-    set((state) => ({
-      // 삭제된 아이템을 제외한 나머지 항목으로 업데이트
-      items: state.items.filter((item) => item.shoppingCartId !== shoppingCartId),
-
-      // 삭제된 아이템의 productId를 checkedItems에서 제거
-      checkedItems: state.checkedItems.filter(
-        (id) =>
-          !state.items.some(
-            (item) => item.shoppingCartId === shoppingCartId && item.productId === id,
+    // 수량 업데이트 메서드
+    updateQuantity: async (shoppingCartId, quantity) => {
+      try {
+        await updateCartItemQuantity(shoppingCartId, quantity);
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.shoppingCartId === shoppingCartId ? { ...item, quantity } : item,
           ),
-      ),
-    }));
-  },
-}));
+        }));
+      } catch (error) {
+        console.error('Failed to update quantity:', error);
+      }
+    },
+
+    // 개별 항목 선택 상태 변경
+    toggleItemSelection: (itemId, isChecked) => {
+      set((state) => ({
+        checkedItems: isChecked
+          ? [...state.checkedItems, itemId]
+          : state.checkedItems.filter((id) => id !== itemId),
+      }));
+    },
+
+    // 전체 선택/해제 메서드
+    selectAllItems: (isChecked) => {
+      set((state) => ({
+        checkedItems: isChecked ? state.items.map((item) => item.productId) : [],
+      }));
+    },
+
+    // 개별 장바구니 항목 삭제 메서드
+    removeCartItems: async (shoppingCartId) => {
+      try {
+        await removeFromCart(shoppingCartId);
+        set((state) => ({
+          items: state.items.filter((item) => item.shoppingCartId !== shoppingCartId),
+          checkedItems: state.checkedItems.filter(
+            (id) =>
+              !state.items.some(
+                (item) => item.shoppingCartId === shoppingCartId && item.productId === id,
+              ),
+          ),
+        }));
+      } catch (error) {
+        console.error('Failed to remove cart item:', error);
+      }
+    },
+  };
+});
 
 export default useCartStore;

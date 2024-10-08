@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ToastAction } from '@/components/ui/toast';
 import Link from 'next/link';
 import { Product } from '@/types/product-types';
-import { addToCart } from '@/app/actions/cart-action'; // 서버 액션 임포트
+import { useLoading } from '@/components/common/loading-context'; // useLoading 훅 임포트
+import useCartStore from '@/stores/use-cart-store';
 
 interface AddToCartButtonProps {
   book: Product;
@@ -14,12 +15,14 @@ interface AddToCartButtonProps {
 
 const AddToCartButton = ({ book, quantity }: AddToCartButtonProps) => {
   const { toast } = useToast();
+  const { setLoading } = useLoading();
+  const { addItemToCart } = useCartStore();
 
   const handleAddToCart = async (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-
     try {
-      await addToCart(book.id, quantity);
+      setLoading(true);
+      await addItemToCart(book.id, quantity);
       toast({
         title: 'Added to cart!',
         description: `${book.title}이(가) ${quantity}개가 장바구니에 추가되었습니다.`,
@@ -40,6 +43,8 @@ const AddToCartButton = ({ book, quantity }: AddToCartButtonProps) => {
         duration: 3000,
       });
       console.error('Failed to add item to cart:', error);
+    } finally {
+      setLoading(false); // 로딩 종료
     }
   };
 
