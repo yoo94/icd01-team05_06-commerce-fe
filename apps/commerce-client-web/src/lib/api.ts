@@ -11,4 +11,5 @@ export const productApi = externalApi.extend({
 
 export const orderApi = externalApi.extend({
   prefixUrl: process.env.NEXT_PUBLIC_ORDER_API_URL,
+  credentials: 'include',
 });
