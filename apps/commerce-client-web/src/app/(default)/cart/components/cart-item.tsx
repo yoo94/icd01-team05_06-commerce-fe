@@ -24,18 +24,13 @@ const CartItem: React.FC<CartItemProps> = ({
   const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
   const totalPrice = (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString();
 
-  // 입력 값이 변경될 때 로컬 상태 업데이트
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
-
-    // 최소값과 최대값을 초과하지 않도록 제한
     if (value < 1) value = 1;
-    if (value > 100) value = 100;
 
     setInputQuantity(value);
   };
 
-  // 입력 필드가 포커스를 잃었을 때나 Enter 키를 눌렀을 때 수량 업데이트
   const handleQuantityUpdate = () => {
     if (inputQuantity !== item.quantity) {
       onChangeQuantity(item.shoppingCartId, inputQuantity);
@@ -61,14 +56,13 @@ const CartItem: React.FC<CartItemProps> = ({
         <Input
           type="number"
           value={inputQuantity}
-          min={1} // 최소값 설정
-          max={100} // 최대값 설정
+          min={1}
           className="w-20 rounded border text-center"
           onChange={handleQuantityChange}
-          onBlur={handleQuantityUpdate} // 포커스가 나갔을 때 업데이트
+          onBlur={handleQuantityUpdate}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              handleQuantityUpdate(); // Enter 키를 눌렀을 때 업데이트
+              handleQuantityUpdate();
             }
           }}
         />
