@@ -26,7 +26,12 @@ const CartItem: React.FC<CartItemProps> = ({
 
   // 입력 값이 변경될 때 로컬 상태 업데이트
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
+    let value = Number(event.target.value);
+
+    // 최소값과 최대값을 초과하지 않도록 제한
+    if (value < 1) value = 1;
+    if (value > 100) value = 100;
+
     setInputQuantity(value);
   };
 
@@ -56,7 +61,8 @@ const CartItem: React.FC<CartItemProps> = ({
         <Input
           type="number"
           value={inputQuantity}
-          min={1}
+          min={1} // 최소값 설정
+          max={100} // 최대값 설정
           className="w-20 rounded border text-center"
           onChange={handleQuantityChange}
           onBlur={handleQuantityUpdate} // 포커스가 나갔을 때 업데이트
