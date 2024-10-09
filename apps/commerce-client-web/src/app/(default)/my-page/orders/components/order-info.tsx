@@ -1,32 +1,37 @@
-import { DateRange, SortBy } from '@/types/order-types';
-import { getOrders } from '@/app/actions/order-action';
-import OrderPagination from '@/app/(default)/my-page/orders/components/order-pagination';
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { useOrdersStore } from '@/stores/use-orders-store';
+import OrderPagination from './order-pagination';
 import OrderTable from './order-table';
 
 interface OrderInfoProps {
   page: number;
 }
 
-const PAGE_OFFSET = 1;
-const PAGE_SIZE = 10;
+const OrderInfo = ({ page }: OrderInfoProps) => {
+  const isInitialized = useRef(false);
 
-const OrderInfo = async ({ page }: OrderInfoProps) => {
-  const { products: orders, paginationInfo } = await getOrders({
-    dateRange: DateRange.LAST_6_MONTHS,
-    sortBy: SortBy.RECENT,
-    page: page - PAGE_OFFSET,
-    size: PAGE_SIZE,
-  });
+  const { orders, pagination, fetchOrders } = useOrdersStore();
+
+  useEffect(() => {
+    if (!isInitialized.current) {
+      isInitialized.current = true;
+      fetchOrders(page);
+    }
+  }, [fetchOrders, page]);
 
   return (
-    <div className="flex flex-col gap-2 text-sm">
+    <div className=" flex flex-col gap-2 text-sm">
       <OrderTable orders={orders} />
-      <OrderPagination
-        currentPage={paginationInfo.currentPage}
-        totalPage={paginationInfo.totalPage}
-        hasNext={paginationInfo.hasNextPage}
-        hasPrev={paginationInfo.hasPreviousPage}
-      />
+      {pagination !== null && (
+        <OrderPagination
+          currentPage={pagination.currentPage}
+          totalPage={pagination.totalPage}
+          hasNext={pagination.hasNextPage}
+          hasPrev={pagination.hasPreviousPage}
+        />
+      )}
       <div className="flex flex-col gap-1">
         <p>
           - 발송 전 주문은 주문상세내역에서 주문취소, 배송 주소 변경(국내배송만 해당)이 가능합니다.

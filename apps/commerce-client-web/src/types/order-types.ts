@@ -2,11 +2,12 @@ import type { Enum } from '@/types/util-types';
 import type { Pagination } from '@/types/pagination-types';
 
 export const OrderStatus = {
+  ALL: 'ALL',
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
-  CANCEL: 'CANCEL',
+  CANCELLED: 'CANCELLED',
   REFUND: 'REFUND',
   EXCHANGE: 'EXCHANGE',
 } as const;
@@ -37,9 +38,8 @@ export interface Order {
   content: string;
   orderDate: string;
   status: OrderStatus;
-  // API 응답에 오타가 존재해서 우선은 똑같이 맞춤
-  pricie: number;
-  discoutedPrice: number;
+  price: number;
+  discountedPrice: number;
   memberName: string;
   recipient: string;
 }

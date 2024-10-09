@@ -16,16 +16,17 @@ interface OrderTableProps {
 const formatDate = (date: string) => format(date, 'yyyy.MM.dd');
 
 const orderStatusTitles: Record<OrderStatus, string> = {
+  [OrderStatus.ALL]: '',
   [OrderStatus.PENDING]: '주문 생성',
   [OrderStatus.PROCESSING]: '주문 처리중',
   [OrderStatus.SHIPPED]: '배송중',
   [OrderStatus.DELIVERED]: '배송완료',
-  [OrderStatus.CANCEL]: '주문 취소',
+  [OrderStatus.CANCELLED]: '주문 취소',
   [OrderStatus.REFUND]: '환불',
   [OrderStatus.EXCHANGE]: '교환',
 };
 
-const OrderTable = async ({ orders }: OrderTableProps) => {
+const OrderTable = ({ orders }: OrderTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -44,7 +45,7 @@ const OrderTable = async ({ orders }: OrderTableProps) => {
             <TableCell>{order.orderNumber}</TableCell>
             <TableCell>{formatDate(order.orderDate)}</TableCell>
             <TableCell>{order.content}</TableCell>
-            <TableCell>{order.pricie.toLocaleString()}원</TableCell>
+            <TableCell>{order.price.toLocaleString()}원</TableCell>
             <TableCell>{orderStatusTitles[order.status]}</TableCell>
             <TableCell>{order.memberName}</TableCell>
           </TableRow>
