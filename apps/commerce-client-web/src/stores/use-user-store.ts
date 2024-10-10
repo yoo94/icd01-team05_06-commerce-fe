@@ -3,30 +3,25 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { UserSession } from '@/types/auth-types';
 
 export interface UserInfoFormData {
-  password?: string;
   name: string;
   phone: string;
+  password?: string;
   postalCode: string;
   streetAddress: string;
   detailAddress: string;
 }
 
-export interface PasswordFormData {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 interface UserState {
   userSession: UserSession | null;
   userInfoData: UserInfoFormData;
-  passwordData: PasswordFormData;
+  authToken: string;
   setUserSession: (session: UserSession) => void;
   setUserInfoData: (data: Partial<UserInfoFormData>) => void;
-  setPasswordData: (data: PasswordFormData) => void;
+  setAuthToken: (token: string) => void;
   clearUserSession: () => void;
   clearUserInfoData: () => void;
-  clearPasswordData: () => void;
+  clearAuthToken: () => void;
+  reset: () => void; // Add reset function to clear all user data
 }
 
 export const useUserStore = create<UserState>()(
@@ -36,16 +31,17 @@ export const useUserStore = create<UserState>()(
       userInfoData: {
         name: '',
         phone: '',
+        password: undefined,
         postalCode: '',
         streetAddress: '',
         detailAddress: '',
       },
-      passwordData: {
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      },
+      authToken: '',
+
+      // Function to set user session
       setUserSession: (session: UserSession) => set({ userSession: session }),
+
+      // Function to set user info data
       setUserInfoData: (data) =>
         set((state) => ({
           userInfoData: {
@@ -53,25 +49,42 @@ export const useUserStore = create<UserState>()(
             ...data,
           },
         })),
-      setPasswordData: (data: PasswordFormData) => set({ passwordData: data }),
+
+      // Function to set auth token
+      setAuthToken: (token: string) => set({ authToken: token }),
+
+      // Function to clear user session
       clearUserSession: () => set({ userSession: null }),
+
+      // Function to clear user info data
       clearUserInfoData: () =>
         set({
           userInfoData: {
             name: '',
             phone: '',
+            password: undefined,
             postalCode: '',
             streetAddress: '',
             detailAddress: '',
           },
         }),
-      clearPasswordData: () =>
+
+      // Function to clear auth token
+      clearAuthToken: () => set({ authToken: '' }),
+
+      // Reset function to clear all state
+      reset: () =>
         set({
-          passwordData: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: '',
+          userSession: null,
+          userInfoData: {
+            name: '',
+            phone: '',
+            password: undefined,
+            postalCode: '',
+            streetAddress: '',
+            detailAddress: '',
           },
+          authToken: '',
         }),
     }),
     {
@@ -79,6 +92,7 @@ export const useUserStore = create<UserState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         userSession: state.userSession,
+        authToken: state.authToken,
       }),
     },
   ),
