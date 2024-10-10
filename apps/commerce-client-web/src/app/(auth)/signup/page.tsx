@@ -6,7 +6,6 @@ import StepIndicator from './components/step-indicator';
 import TermsAgreement from './components/terms-agreement';
 import SignUpForm from './components/sign-up-form';
 import CompletionStep from './components/completion-step';
-import useAuthStore from '@/stores/use-auth-store';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -17,16 +16,18 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import Link from 'next/link';
+import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
+import { login, signUp } from '@/app/actions/auth-action';
 
 const steps = ['약관동의', '정보입력', '가입완료'];
 
 const JoinPage = () => {
   const [step, setStep] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
-  const { submitSignup } = useAuthStore();
   const [isAgreedPrivacy, setIsAgreedPrivacy] = useState(false);
   const [isAgreedTerms, setIsAgreedTerms] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const { signupData } = useAuthStore();
 
   const handleStepClick = (index: number) => {
     if (index === 0) {
@@ -57,7 +58,12 @@ const JoinPage = () => {
       setStep(step + 1);
     } else if (step === 1 && isFormValid) {
       try {
-        await submitSignup();
+        await signUp(signupData);
+        const loginData: LoginFormData = {
+          email: signupData.email,
+          password: signupData.password,
+        };
+        await login(loginData);
         setStep(step + 1);
       } catch (error) {
         console.error('Error during signup:', error);
@@ -80,7 +86,10 @@ const JoinPage = () => {
         />
       )}
       {step === 1 && (
-        <SignUpForm onSubmit={submitSignup} onValidChange={handleFormValidityChange} />
+        <SignUpForm
+          onSubmit={async () => await signUp(signupData)}
+          onValidChange={handleFormValidityChange}
+        />
       )}
       {step === 2 && <CompletionStep />}
       <div className="mt-8 flex justify-between gap-x-4">

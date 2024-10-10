@@ -16,6 +16,11 @@ import { ApiResponse } from '@/types/api-types';
 const Header = async () => {
   const serverData = await productApi.get('categories').json<ApiResponse<Category>>();
 
+  // 서버로부터 카테고리 데이터를 받아오지 못한 경우
+  if (!serverData.success || !serverData.data) {
+    return null;
+  }
+
   const categories: MenuCategory[] = transformServerCategories(serverData.data);
 
   const mainMenu: MainMenu[] = [

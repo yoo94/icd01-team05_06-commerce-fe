@@ -32,7 +32,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const filteredBooks = booksData.data?.products ?? [];
   const allBooks = await getAllBooks();
   const pagination = booksData.data?.pagination;
-
+  
   return (
     <div className="flex">
       <div className="hidden w-1/5 p-4 lg:block">
