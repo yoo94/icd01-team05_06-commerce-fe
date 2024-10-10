@@ -4,7 +4,7 @@ import { DateRange, Order, OrderStatus, SortBy } from '@/types/order-types';
 import { Pagination } from '@/types/pagination-types';
 import { getOrders } from '@/app/actions/order-action';
 
-interface OrdersFilterState {
+interface OrdersState {
   startDate: Date;
   endDate: Date;
   sortBy: SortBy;
@@ -13,7 +13,7 @@ interface OrdersFilterState {
   pagination: Pagination | null;
 }
 
-interface OrdersFilterAction {
+interface OrdersAction {
   changeStartDate: (date: Date) => void;
   changeEndDate: (date: Date) => void;
   changeSortBy: (sortBy: SortBy) => void;
@@ -21,7 +21,7 @@ interface OrdersFilterAction {
   fetchOrders: (page: number) => Promise<void>;
 }
 
-export const useOrdersStore = create<OrdersFilterState & OrdersFilterAction>((set, get) => ({
+export const useOrdersStore = create<OrdersState & OrdersAction>((set, get) => ({
   startDate: subDays(new Date(), 7),
   endDate: new Date(),
   sortBy: SortBy.RECENT,
