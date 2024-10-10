@@ -1,18 +1,24 @@
+'use client';
+
 import Link from 'next/link';
 import { Pagination } from '@/types/pagination-types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useSearchParams } from 'next/navigation';
 
 interface PaginationProps {
   pagination: Pagination;
   searchParams: URLSearchParams;
 }
 
-const PaginatedProducts = ({ pagination, searchParams }: PaginationProps) => {
+const PaginatedProducts = ({ pagination }: PaginationProps) => {
+  const searchParams = useSearchParams();
+
   const createPaginationLink = (newPage: number) => {
-    const query = new URLSearchParams(searchParams);
-    query.set('page', String(newPage));
-    return `/search?${query.toString()}`;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(newPage));
+
+    return `/search?${params.toString()}`;
   };
 
   const { page, totalPages } = pagination;
