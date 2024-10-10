@@ -33,20 +33,20 @@ const PaginatedProducts = ({ pagination }: PaginationProps) => {
 
       <div className="flex space-x-2">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-          <Link
-            href={createPaginationLink(pageNumber)}
-            key={pageNumber}
-            aria-label={`Go to page ${pageNumber}`}
+          <Button
+            variant={pageNumber === page ? 'default' : 'secondary'}
+            className={`cursor-pointer rounded-md px-2 py-1 text-center ${
+              pageNumber === page ? 'bg-primary text-white' : ''
+            }`}
           >
-            <Button
-              variant={pageNumber === page ? 'default' : 'secondary'}
-              className={`cursor-pointer rounded-md px-2 py-1 text-center ${
-                pageNumber === page ? 'bg-primary text-white' : ''
-              }`}
+            <Link
+              href={createPaginationLink(pageNumber)}
+              key={pageNumber}
+              aria-label={`Go to page ${pageNumber}`}
             >
               {pageNumber}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         ))}
       </div>
 
