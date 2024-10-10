@@ -21,7 +21,6 @@ export interface LoginFormData {
 interface AuthStore {
   signupData: SignupFormData;
   loginData: LoginFormData;
-
   saveId: boolean;
   isLoggedIn: boolean;
   setSignupData: (data: Partial<SignupFormData>) => void;
@@ -31,6 +30,7 @@ interface AuthStore {
   setSaveId: (save: boolean) => void;
   setLoginState: (state: boolean) => void;
   checkLoginState: () => void;
+  reset: () => void;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -97,6 +97,12 @@ const useAuthStore = create<AuthStore>()(
         checkLoginState: () => {
           const token = getCookie('accessToken');
           set({ isLoggedIn: !!token });
+        },
+        reset: () => {
+          set({
+            saveId: false,
+            isLoggedIn: false,
+          });
         },
       }),
       {
