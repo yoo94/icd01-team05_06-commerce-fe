@@ -51,7 +51,12 @@ const addressSchema = z.object({
 export const UserInfoSchema = z.object({
   name: nameSchema,
   phone: phoneSchema,
-  password: passwordSchema,
+  password: z
+    .string()
+    .optional()
+    .refine((value) => !value || passwordSchema.safeParse(value).success, {
+      message: '비밀번호는 대소문자, 숫자, 특수문자를 포함하여 6자 이상이어야 합니다.',
+    }),
   ...addressSchema.shape, // Spread address schema into UserInfoSchema
 });
 
