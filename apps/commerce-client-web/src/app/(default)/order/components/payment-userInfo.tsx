@@ -1,37 +1,37 @@
+import { getUserInfo } from '@/app/actions/auth-action';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useEffect, useState } from 'react';
+import { usePaymentStore } from '@/stores/use-payment-store';
 import { useUserStore } from '@/stores/use-user-store';
-import { getUserInfo } from '@/app/actions/auth-action';
-
-interface UserInfo {
-  name: string;
-  phone: string;
-  email: string;
-}
+import { useEffect } from 'react';
 
 const PaymentUserInfo = () => {
   const { authToken } = useUserStore();
-  const [user, setUser] = useState<UserInfo>({ name: '', phone: '', email: '' });
+  const userInfo = usePaymentStore((state) => state.userInfo);
+  const setUserInfo = usePaymentStore((state) => state.setUserInfo);
 
   useEffect(() => {
     if (authToken) {
       const fetchUserInfo = async () => {
         try {
           const fetchedUserInfo = await getUserInfo();
-          setUser(fetchedUserInfo);
+          setUserInfo({
+            name: fetchedUserInfo.name,
+            phone: fetchedUserInfo.phone,
+            email: fetchedUserInfo.email,
+          });
         } catch (error) {
           console.error('Error fetching user info:', error);
         }
       };
       fetchUserInfo();
     }
-  }, [authToken]);
+  }, [authToken, setUserInfo]);
 
   const onUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    setUserInfo({ ...userInfo, [name]: value });
   };
 
   return (
@@ -47,7 +47,7 @@ const PaymentUserInfo = () => {
               type="text"
               placeholder="이름"
               name="name"
-              value={user.name}
+              value={userInfo.name}
               onChange={onUserChange}
             />
           </div>
@@ -57,7 +57,7 @@ const PaymentUserInfo = () => {
               type="text"
               placeholder="연락처"
               name="phone"
-              value={user.phone}
+              value={userInfo.phone}
               onChange={onUserChange}
             />
           </div>
@@ -67,7 +67,7 @@ const PaymentUserInfo = () => {
               type="email"
               placeholder="이메일"
               name="email"
-              value={user.email}
+              value={userInfo.email}
               onChange={onUserChange}
             />
           </div>
