@@ -1,21 +1,32 @@
-import SortOptionSelect from './sort-option-select';
-import OrderStatusSelect from './order-status-select';
+'use client';
+
+import { useEffect } from 'react';
+import { useOrdersStore } from '@/stores/use-orders-store';
+import OrderPagination from './order-pagination';
 import OrderTable from './order-table';
 
-const OrderInfo = () => {
+interface OrderInfoProps {
+  page: number;
+}
+
+const OrderInfo = ({ page }: OrderInfoProps) => {
+  const { orders, pagination, fetchOrders } = useOrdersStore();
+
+  useEffect(() => {
+    fetchOrders(page);
+  }, [fetchOrders, page]);
+
   return (
-    <div className="flex flex-col gap-2 text-sm">
-      <div className="flex justify-end gap-4">
-        <div className="flex items-center gap-2">
-          <span>정렬기준</span>
-          <SortOptionSelect />
-        </div>
-        <div className="flex items-center gap-2">
-          <span>주문상태</span>
-          <OrderStatusSelect />
-        </div>
-      </div>
-      <OrderTable />
+    <div className=" flex flex-col gap-2 text-sm">
+      <OrderTable orders={orders} />
+      {pagination !== null && (
+        <OrderPagination
+          currentPage={pagination.currentPage}
+          totalPage={pagination.totalPage}
+          hasNext={pagination.hasNextPage}
+          hasPrev={pagination.hasPreviousPage}
+        />
+      )}
       <div className="flex flex-col gap-1">
         <p>
           - 발송 전 주문은 주문상세내역에서 주문취소, 배송 주소 변경(국내배송만 해당)이 가능합니다.

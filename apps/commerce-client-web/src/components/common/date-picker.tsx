@@ -8,12 +8,23 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-export default function DatePicker() {
-  const [date, setDate] = useState(new Date());
+interface DatePickerProps {
+  defaultDate?: Date;
+  onChange?: (date: Date) => void;
+}
 
-  const handleSelect = useCallback((value: Date | undefined) => {
-    if (value) setDate(value);
-  }, []);
+export default function DatePicker({ defaultDate = new Date(), onChange }: DatePickerProps) {
+  const [date, setDate] = useState(defaultDate);
+
+  const handleSelect = useCallback(
+    (value: Date | undefined) => {
+      if (value) {
+        setDate(value);
+        onChange?.(value);
+      }
+    },
+    [onChange],
+  );
 
   return (
     <Popover>
