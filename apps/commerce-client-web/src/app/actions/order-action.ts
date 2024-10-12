@@ -2,7 +2,13 @@
 
 import type { SearchParamsOption } from 'ky';
 import type { ApiResponse } from '@/types/api-types';
-import type { DateRange, OrdersResponse, OrderStatus, SortBy } from '@/types/order-types';
+import type {
+  DateRange,
+  DetailOrder,
+  OrdersResponse,
+  OrderStatus,
+  SortBy,
+} from '@/types/order-types';
 import { externalApi } from '@/lib/api';
 import { getHeadersWithToken } from './action-helper';
 
@@ -36,6 +42,24 @@ export const getOrders = async (params: GetOrdersParams): Promise<OrdersResponse
       searchParams,
     })
     .json<ApiResponse<OrdersResponse>>();
+
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message);
+  }
+
+  return response.data;
+};
+
+export const getOrder = async (id: number): Promise<DetailOrder> => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+
+  const response = await externalApi
+    .get(`order/v1/orders/${id}`, { headers })
+    .json<ApiResponse<DetailOrder>>();
 
   if (!response.success || !response.data) {
     throw new Error(response.error?.message);

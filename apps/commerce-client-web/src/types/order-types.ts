@@ -48,3 +48,44 @@ export interface OrdersResponse {
   products: Order[];
   paginationInfo: Pagination;
 }
+
+export interface Orderer {
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
+export interface OrderProduct {
+  id: number;
+  title: string;
+  author: string;
+  publisher: string;
+  coverImage: string;
+  quantity: number;
+  price: number;
+  discountedPrice: number;
+}
+
+export interface DeliveryInfo {
+  recipient: string;
+  phoneNumber: string;
+  postalCode: string;
+  streetAddress: string;
+  detailAddress: string;
+  memo: string;
+}
+
+export interface PaymentInfo {
+  method: string;
+  depositorName: string;
+}
+
+export interface DetailOrder {
+  id: number;
+  orderNumber: string;
+  orderer: Orderer;
+  products: OrderProduct[];
+  deliveryInfo: DeliveryInfo;
+  paymentInfo: PaymentInfo;
+  orderStatus: OrderStatus;
+}
