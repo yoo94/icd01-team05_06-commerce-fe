@@ -9,8 +9,8 @@ export interface SignupFormData {
   confirmPassword: string;
   phone: string;
   postalCode: string;
-  address: string;
-  addressDetail: string;
+  streetAddress: string;
+  detailAddress: string;
 }
 
 export interface LoginFormData {
@@ -30,6 +30,7 @@ interface AuthStore {
   setSaveId: (save: boolean) => void;
   setLoginState: (state: boolean) => void;
   checkLoginState: () => void;
+  reset: () => void;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -44,12 +45,17 @@ const useAuthStore = create<AuthStore>()(
           confirmPassword: '',
           phone: '',
           postalCode: '',
-          address: '',
-          addressDetail: '',
+          streetAddress: '',
+          detailAddress: '',
         },
         loginData: {
           email: '',
           password: '',
+        },
+        passwordData: {
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
         },
         isLoggedIn: false, // Default login state is false
         setSignupData: (data) =>
@@ -75,8 +81,8 @@ const useAuthStore = create<AuthStore>()(
               confirmPassword: '',
               phone: '',
               postalCode: '',
-              address: '',
-              addressDetail: '',
+              streetAddress: '',
+              detailAddress: '',
             },
           }),
         resetLoginData: () =>
@@ -91,6 +97,12 @@ const useAuthStore = create<AuthStore>()(
         checkLoginState: () => {
           const token = getCookie('accessToken');
           set({ isLoggedIn: !!token });
+        },
+        reset: () => {
+          set({
+            saveId: false,
+            isLoggedIn: false,
+          });
         },
       }),
       {

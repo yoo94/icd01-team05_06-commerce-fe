@@ -3,10 +3,11 @@
 import { externalApi } from '@/lib/api';
 import { LoginFormData, SignupFormData } from '@/stores/use-auth-store';
 import { ApiResponse } from '@/types/api-types';
-import { TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
+import { AuthToken, TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
 import { getHeadersWithToken } from './action-helper';
 import { removeTokenInfo, setTokenInfo } from '@/lib/cookies';
-// import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { UserInfoFormData } from '@/stores/use-user-store';
 
 export const login = async (formData: LoginFormData) => {
   try {
@@ -25,8 +26,7 @@ export const login = async (formData: LoginFormData) => {
 
     setTokenInfo(response.data.tokenInfo);
 
-    // TODO: redirect 시, 발생하는 오류 해결하기
-    // redirect('/');
+    redirect('/');
   } catch (error) {
     if ((error as Error).message === 'NEXT_REDIRECT') {
       return;
@@ -36,7 +36,6 @@ export const login = async (formData: LoginFormData) => {
   }
 };
 
-// TODO : 작동되는지 확인 여부 필요
 export const signUp = async (formData: SignupFormData) => {
   try {
     const response = await externalApi
@@ -46,13 +45,11 @@ export const signUp = async (formData: SignupFormData) => {
           'Content-Type': 'application/json',
         },
       })
-      .json<TokenResponse>();
+      .json<ApiResponse<null>>();
 
-    if (!response.success || !response.data) {
+    if (!response.success) {
       throw new Error(response.error?.message || 'SignUp failed');
     }
-
-    setTokenInfo(response.data.tokenInfo);
   } catch (error) {
     console.error('Error during signup:', error);
     throw new Error('Signup failed');
@@ -80,9 +77,11 @@ export const logout = async () => {
     // Clear cookies on logout
     removeTokenInfo();
 
-    // TODO: redirect 시, 발생하는 오류 해결하기
-    // redirect('/');
+    redirect('/');
   } catch (error) {
+    if ((error as Error).message === 'NEXT_REDIRECT') {
+      return;
+    }
     console.error('Error during logout:', error);
     throw new Error('Failed to logout');
   }
@@ -96,22 +95,60 @@ export const getUserInfo = async (): Promise<UserInfo> => {
       throw new Error('No token found');
     }
 
-    const user = await externalApi
+    const response = await externalApi
       .get('auth/v1/info', {
         headers,
       })
       .json<ApiResponse<UserInfo>>();
 
-    console.log('User info:', user);
-
-    if (!user.success || !user.data) {
-      throw new Error(user.error?.message);
+    if (!response.success || !response.data) {
+      throw new Error(response.error?.message);
     }
 
-    return user.data;
+    return response.data;
   } catch (error) {
-    console.error('Failed to fetch user info:', error);
-    throw new Error('Failed to fetch user info');
+    console.error('Failed to delete user account:', error);
+    throw new Error('Failed to delete user account');
+  }
+};
+
+export const updateUserInfo = async (
+  userInfo: UserInfoFormData,
+  authToken: string,
+): Promise<boolean> => {
+  const headers = await getHeadersWithToken();
+
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
+
+    // Create a shallow copy of the userInfo and filter out password if it's not provided
+    const filteredUserInfo = { ...userInfo };
+
+    if (!filteredUserInfo.password) {
+      delete filteredUserInfo.password;
+    }
+
+    const response = await externalApi
+      .put('auth/v1/update', {
+        body: JSON.stringify(filteredUserInfo), // Send filtered userInfo
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': authToken,
+          ...headers,
+        },
+      })
+      .json<ApiResponse<null>>();
+
+    if (!response.success) {
+      throw new Error(response.error?.message || 'Failed to update user info');
+    }
+
+    return response.success;
+  } catch (error) {
+    console.error('Error updating user info:', error);
+    redirect('/my-page/user-info');
   }
 };
 
@@ -127,12 +164,69 @@ export const refreshAccessToken = async (refreshToken: string): Promise<TokenInf
       .json<TokenResponse>();
 
     if (!response.success || !response.data) {
-      throw new Error(response.error?.message || 'Failed to refresh token');
+      throw new Error(response.error?.message || 'Failed to refresh access token');
     }
 
-    return response.data.tokenInfo as TokenInfo; // Return new token info
+    return response.data.tokenInfo;
   } catch (error) {
     console.error('Error refreshing access token:', error);
-    throw new Error('Failed to refresh access token');
+    removeTokenInfo();
+    redirect('/');
+  }
+};
+
+export const verifyPassword = async (password: string): Promise<AuthToken> => {
+  const headers = await getHeadersWithToken();
+
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
+
+    const response = await externalApi
+      .post('auth/v1/password-verify', {
+        body: JSON.stringify({ password }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers,
+        },
+      })
+      .json<ApiResponse<AuthToken>>();
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error?.message || 'Failed to verify password');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Password verification error:', error);
+    throw new Error('Failed to verify password');
+  }
+};
+
+export const deleteUserAccount = async () => {
+  const headers = await getHeadersWithToken();
+
+  try {
+    if (!headers) {
+      throw new Error('No token found');
+    }
+
+    const response = await externalApi
+      .delete('auth/v1/withdrawal', {
+        headers,
+      })
+      .json<ApiResponse<null>>();
+
+    if (!response.success) {
+      throw new Error(response.error?.message || 'Failed to delete user account');
+    }
+
+    removeTokenInfo();
+
+    redirect('/');
+  } catch (error) {
+    console.error('Failed to delete user account:', error);
+    throw new Error('Failed to delete user account');
   }
 };
