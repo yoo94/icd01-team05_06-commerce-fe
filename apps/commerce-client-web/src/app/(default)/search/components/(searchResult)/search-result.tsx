@@ -1,9 +1,9 @@
 import BookCard from './book-card';
-import { Book } from '@/types/book-types';
+import { Product } from '@/types/product-types';
 
 // SearchResultProps 타입 정의
 export type SearchResultProps = {
-  books: Book[];
+  books: Product[];
 };
 
 const SearchResult = ({ books }: SearchResultProps) => {

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Book } from '@/types/book-types';
 import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
+import { Product } from '@/types/product-types';
 
 interface CartActionsProps {
-  book: Book;
+  book: Product;
 }
 
 const DetailButtonActions = ({ book }: CartActionsProps) => {

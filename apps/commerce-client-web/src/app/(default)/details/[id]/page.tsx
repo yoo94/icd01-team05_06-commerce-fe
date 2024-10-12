@@ -1,15 +1,15 @@
-import { DetailBook } from '@/types/book-types';
 import Image from 'next/image';
 import Breadcrumb from '@/components/common/breadcrumb';
-import { calculationDiscountRate } from '@/lib/utils';
-import DetailButtonActions from './components/detail-button-actions';
+import { calculationDiscountRate, parseAndRoundPrice } from '@/lib/utils';
 import BookInfo from './components/book-info/book-info';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import StarRating from '@/components/common/star-rating';
 import RefundExchangePolicy from './components/refund-exchage-policy';
+import { productApi } from '@/lib/api';
+import { ApiResponse } from '@/types/api-types';
+import { Product } from '@/types/product-types';
 import ReviewSection from './components/review/review-section';
-import api from '@/lib/api';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -20,11 +20,16 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   const bookId = parseInt(params.id, 10);
 
   // Fetch Book Data from the API
-  const book = await api(`api/books/${bookId}`).json<DetailBook>();
+  const response = await productApi(`books/${bookId}`).json<ApiResponse<Product>>();
+  const book = response.data;
 
-  const originalPrice = Number(book.price).toLocaleString();
-  const discountedPrice = Number(book.discount).toLocaleString();
-  const discountRate = calculationDiscountRate(book.price, book.discount);
+  if (!book) {
+    return <div>책 정보를 찾을 수 없습니다.</div>;
+  }
+
+  const originalPrice = parseAndRoundPrice(book.price);
+  const discountedPrice = parseAndRoundPrice(book.discountedPrice);
+  const discountRate = calculationDiscountRate(book.price, book.price - book.discountedPrice);
 
   return (
     <div className="mx-auto max-w-5xl p-4">
@@ -58,7 +63,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
             </div>
             <h1 className="mb-2 text-lg font-semibold">{book.title}</h1>
             <p className="text-xs font-extralight text-slate-500">
-              {book.author} | {book.publisher} | {book.pubdate}
+              {book.author} | {book.publisher} | {book.publishDate}
             </p>
             <div className="flex items-center gap-x-2">
               <StarRating rating={book.rating} />
@@ -67,7 +72,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
           </div>
 
           <div className="mb-6 mt-4">
-            {book.discount > 0 ? (
+            {book.price > book.discountedPrice ? (
               <div className="py-4">
                 <div className="grid grid-cols-[120px_1fr] items-center gap-y-2 text-sm">
                   {/* Original Price */}
@@ -99,9 +104,7 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
         </div>
 
         {/* Cart Actions Section */}
-        <div className="ml-6 w-1/4">
-          <DetailButtonActions book={book} />
-        </div>
+        <div className="ml-6 w-1/4">{/*<DetailButtonActions book={book} />*/}</div>
       </div>
 
       {/* Bottom Section */}

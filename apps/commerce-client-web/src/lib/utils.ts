@@ -1,8 +1,8 @@
-import { Category, SubCategory, SubSubCategory } from '@/types/category-types';
-import { Book, BookCategory } from '@/types/book-types';
+import { Category } from '@/types/category-types';
 import { MenuCategory } from '@/types/menu-types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { Product, ProductCategory } from '@/types/product-types';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,31 +19,34 @@ const calculationDiscountRate = (price: number, discount: number): string => {
   return discountRate.toFixed(0);
 };
 
-const transformServerCategories = (data: Category[]): MenuCategory[] => {
-  return data.map((category: Category) => ({
-    title: category.name,
-    items:
-      category.subCategory?.map((sub: SubCategory) => ({
-        title: sub.name,
-        items:
-          sub.subCategory?.map((subSub: SubSubCategory) => ({
-            title: subSub.name,
-          })) ?? [],
-      })) ?? [],
-  }));
+const transformServerCategories = (data: Category): MenuCategory[] => {
+  return (
+    data.childCategories?.map((category: Category) => ({
+      title: category.name,
+      items:
+        category.childCategories?.map((sub: Category) => ({
+          title: sub.name,
+          items:
+            sub.childCategories?.map((subSub: Category) => ({
+              title: subSub.name,
+            })) ?? [],
+        })) ?? [],
+    })) ?? []
+  );
 };
 
-const hasCategoryName = (category: BookCategory, nameToFind: string): boolean => {
+const hasCategoryName = (category: ProductCategory, nameToFind: string): boolean => {
   if (category.name === nameToFind) return true;
 
-  if (category.subCategory) {
-    return hasCategoryName(category.subCategory, nameToFind);
-  }
+  // TODO: ProductCategory에는 subCategory가 없음
+  // if (category.subCategory) {
+  //   return hasCategoryName(category.subCategory, nameToFind);
+  // }
 
   return false;
 };
 
-const filterBooksByCategoryName = (books: Book[], categoryName: string): Book[] => {
+const filterBooksByCategoryName = (books: Product[], categoryName: string): Product[] => {
   return books.filter((book) => hasCategoryName(book.category, categoryName));
 };
 
