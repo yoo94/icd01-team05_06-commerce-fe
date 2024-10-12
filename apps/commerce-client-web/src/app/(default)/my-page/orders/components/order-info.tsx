@@ -27,7 +27,7 @@ const OrderInfo = ({ page }: OrderInfoProps) => {
           hasPrev={pagination.hasPreviousPage}
         />
       )}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 text-xs font-light text-slate-500">
         <p>
           - 발송 전 주문은 주문상세내역에서 주문취소, 배송 주소 변경(국내배송만 해당)이 가능합니다.
         </p>

@@ -1,11 +1,12 @@
+import { Button } from '@/components/ui/button';
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from '@/components/ui/pagination';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface OrderPaginationProps {
   currentPage: number;
@@ -45,7 +46,11 @@ const OrderPagination = ({ currentPage, totalPage, hasPrev, hasNext }: OrderPagi
       <PaginationContent>
         {hasPrev && (
           <PaginationItem>
-            <PaginationPrevious href={`?page=${currentPage - 1}`} />
+            <Button variant="link" className="px-2 text-slate-500" asChild>
+              <Link href={`?page=${currentPage - 1}`}>
+                <ChevronLeft />
+              </Link>
+            </Button>
           </PaginationItem>
         )}
         {pages.map((page) => (
@@ -57,7 +62,11 @@ const OrderPagination = ({ currentPage, totalPage, hasPrev, hasNext }: OrderPagi
         ))}
         {hasNext && (
           <PaginationItem>
-            <PaginationNext href={`?page=${currentPage + 1}`} />
+            <Button variant="link" className="px-2 text-slate-500" asChild>
+              <Link href={`?page=${currentPage + 1}`}>
+                <ChevronRight />
+              </Link>
+            </Button>
           </PaginationItem>
         )}
       </PaginationContent>

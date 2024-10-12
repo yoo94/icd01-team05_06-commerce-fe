@@ -2,30 +2,33 @@
 
 import { SortBy } from '@/types/order-types';
 import { useOrdersStore } from '@/stores/use-orders-store';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const SortBySelect = () => {
   const { sortBy, changeSortBy } = useOrdersStore();
 
+  const buttons = [
+    { value: SortBy.RECENT, label: '최근순' },
+    { value: SortBy.ORDER_STATUS, label: '상태순' },
+  ];
+
   return (
-    <Select value={sortBy} onValueChange={changeSortBy}>
-      <SelectTrigger className="w-[120px]">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectItem value={SortBy.RECENT}>최근순</SelectItem>
-          <SelectItem value={SortBy.ORDER_STATUS}>상태순</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="flex rounded-md border border-gray-200">
+      {buttons.map(({ value, label }) => (
+        <Button
+          key={value}
+          variant={sortBy === value ? 'default' : 'outline'}
+          className={cn(
+            'overflow-hidden px-4 py-2 text-sm border-none',
+            sortBy === SortBy.RECENT ? 'rounded-r-none' : 'rounded-l-none',
+          )}
+          onClick={() => changeSortBy(value)}
+        >
+          {label}
+        </Button>
+      ))}
+    </div>
   );
 };
 

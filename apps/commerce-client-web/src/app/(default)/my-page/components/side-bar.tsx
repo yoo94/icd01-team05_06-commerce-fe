@@ -6,20 +6,15 @@ import MenuList from './menu-list';
 const menuItems = [
   {
     title: '주문내역',
-    items: [{ title: '주문내역/배송조회', route: '/orders' }],
+    items: [{ title: '주문내역/배송조회', route: '/my-page/orders' }],
   },
   {
     title: '회원정보',
-    items: [
-      { title: '배송주소록', route: '/my-page/shipping-address' },
-      { title: '회원정보관리', route: '/my-page/user-info' },
-      { title: '마케팅 수신 및 정보 제공 동의 관리', route: '/marketing-consent' },
-    ],
+    items: [{ title: '회원정보관리', route: '/my-page/user-info' }],
   },
 ];
 
 const sideBarButtons = [
-  { title: '찜 목록', route: '/wishlist' },
   { title: '나의 1:1 문의 내역', route: '/inquiries' },
   { title: '나의 리뷰', route: '/reviews' },
 ];

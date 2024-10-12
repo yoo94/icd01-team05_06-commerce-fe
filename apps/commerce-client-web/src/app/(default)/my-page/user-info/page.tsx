@@ -1,23 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import UserInfoForm from './components/user-info-form';
-import PasswordConfirmationForm from './components/password-confirm-form';
+
 import { getUserInfo } from '@/app/actions/auth-action';
 import { AuthToken } from '@/types/auth-types';
 import { useUserStore } from '@/stores/use-user-store';
+import UserInfoForm from './components/user-info-form';
+import PasswordConfirmationForm from './components/password-confirm-form';
 
 const Page = () => {
   const { userInfoData, setUserInfoData, setUserSession, authToken, setAuthToken } = useUserStore();
   const [loading, setLoading] = useState<boolean>(false); // Loading state
 
-  // When the token is available, fetch the user info
   useEffect(() => {
     if (authToken) {
       const fetchUserInfo = async () => {
         setLoading(true);
         try {
-          const fetchedUserInfo = await getUserInfo(); // Fetch user info using the token
+          const fetchedUserInfo = await getUserInfo();
           setUserSession({
             id: fetchedUserInfo.id,
             email: fetchedUserInfo.email,
@@ -38,6 +38,8 @@ const Page = () => {
   const handlePasswordVerified = (authToken: AuthToken) => {
     setAuthToken(authToken.token);
   };
+
+  console.log('authToken:', authToken);
 
   return (
     <div className="mx-auto">
