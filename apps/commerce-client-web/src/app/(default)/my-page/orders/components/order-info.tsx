@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useOrdersStore } from '@/stores/use-orders-store';
 import OrderPagination from './order-pagination';
 import OrderTable from './order-table';
@@ -10,15 +10,10 @@ interface OrderInfoProps {
 }
 
 const OrderInfo = ({ page }: OrderInfoProps) => {
-  const isInitialized = useRef(false);
-
   const { orders, pagination, fetchOrders } = useOrdersStore();
 
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-      fetchOrders(page);
-    }
+    fetchOrders(page);
   }, [fetchOrders, page]);
 
   return (
