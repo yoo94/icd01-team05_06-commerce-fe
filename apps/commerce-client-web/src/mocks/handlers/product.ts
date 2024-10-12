@@ -4,7 +4,7 @@ import books from '@/data/books.json';
 import orders from '@/data/orders.json';
 import detailBooks from '@/data/detail-books.json';
 import categories from '@/data/categories.json';
-import { products } from '@/data/products.json';
+import productsResponse from '@/data/products.json';
 import { withResponse } from '@/mocks/util/response';
 import { Product } from '@/types/product-types';
 
@@ -58,7 +58,7 @@ export const handlers = [
     const searchParams = new URLSearchParams(paramsString);
     const queryParamsObject = Object.fromEntries(searchParams.entries());
 
-    const filteredProducts = filterProducts(products, queryParamsObject);
+    const filteredProducts = filterProducts(productsResponse.products, queryParamsObject);
     const page = parseInt(queryParamsObject.page || '1', 10);
     const size = parseInt(queryParamsObject.size || '5', 10);
     const data = paginate(filteredProducts, page, size);
