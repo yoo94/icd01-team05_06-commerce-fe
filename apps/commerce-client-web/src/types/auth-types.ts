@@ -11,7 +11,20 @@ export interface UserInfo {
   id: number;
   email: string;
   name: string;
-  phone: number;
+  phone: string;
+  postalCode: string;
+  streetAddress: string;
+  detailAddress: string;
+}
+
+export interface UserSession {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface AuthToken {
+  token: string;
 }
 
 // Reuse for both login and refresh responses

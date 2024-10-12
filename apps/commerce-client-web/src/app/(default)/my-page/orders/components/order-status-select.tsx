@@ -1,3 +1,7 @@
+'use client';
+
+import { OrderStatus } from '@/types/order-types';
+import { useOrdersStore } from '@/stores/use-orders-store';
 import {
   Select,
   SelectContent,
@@ -8,19 +12,23 @@ import {
 } from '@/components/ui/select';
 
 const OrderStatusSelect = () => {
+  const { orderStatus, changeOrderStatus } = useOrdersStore();
+
   return (
-    <Select defaultValue="all">
+    <Select value={orderStatus} onValueChange={changeOrderStatus}>
       <SelectTrigger className="w-[120px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="all">전체</SelectItem>
-          <SelectItem value="order-received">주문접수</SelectItem>
-          <SelectItem value="payment-confirmed">결제확인</SelectItem>
-          <SelectItem value="shipping-instructed">출하지시</SelectItem>
-          <SelectItem value="shipped">출고완료</SelectItem>
-          <SelectItem value="delivery-completed">배송완료</SelectItem>
+          <SelectItem value={OrderStatus.ALL}>전체</SelectItem>
+          <SelectItem value={OrderStatus.PENDING}>주문 생성</SelectItem>
+          <SelectItem value={OrderStatus.PROCESSING}>주문 처리중</SelectItem>
+          <SelectItem value={OrderStatus.SHIPPED}>배송중</SelectItem>
+          <SelectItem value={OrderStatus.DELIVERED}>배송완료</SelectItem>
+          <SelectItem value={OrderStatus.CANCELLED}>주문 취소</SelectItem>
+          <SelectItem value={OrderStatus.REFUND}>환불</SelectItem>
+          <SelectItem value={OrderStatus.EXCHANGE}>교환</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
