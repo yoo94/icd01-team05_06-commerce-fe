@@ -18,9 +18,8 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const { isLoggedIn, setLoginState } = useAuthStore();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [activeCategories, setActiveCategories] = useState<number | null>(null);
-  const [activeItems, setActiveItems] = useState<number | null>(null);
-  const [activeSubItems, setActiveSubItems] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [activeItem, setActiveItem] = useState<number | null>(null);
 
   useEffect(() => {
     closeMenu(); // Close the menu on route change
@@ -43,43 +42,31 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
 
   const closeMenu = () => {
     setIsOpen(false);
-    setActiveCategories(null);
-    setActiveItems(null);
-    setActiveSubItems(null);
+    setActiveCategory(null);
+    setActiveItem(null);
   };
 
-  const toggleCategories = (index: number) => {
-    if (activeCategories === index) {
-      setActiveCategories(null);
-      setActiveItems(null);
-      setActiveSubItems(null);
+  const toggleCategory = (index: number) => {
+    if (activeCategory === index) {
+      setActiveCategory(null);
+      setActiveItem(null);
     } else {
-      setActiveCategories(index);
-      setActiveItems(null);
-      setActiveSubItems(null);
+      setActiveCategory(index);
+      setActiveItem(null); // Reset active item when switching categories
     }
   };
 
-  const toggleItems = (index: number) => {
-    if (activeItems === index) {
-      setActiveItems(null);
-      setActiveSubItems(null);
+  const toggleItem = (index: number) => {
+    if (activeItem === index) {
+      setActiveItem(null);
     } else {
-      setActiveItems(index);
-      setActiveSubItems(null);
-    }
-  };
-
-  const toggleSubItems = (index: number) => {
-    if (activeSubItems === index) {
-      setActiveSubItems(null);
-    } else {
-      setActiveSubItems(index);
+      setActiveItem(index);
     }
   };
 
   return (
     <div className="relative">
+      {/* Hamburger Button */}
       <button
         className="flex size-8 flex-col items-center justify-center space-y-1 border-none bg-transparent focus:outline-none"
         onClick={toggleMenu}
@@ -111,7 +98,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                   로그아웃
                 </Button>
                 <Button asChild>
-                  <Link href={'/my-page'}>마이페이지</Link>
+                  <Link href={'/me'}>마이페이지</Link>
                 </Button>
               </>
             ) : (
@@ -135,54 +122,36 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                 <div>
                   <button
                     className="w-full rounded-md p-2 text-left text-slate-700 hover:bg-slate-100"
-                    onClick={() => toggleCategories(index)}
+                    onClick={() => toggleCategory(index)}
                   >
                     {menu.title}
                   </button>
-                  {menu.categories && activeCategories === index && (
+                  {menu.categories && activeCategory === index && (
                     <ul className="ml-4 mt-2 space-y-2">
                       {menu.categories.map((category, categoryIndex) => (
                         <li key={categoryIndex}>
                           <div>
                             <button
                               className="w-full rounded-md p-2 text-left text-slate-600 hover:bg-slate-200"
-                              onClick={() => toggleItems(categoryIndex)}
+                              onClick={() => toggleItem(categoryIndex)}
                             >
                               {category.title}
                             </button>
-                            {category.items && activeItems === categoryIndex && (
+                            {category.items && activeItem === categoryIndex && (
                               <ul className="ml-4 mt-2 space-y-2">
                                 {category.items.map((item, itemIndex) => (
                                   <li key={itemIndex}>
-                                    <div>
-                                      <button
-                                        className="w-full rounded-md p-2 text-left text-slate-600 hover:bg-slate-300"
-                                        onClick={() => toggleSubItems(itemIndex)}
-                                      >
+                                    <Link
+                                      href={{
+                                        pathname: '/search',
+                                        query: { productCategoryId: item.id },
+                                      }}
+                                      onClick={closeMenu}
+                                    >
+                                      <span className="block rounded-md p-2 font-light text-slate-600 hover:bg-slate-200">
                                         {item.title}
-                                      </button>
-                                      {item.items && activeSubItems === itemIndex && (
-                                        <ul className="ml-4 mt-2 space-y-2">
-                                          {item.items.map((subItem, subItemIndex) => (
-                                            <li key={subItemIndex}>
-                                              <Link
-                                                href={{
-                                                  pathname: '/search',
-                                                  query: {
-                                                    category: subItem.title,
-                                                  },
-                                                }}
-                                                onClick={closeMenu}
-                                              >
-                                                <span className="block rounded-md p-2 font-light text-slate-600 hover:bg-slate-200">
-                                                  {subItem.title}
-                                                </span>
-                                              </Link>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      )}
-                                    </div>
+                                      </span>
+                                    </Link>
                                   </li>
                                 ))}
                               </ul>
