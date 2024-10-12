@@ -1,19 +1,39 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUserStore } from '@/stores/use-user-store';
+import { getUserInfo } from '@/app/actions/auth-action';
 
-const mockUser = {
-  name: '유재석',
-  phnum: '01024129368',
-  email: 'ddd@naver.com',
-};
+interface UserInfo {
+  name: string;
+  phone: string;
+  email: string;
+}
+
 const PaymentUserInfo = () => {
-  const [user, setUser] = useState(mockUser);
+  const { authToken } = useUserStore();
+  const [user, setUser] = useState<UserInfo>({ name: '', phone: '', email: '' });
+
+  useEffect(() => {
+    if (authToken) {
+      const fetchUserInfo = async () => {
+        try {
+          const fetchedUserInfo = await getUserInfo();
+          setUser(fetchedUserInfo);
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      };
+      fetchUserInfo();
+    }
+  }, [authToken]);
+
   const onUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -36,8 +56,8 @@ const PaymentUserInfo = () => {
             <Input
               type="text"
               placeholder="연락처"
-              name="phnum"
-              value={user.phnum}
+              name="phone"
+              value={user.phone}
               onChange={onUserChange}
             />
           </div>

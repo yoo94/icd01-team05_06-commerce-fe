@@ -49,7 +49,7 @@ const CartItemList = () => {
                 onCheckedChange={(checked) =>
                   withLoading(async () => selectAllItems(toBoolean(checked)))
                 }
-                className="fill-primary cursor-pointer"
+                className="cursor-pointer"
               />
             </TableHead>
             <TableHead className="whitespace-nowrap text-center">상품 정보</TableHead>

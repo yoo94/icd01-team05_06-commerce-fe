@@ -43,9 +43,7 @@ const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
 
           {/* 배송비 */}
           <div className="text-sm font-light">배송비</div>
-          <div className="text-primary text-right">
-            {shippingCost > 0 ? `${shippingCost}원` : '무료배송'}
-          </div>
+          <div className="text-right">{shippingCost > 0 ? `${shippingCost}원` : '무료배송'}</div>
 
           {/* 할인 금액 */}
           <div className="text-sm font-light">할인금액</div>

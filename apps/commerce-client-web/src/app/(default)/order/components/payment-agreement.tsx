@@ -24,15 +24,17 @@ const PaymentAgreement = () => {
     setAgreeFn(newVal);
 
     // 모든 개별 항목이 선택되었는지 확인 후 전체 동의 상태 업데이트
-    if (newVal === false) {
+    if (!newVal) {
       setAgreeAll(false);
-    } else if (newVal === true && agreePersonal && agreePurchase) {
+    } else if (newVal && agreePersonal && agreePurchase) {
       setAgreeAll(true);
     }
   };
 
+  // 동의 항목들 모두 선택해야 결제 버튼 활성화
+  const isButtonDisabled = !(agreePersonal && agreePurchase);
   return (
-    <Card className="bg-primary/10 w-full border shadow-md">
+    <Card className="w-full border shadow-md">
       <CardHeader>
         <CardTitle className="border-b pb-5 text-base">동의 및 결제하기</CardTitle>
       </CardHeader>
@@ -70,7 +72,10 @@ const PaymentAgreement = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full text-white">결제하기</Button>
+        {/* 동의 항목들이 선택되지 않으면 버튼을 비활성화 */}
+        <Button className="w-full text-white" disabled={isButtonDisabled} onClick={() => {}}>
+          결제하기
+        </Button>
       </CardFooter>
     </Card>
   );

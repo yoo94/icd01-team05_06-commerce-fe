@@ -57,6 +57,7 @@ const CartSummary = () => {
     if (Number(finalPrice.replace(/,/g, '')) === 0) {
       setShowAlertDialog(true);
     } else {
+      sessionStorage.setItem('selectedItems', JSON.stringify(checkedItems));
       router.push('/order');
     }
   };
@@ -116,8 +117,6 @@ const CartSummary = () => {
       {/* AlertDialogComponent */}
       {showAlertDialog && (
         <AlertDialog
-          open={showAlertDialog}
-          onOpenChange={() => setShowAlertDialog(false)} // 다이얼로그 닫기
           title="경고"
           description="최종 결제 금액이 0원입니다. 구매하실 상품을 선택해주세요."
           onConfirm={() => setShowAlertDialog(false)} // 확인 버튼 클릭 시 다이얼로그 닫기
