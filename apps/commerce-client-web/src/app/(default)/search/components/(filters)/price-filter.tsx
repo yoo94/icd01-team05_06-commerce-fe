@@ -42,7 +42,7 @@ const PriceFilter = () => {
               type="radio"
               id="price-5000"
               name="price"
-              value="5000"
+              value="0-5000"
               className="mr-2"
               onChange={handlePriceChange}
             />
@@ -75,7 +75,7 @@ const PriceFilter = () => {
               type="radio"
               id="price-50000"
               name="price"
-              value="50000"
+              value="50000-999999"
               className="mr-2"
               onChange={handlePriceChange}
             />

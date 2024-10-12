@@ -18,10 +18,6 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      {
-        source: '/products/:path*',
-        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_API_URL}/:path*`,
-      },
     ];
   },
   experimental: {

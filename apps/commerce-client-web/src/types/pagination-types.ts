@@ -1,8 +1,6 @@
 export interface Pagination {
-  currentPage: number;
-  totalPage: number;
-  pageSize: number;
-  totalCount: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  page: number;
+  size: number;
+  totalItems: number;
+  totalPages: number;
 }
