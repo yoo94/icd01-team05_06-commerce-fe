@@ -7,9 +7,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import BookSection from './components/book-section';
-import { Book } from '@/types/book-types';
 import { Card, CardContent } from '@/components/ui/card';
-import { productApi } from '@/lib/api';
+import { fetchHomePageBooks } from '../actions/product-action';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,17 +25,8 @@ const Home = async () => {
     { src: '/images/banner/event_banner_02.png', alt: 'Event 2' },
   ];
 
-  const [newReleasesResponse, recommendedBooksResponse, bestSellersResponse] = await Promise.all([
-    productApi.get('books/new-releases').json<Book[]>(),
-    productApi.get('books/recommended').json<Book[]>(),
-    productApi.get('books/best-sellers').json<Book[]>(),
-  ]);
-
-  const newReleases: Book[] = Array.isArray(newReleasesResponse) ? newReleasesResponse : [];
-  const recommendedBooks: Book[] = Array.isArray(recommendedBooksResponse)
-    ? recommendedBooksResponse
-    : [];
-  const bestSellers: Book[] = Array.isArray(bestSellersResponse) ? bestSellersResponse : [];
+  // Fetch home page book data
+  const { hotNew, recommend, bestseller } = await fetchHomePageBooks();
 
   return (
     <div className="container mx-auto space-y-12 px-4 py-8">
@@ -81,14 +71,14 @@ const Home = async () => {
         </Carousel>
       </section>
 
-      {/* New Releases Section */}
-      <BookSection title="화제의 신간" books={newReleases} />
+      {/* Hot New Releases Section */}
+      <BookSection title="화제의 신간" books={hotNew} />
 
       {/* Recommended Books Section */}
-      <BookSection title="추천 도서" books={recommendedBooks} />
+      <BookSection title="추천 도서" books={recommend} />
 
       {/* Best Sellers Section */}
-      <BookSection title="베스트 셀러" books={bestSellers} />
+      <BookSection title="베스트 셀러" books={bestseller} />
 
       {/* Event Section */}
       <section className="relative mb-8">
