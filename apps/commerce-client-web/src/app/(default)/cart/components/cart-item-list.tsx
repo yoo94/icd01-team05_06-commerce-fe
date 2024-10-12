@@ -22,7 +22,7 @@ const CartItemList = () => {
   const withLoading = useWithLoading();
 
   useEffect(() => {
-    withLoading(fetchItems); // withLoading으로 비동기 함수 감싸기
+    withLoading(fetchItems);
   }, [fetchItems]);
 
   const allSelected = items.length > 0 && checkedItems.length === items.length;

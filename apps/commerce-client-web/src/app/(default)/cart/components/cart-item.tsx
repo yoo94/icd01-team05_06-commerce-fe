@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -22,19 +23,22 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemoveItem,
 }) => {
   const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
-  const totalPrice = (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString();
+  const [totalPrice, setTotalPrice] = useState(
+    (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString(),
+  );
+
+  const safeParseNumber = (value: number | string) => {
+    const parsedValue = Number(value);
+    return isNaN(parsedValue) ? 0 : parsedValue;
+  };
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
     if (value < 1) value = 1;
 
     setInputQuantity(value);
-  };
-
-  const handleQuantityUpdate = () => {
-    if (inputQuantity !== item.quantity) {
-      onChangeQuantity(item.shoppingCartId, inputQuantity);
-    }
+    setTotalPrice((safeParseNumber(item.discountedPrice) * value).toLocaleString()); // 즉시 가격 계산
+    onChangeQuantity(item.shoppingCartId, value); // 변경된 수량 전달
   };
 
   return (
@@ -59,12 +63,6 @@ const CartItem: React.FC<CartItemProps> = ({
           min={1}
           className="w-20 rounded border text-center"
           onChange={handleQuantityChange}
-          onBlur={handleQuantityUpdate}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              handleQuantityUpdate();
-            }
-          }}
         />
       </TableCell>
       <TableCell className="w-32 whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>

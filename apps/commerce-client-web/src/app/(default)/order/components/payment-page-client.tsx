@@ -19,13 +19,7 @@ const PaymentPageClient = ({ serverBooks }: PaymentPageClientProps) => {
   const [books, setBooks] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    if (serverBooks.length > 0) {
-      // 서버에서 전달된 데이터가 있으면 사용
-      setBooks(serverBooks);
-    } else {
-      // 서버에서 데이터가 없으면 클라이언트 상태에서 가져옴
-      setBooks(getSelectedBook());
-    }
+    setBooks(getSelectedBook());
   }, [serverBooks, getSelectedBook, items]);
 
   return (
