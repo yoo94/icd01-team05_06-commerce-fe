@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import CartItem from './cart-item';
 import useCartStore from '@/stores/use-cart-store';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { useWithLoading } from '@/app/actions/utils/with-loading-spinner';
+import { useWithLoading } from '@/components/common/with-loading-spinner';
 
 const CartItemList = () => {
   const {
