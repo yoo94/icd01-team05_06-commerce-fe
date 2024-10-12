@@ -148,7 +148,7 @@ export const updateUserInfo = async (
     return response.success;
   } catch (error) {
     console.error('Error updating user info:', error);
-    redirect('/my-page/user-info');
+    throw new Error('Failed to update user info');
   }
 };
 

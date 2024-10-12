@@ -66,6 +66,11 @@ const UserInfoForm = () => {
   };
 
   const onSubmit = async (data: UserInfoFormData) => {
+    if (!authToken) {
+      console.error('No authentication token available');
+      return;
+    }
+
     try {
       const { password, ...rest } = data;
       const userInfoToUpdate = password ? data : rest;
@@ -78,10 +83,10 @@ const UserInfoForm = () => {
       }
     } catch (error) {
       console.error('Error during user info update:', error);
+      // Set authToken to null in case of error
       clearAuthToken();
     }
   };
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4 flex flex-col gap-y-4">
