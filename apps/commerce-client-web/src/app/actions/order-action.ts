@@ -4,7 +4,7 @@ import type { SearchParamsOption } from 'ky';
 import type { ApiResponse } from '@/types/api-types';
 import type { DateRange, OrdersResponse, OrderStatus, SortBy } from '@/types/order-types';
 import { externalApi } from '@/lib/api';
-import { getHeadersWithToken } from './action-helper';
+import { getHeadersWithToken } from './utils/action-helper';
 
 interface GetOrdersParams {
   dateRange?: DateRange;

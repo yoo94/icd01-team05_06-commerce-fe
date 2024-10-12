@@ -32,7 +32,7 @@ export default function DatePicker({ defaultDate = new Date(), onChange }: DateP
         <Button
           variant="outline"
           className={cn(
-            'w-[160px] justify-start text-left font-normal',
+            'md:min-w-[200px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >

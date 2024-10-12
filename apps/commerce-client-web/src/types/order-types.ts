@@ -3,13 +3,11 @@ import type { Pagination } from '@/types/pagination-types';
 
 export const OrderStatus = {
   ALL: 'ALL',
-  PENDING: 'PENDING',
-  PROCESSING: 'PROCESSING',
-  SHIPPED: 'SHIPPED',
-  DELIVERED: 'DELIVERED',
+  COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
-  REFUND: 'REFUND',
-  EXCHANGE: 'EXCHANGE',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  REFUNDED: 'REFUNDED',
 } as const;
 
 export type OrderStatus = Enum<typeof OrderStatus>;
