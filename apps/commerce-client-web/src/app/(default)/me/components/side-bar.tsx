@@ -6,11 +6,11 @@ import MenuList from './menu-list';
 const menuItems = [
   {
     title: '주문내역',
-    items: [{ title: '주문내역/배송조회', route: '/my-page/orders' }],
+    items: [{ title: '주문내역/배송조회', route: '/me/orders' }],
   },
   {
     title: '회원정보',
-    items: [{ title: '회원정보관리', route: '/my-page/user-info' }],
+    items: [{ title: '회원정보관리', route: '/me/user-info' }],
   },
 ];
 

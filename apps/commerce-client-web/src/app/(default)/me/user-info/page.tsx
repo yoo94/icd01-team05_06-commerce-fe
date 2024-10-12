@@ -39,8 +39,6 @@ const Page = () => {
     setAuthToken(authToken.token);
   };
 
-  console.log('authToken:', authToken);
-
   return (
     <div className="mx-auto">
       <h1 className="mb-4">회원정보 관리</h1>

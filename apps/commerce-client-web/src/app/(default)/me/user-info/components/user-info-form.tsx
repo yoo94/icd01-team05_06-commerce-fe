@@ -79,11 +79,10 @@ const UserInfoForm = () => {
 
       if (success) {
         setUserInfoData(userInfoToUpdate);
-        reset(userInfoToUpdate); // Reset with updated info
+        reset(userInfoToUpdate);
       }
     } catch (error) {
       console.error('Error during user info update:', error);
-      // Set authToken to null in case of error
       clearAuthToken();
     }
   };
