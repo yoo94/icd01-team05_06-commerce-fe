@@ -78,11 +78,14 @@ export interface DeliveryInfo {
 export interface PaymentInfo {
   method: string;
   depositorName: string;
+  price: number;
+  discountedPrice: number;
 }
 
 export interface DetailOrder {
   id: number;
   orderNumber: string;
+  orderDate: string;
   orderer: Orderer;
   products: OrderProduct[];
   deliveryInfo: DeliveryInfo;
