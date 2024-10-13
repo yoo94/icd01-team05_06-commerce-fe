@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { getOrder } from '@/app/actions/order-action';
 
 interface Props {
-  params: { id: string };
+  params: { orderNumber: string };
 }
 
 interface Info {
@@ -11,8 +11,8 @@ interface Info {
   content: string;
 }
 
-const Page = async ({ params: { id } }: Props) => {
-  const order = await getOrder(Number(id));
+const Page = async ({ params: { orderNumber } }: Props) => {
+  const order = await getOrder(orderNumber);
 
   const basicInfo: Info[] = [
     {

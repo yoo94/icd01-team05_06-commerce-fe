@@ -50,7 +50,7 @@ export const getOrders = async (params: GetOrdersParams): Promise<OrdersResponse
   return response.data;
 };
 
-export const getOrder = async (id: number): Promise<DetailOrder> => {
+export const getOrder = async (orderNumber: string): Promise<DetailOrder> => {
   const headers = await getHeadersWithToken();
 
   if (!headers) {
@@ -58,7 +58,7 @@ export const getOrder = async (id: number): Promise<DetailOrder> => {
   }
 
   const response = await externalApi
-    .get(`order/v1/orders/${id}`, { headers })
+    .get(`order/v1/orders/${orderNumber}`, { headers })
     .json<ApiResponse<DetailOrder>>();
 
   if (!response.success || !response.data) {
