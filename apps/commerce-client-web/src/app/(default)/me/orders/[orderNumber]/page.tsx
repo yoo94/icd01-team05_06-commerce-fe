@@ -29,6 +29,25 @@ const Page = async ({ params: { orderNumber } }: Props) => {
     },
   ];
 
+  const productsInfo: Info[][] = order.products.map((product) => [
+    {
+      title: '제목',
+      content: product.title,
+    },
+    {
+      title: '저자',
+      content: product.author,
+    },
+    {
+      title: '주문 수량',
+      content: product.quantity.toString(),
+    },
+    {
+      title: '가격',
+      content: `${product.price.toLocaleString()}원`,
+    },
+  ]);
+
   const paymentInfo: Info[] = [
     {
       title: '결제 방법',
@@ -58,7 +77,16 @@ const Page = async ({ params: { orderNumber } }: Props) => {
           ))}
         </div>
         <div>상품 정보</div>
-
+        {productsInfo.map((product) => (
+          <div className="flex flex-col border border-gray-200">
+            {product.map((info, i) => (
+              <div key={info.title} className={cn('flex', i > 0 && 'border-t border-gray-200')}>
+                <div className="flex-1 bg-gray-100 px-2 py-1 text-xs">{info.title}</div>
+                <div className="flex-[3] px-2 py-1 text-xs">{info.content}</div>
+              </div>
+            ))}
+          </div>
+        ))}
         <div>결제 정보</div>
         <div className="flex flex-col border border-gray-200">
           {paymentInfo.map((info, i) => (
