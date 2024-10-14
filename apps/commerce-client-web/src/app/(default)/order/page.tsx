@@ -9,10 +9,11 @@ import OrderPaymentMethod from '@/app/(default)/order/components/payment-method'
 import PaymentAgreement from '@/app/(default)/order/components/payment-agreement';
 import { useWithLoading } from '@/components/common/with-loading-spinner';
 import { usePaymentStore } from '@/stores/use-payment-store';
+import { searchBooks } from '@/app/actions/order-action';
 
 const PaymentPage = () => {
   const { fetchItems, items } = useCartStore();
-  const { setSelectedBooks, selectedBooks } = usePaymentStore(); // usePaymentStore 사용
+  const { setSelectedBooks, selectedBooks } = usePaymentStore();
   const withLoading = useWithLoading();
 
   useEffect(() => {
@@ -23,11 +24,32 @@ const PaymentPage = () => {
 
   useEffect(() => {
     withLoading(async () => {
+      setSelectedBooks([]);
       const storedSelectedItems = sessionStorage.getItem('selectedItems');
       if (storedSelectedItems) {
         const selectedIds = JSON.parse(storedSelectedItems);
-        const selectedBooks = items.filter((item) => selectedIds.includes(item.productId));
-        setSelectedBooks(selectedBooks); // 선택된 책들을 PaymentStore에 저장
+
+        const fetchSelectedBooks = async () => {
+          const books = await Promise.all(
+            selectedIds.map(async (productId: number) => {
+              const book = await searchBooks(productId);
+              const bookWithQuantity = {
+                ...book,
+                quantity: 1,
+              };
+              const matchingItem = items.find((item) => item.productId === book.id);
+              if (matchingItem) {
+                bookWithQuantity.quantity = matchingItem.quantity;
+              }
+              return bookWithQuantity;
+            }),
+          );
+
+          const validBooks = books.filter((book) => book !== null);
+          setSelectedBooks(validBooks);
+        };
+
+        fetchSelectedBooks();
       }
     });
   }, [items, setSelectedBooks]);

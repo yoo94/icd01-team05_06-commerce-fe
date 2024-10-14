@@ -3,8 +3,9 @@
 import type { SearchParamsOption } from 'ky';
 import type { ApiResponse } from '@/types/api-types';
 import type { DateRange, OrdersResponse, OrderStatus, SortBy } from '@/types/order-types';
-import { externalApi, orderApi } from '@/lib/api';
+import { externalApi, orderApi, productApi } from '@/lib/api';
 import { getHeadersWithToken } from './action-helper';
+import { Product } from '@/types/product-types';
 interface CreateOrderRequest {
   products: {
     id: number;
@@ -43,6 +44,29 @@ interface GetOrdersParams {
   orderStartDate?: string;
   orderEndDate?: string;
 }
+
+export const searchBooks = async (productId: number): Promise<Product> => {
+  try {
+    const headers = await getHeadersWithToken();
+
+    if (!headers) {
+      throw new Error('No token found');
+    }
+    const response = await productApi
+      .get(`products/${productId}`, {
+        headers,
+      })
+      .json<ApiResponse<Product>>();
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error?.message || '상품 검색에 실패했습니다.');
+    }
+    return response.data;
+  } catch (error) {
+    console.error('상품 검색 중 오류가 발생했습니다.', error);
+    throw new Error('상품 검색 중 오류가 발생했습니다.');
+  }
+};
 
 export const createOrder = async (orderData: CreateOrderRequest): Promise<OrdersResponse> => {
   const headers = await getHeadersWithToken();
