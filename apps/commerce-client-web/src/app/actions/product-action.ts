@@ -34,6 +34,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
 };
 
 export const fetchProducts = async ({
+  homeProductType,
   productCategoryId,
   searchWord,
   page,
@@ -50,6 +51,10 @@ export const fetchProducts = async ({
 
   if (searchWord) {
     queryParams.set('searchWord', searchWord);
+  }
+
+  if (homeProductType) {
+    queryParams.set('homeProductType', homeProductType);
   }
 
   const response = await externalApi

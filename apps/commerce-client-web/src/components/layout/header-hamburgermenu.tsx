@@ -144,7 +144,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                                     <Link
                                       href={{
                                         pathname: '/search',
-                                        query: { productCategoryId: item.id },
+                                        query: { category: item.id },
                                       }}
                                       onClick={closeMenu}
                                     >

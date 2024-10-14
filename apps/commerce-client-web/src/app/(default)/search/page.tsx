@@ -5,25 +5,26 @@ import ProductList from './components/(searchResult)/product-list';
 
 interface SearchPageProps {
   searchParams: {
-    searchWord?: string;
+    word?: string;
     price?: string;
     publisher?: string;
     category?: string;
+    type?: string;
     page?: string;
     size?: string;
   };
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  // Convert `page` and `size` params to numbers or default them
   const page = parseInt(searchParams.page || '1', 10);
   const size = parseInt(searchParams.size || '20', 10);
 
   const booksData: ProductsResponse | null = await fetchProducts({
     page,
     size,
-    productCategoryId: searchParams.category ? parseInt(searchParams.category, 1) : undefined,
-    searchWord: searchParams.searchWord,
+    productCategoryId: searchParams.category ? parseInt(searchParams.category, 10) : undefined,
+    homeProductType: searchParams.type,
+    searchWord: searchParams.word,
   });
 
   const filteredBooks = booksData?.products ?? [];

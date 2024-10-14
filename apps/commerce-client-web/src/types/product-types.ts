@@ -49,6 +49,7 @@ export interface HomePageData {
 }
 
 export interface FetchProductsParams {
+  homeProductType?: string;
   productCategoryId?: number;
   searchWord?: string;
   page: number;
