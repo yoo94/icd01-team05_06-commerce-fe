@@ -73,8 +73,14 @@ export interface DeliveryInfo {
   memo: string;
 }
 
+export const PaymentMethod = {
+  CREDIT_CARD: 'CREDIT_CARD',
+} as const;
+
+export type PaymentMethod = Enum<typeof PaymentMethod>;
+
 export interface PaymentInfo {
-  method: string;
+  method: PaymentMethod;
   depositorName: string;
   price: number;
   discountedPrice: number;

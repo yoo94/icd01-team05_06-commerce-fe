@@ -1,4 +1,4 @@
-import { OrderStatus } from '@/types/order-types';
+import { OrderStatus, PaymentMethod } from '@/types/order-types';
 
 export const orderStatusLabels: Record<OrderStatus, string> = {
   [OrderStatus.ALL]: '전체',
@@ -7,4 +7,8 @@ export const orderStatusLabels: Record<OrderStatus, string> = {
   [OrderStatus.SHIPPING]: '배송중',
   [OrderStatus.DELIVERED]: '배송 완료',
   [OrderStatus.REFUNDED]: '환불',
+};
+
+export const paymentMethodLabels: Record<PaymentMethod, string> = {
+  [PaymentMethod.CREDIT_CARD]: '신용카드',
 };
