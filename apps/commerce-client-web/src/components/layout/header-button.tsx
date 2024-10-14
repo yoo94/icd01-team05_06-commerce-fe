@@ -8,7 +8,7 @@ const HeaderButton = () => {
         <ShoppingCart className="size-7" />
       </Link>
       <Link
-        href={'/my-page'}
+        href={'/me'}
         className="flex size-10 items-center justify-center rounded-full bg-lime-500 text-white shadow-md"
       >
         <User2 className="size-6" />

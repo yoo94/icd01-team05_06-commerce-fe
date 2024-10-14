@@ -19,20 +19,19 @@ const calculationDiscountRate = (price: number, discount: number): string => {
   return discountRate.toFixed(0);
 };
 
-const transformServerCategories = (data: Category): MenuCategory[] => {
-  return (
-    data.childCategories?.map((category: Category) => ({
-      title: category.name,
-      items:
-        category.childCategories?.map((sub: Category) => ({
-          title: sub.name,
-          items:
-            sub.childCategories?.map((subSub: Category) => ({
-              title: subSub.name,
-            })) ?? [],
-        })) ?? [],
-    })) ?? []
-  );
+const transformServerCategories = (data: Category[]): MenuCategory[] => {
+  return data.map((category) => ({
+    title: category.name,
+    items:
+      category.childCategories?.map((subCategory) => ({
+        id: subCategory.id,
+        title: subCategory.name,
+        items:
+          subCategory.childCategories?.map((subSubCategory) => ({
+            title: subSubCategory.name,
+          })) ?? [],
+      })) ?? [],
+  }));
 };
 
 const hasCategoryName = (category: ProductCategory, nameToFind: string): boolean => {
