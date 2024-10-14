@@ -1,17 +1,26 @@
 'use client';
 
 import useAuthStore from '@/stores/use-auth-store';
-import { useSession } from 'next-auth/react';
 import NavLinks from '@/components/common/nav-links';
+import { logout } from '@/app/actions/auth-action';
+import { useRouter } from 'next/navigation';
 
 const TopBar = () => {
-  const { data: session } = useSession();
-  const isAuthenticated = !!session;
-  const { logout } = useAuthStore();
+  const router = useRouter();
+  const { isLoggedIn, setLoginState } = useAuthStore();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setLoginState(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
+  };
 
-  const links = isAuthenticated
+  const links = isLoggedIn
     ? [
-        { href: '#', label: '로그아웃', onClick: logout },
+        { href: '#', label: '로그아웃', onClick: handleLogout },
         {
           href: '#',
           label: '고객센터',

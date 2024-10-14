@@ -1,30 +1,54 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Equal, Minus, Plus } from 'lucide-react';
 import useCartStore from '@/stores/use-cart-store';
 
 const CartSummary = () => {
-  const { items } = useCartStore();
+  const { items, checkedItems } = useCartStore();
 
-  const selectedItems = items.filter((item) => item.selected);
-  const totalItemPrice = selectedItems
-    .reduce((acc, item) => acc + parseInt(String(item.price)) * item.selectNum, 0)
-    .toLocaleString();
-  const totalDiscount = selectedItems
-    .reduce(
-      (acc, item) => acc + parseInt(String(item.price - item.discountedPrice)) * item.selectNum,
-      0,
-    )
-    .toLocaleString();
-  const finalPrice = selectedItems
-    .reduce(
-      (acc, item) =>
-        acc +
-        (parseInt(String(item.price)) - parseInt(String(item.price - item.discountedPrice))) *
-          item.selectNum,
-      0,
-    )
-    .toLocaleString();
+  const [totalItemPrice, setTotalItemPrice] = useState('0');
+  const [totalDiscount, setTotalDiscount] = useState('0');
+  const [finalPrice, setFinalPrice] = useState('0');
+
+  useEffect(() => {
+    const selectedItems = items.filter((item) => checkedItems.includes(item.productId));
+
+    const safeParseNumber = (value: number | string | undefined) => {
+      const parsedValue = Number(value);
+      return isNaN(parsedValue) ? 0 : parsedValue; // NaN이면 0을 반환
+    };
+
+    const totalItemPriceCalc = selectedItems
+      .reduce((acc, item) => acc + safeParseNumber(item.price) * item.quantity, 0)
+      .toLocaleString();
+
+    const totalDiscountCalc = selectedItems
+      .reduce(
+        (acc, item) =>
+          acc +
+          safeParseNumber(safeParseNumber(item.price) - safeParseNumber(item.discountedPrice)) *
+            item.quantity,
+        0,
+      )
+      .toLocaleString();
+
+    const finalPriceCalc = selectedItems
+      .reduce(
+        (acc, item) =>
+          acc +
+          (safeParseNumber(item.price) -
+            safeParseNumber(item.price - safeParseNumber(item.discountedPrice))) *
+            item.quantity,
+        0,
+      )
+      .toLocaleString();
+
+    // 계산된 값 상태로 설정
+    setTotalItemPrice(totalItemPriceCalc);
+    setTotalDiscount(totalDiscountCalc);
+    setFinalPrice(finalPriceCalc);
+  }, [items, checkedItems]); // items와 checkedItems가 변경될 때마다 실행
 
   return (
     <div className="mt-8 w-full">
