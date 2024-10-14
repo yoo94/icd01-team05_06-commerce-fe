@@ -1,13 +1,17 @@
 'use client';
 
-import { Book } from '@/types/book-types';
 import { Accordion } from '@/components/ui/accordion';
 import PriceFilter from './price-filter';
 import PublisherFilter from './publisher-filter';
 import CategoryFilter from './category-filter';
 import { Suspense } from 'react';
+import { Product } from '@/types/product-types';
 
-const FilterComponent = ({ books }: { books: Book[] }) => {
+interface FilterComponentProps {
+  books: Product[];
+}
+
+const FilterComponent = ({ books }: FilterComponentProps) => {
   const publishers = [...new Set(books.map((book) => book.publisher))];
 
   return (

@@ -1,11 +1,12 @@
 'use client';
 
+import React from 'react';
 import { useRouter } from 'next/navigation'; // Next.js의 useRouter 훅 가져오기
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { Book } from '@/types/book-types'; // Book 타입 가져오기
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Product } from '@/types/product-types';
 
 interface CategoryFilterProps {
-  books: Book[]; // 정확한 Book 타입을 사용
+  books: Product[]; // 정확한 Book 타입을 사용
 }
 
 const CategoryFilter = ({ books }: CategoryFilterProps) => {

@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <main className="container max-w-screen-xs justify-center p-4 sm:max-w-screen-md md:max-w-screen-lg md:p-8">
+      <main className="max-w-screen-xs container justify-center p-4 sm:max-w-screen-md md:max-w-screen-lg md:p-8">
         {children}
       </main>
       <Footer />

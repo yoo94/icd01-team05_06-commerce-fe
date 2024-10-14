@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware'; // persist 미들웨어 추가
 import { useUserStore } from './use-user-store';
-import api from '@/lib/api';
+import { authApi } from '@/lib/api';
 import { signIn, signOut } from 'next-auth/react';
 import { UserInfo } from '@/types/auth-types';
 import { ApiError } from '@/types/api-types';
@@ -106,7 +106,7 @@ const useAuthStore = create<AuthStore>()(
           };
 
           try {
-            const response = await api.post('external-auth/sign-up', {
+            const response = await authApi.post('sign-up', {
               json: submitData,
             });
 
@@ -144,7 +144,7 @@ const useAuthStore = create<AuthStore>()(
             }
 
             // TODO: 서버로부터 받은 유저 정보 저장하기
-            const user = await api.get('external-auth/info').json<{
+            const user = await authApi.get('info').json<{
               success: boolean;
               data: UserInfo;
               error: ApiError | null;
