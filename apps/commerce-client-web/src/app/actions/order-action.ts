@@ -9,8 +9,38 @@ import type {
   OrderStatus,
   SortBy,
 } from '@/types/order-types';
-import { externalApi } from '@/lib/api';
+import { externalApi, orderApi, productApi } from '@/lib/api';
 import { getHeadersWithToken } from './utils/action-helper';
+import { Product } from '@/types/product-types';
+
+interface CreateOrderRequest {
+  products: {
+    id: number;
+    quantity: number;
+  }[];
+  ordererInfo: {
+    name: string;
+    phoneNumber: string;
+    email: string;
+  };
+  deliveryInfo: {
+    recipient: string;
+    phoneNumber: string;
+    streetAddress: string;
+    detailAddress: string;
+    postalCode: string;
+    memo?: string;
+  };
+  paymentInfo: {
+    method: string;
+    depositorName: string;
+  };
+  agreementInfo: {
+    termsOfService: boolean;
+    privacyPolicy: boolean;
+    ageVerification: boolean;
+  };
+}
 
 interface GetOrdersParams {
   dateRange?: DateRange;
@@ -21,6 +51,47 @@ interface GetOrdersParams {
   orderStartDate?: string;
   orderEndDate?: string;
 }
+
+export const searchBooks = async (productId: number): Promise<Product> => {
+  try {
+    const headers = await getHeadersWithToken();
+
+    if (!headers) {
+      throw new Error('No token found');
+    }
+    const response = await productApi
+      .get(`products/${productId}`, {
+        headers,
+      })
+      .json<ApiResponse<Product>>();
+
+    if (!response.success || !response.data) {
+      throw new Error(response.error?.message || '상품 검색에 실패했습니다.');
+    }
+    return response.data;
+  } catch (error) {
+    console.error('상품 검색 중 오류가 발생했습니다.', error);
+    throw new Error('상품 검색 중 오류가 발생했습니다.');
+  }
+};
+
+export const createOrder = async (orderData: CreateOrderRequest): Promise<OrdersResponse> => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+  const response = await orderApi
+    .post('order/v1/orders', {
+      json: orderData,
+      headers,
+    })
+    .json<ApiResponse<OrdersResponse>>();
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to create order');
+  }
+  return response.data;
+};
 
 export const getOrders = async (params: GetOrdersParams): Promise<OrdersResponse> => {
   const headers = await getHeadersWithToken();

@@ -22,7 +22,7 @@ const CartItemList = () => {
   const withLoading = useWithLoading();
 
   useEffect(() => {
-    withLoading(fetchItems); // withLoading으로 비동기 함수 감싸기
+    withLoading(fetchItems);
   }, [fetchItems]);
 
   const allSelected = items.length > 0 && checkedItems.length === items.length;
@@ -49,7 +49,7 @@ const CartItemList = () => {
                 onCheckedChange={(checked) =>
                   withLoading(async () => selectAllItems(toBoolean(checked)))
                 }
-                className="fill-primary cursor-pointer"
+                className="cursor-pointer"
               />
             </TableHead>
             <TableHead className="whitespace-nowrap text-center">상품 정보</TableHead>
