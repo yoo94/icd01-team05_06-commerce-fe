@@ -33,7 +33,6 @@ export const useOrdersStore = create<OrdersState & OrdersAction>((set, get) => (
   changeSortBy: (sortBy: SortBy) => set(() => ({ sortBy })),
   changeOrderStatus: (orderStatus: OrderStatus) => set(() => ({ orderStatus })),
   fetchOrders: async (page: number) => {
-    const pageOffset = 1;
     const pageSize = 10;
 
     const { sortBy, orderStatus, startDate, endDate } = get();
@@ -44,7 +43,7 @@ export const useOrdersStore = create<OrdersState & OrdersAction>((set, get) => (
       status: orderStatus === OrderStatus.ALL ? undefined : orderStatus,
       orderStartDate: format(startDate, 'yyyy-MM-dd'),
       orderEndDate: format(endDate, 'yyyy-MM-dd'),
-      page: page - pageOffset,
+      page: page,
       size: pageSize,
     });
 
