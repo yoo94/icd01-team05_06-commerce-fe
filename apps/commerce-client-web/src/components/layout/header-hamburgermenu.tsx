@@ -7,6 +7,7 @@ import Link from 'next/link';
 import useAuthStore from '@/stores/use-auth-store';
 import { logout } from '@/app/actions/auth-action';
 import { usePathname, useRouter } from 'next/navigation';
+import { useUserStore } from '@/stores/use-user-store';
 
 interface HamburgerMenuProps {
   mainMenu: MainMenu[];
@@ -15,7 +16,8 @@ interface HamburgerMenuProps {
 const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isLoggedIn, setLoginState } = useAuthStore();
+  const { isLoggedIn, resetAuthState } = useAuthStore();
+  const { resetUserState } = useUserStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
@@ -28,8 +30,12 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const handleLogout = async () => {
     try {
       await logout();
+
+      resetAuthState();
+      resetUserState();
+
       router.push('/');
-      setLoginState(false);
+
       closeMenu();
     } catch (error) {
       console.error('Error during logout:', error);
@@ -46,13 +52,18 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
     setActiveItem(null);
   };
 
-  const toggleCategory = (index: number) => {
-    if (activeCategory === index) {
-      setActiveCategory(null);
-      setActiveItem(null);
+  const toggleCategory = (index: number, type?: string) => {
+    if (type) {
+      closeMenu();
+      router.push(`/search?type=${type}`);
     } else {
-      setActiveCategory(index);
-      setActiveItem(null); // Reset active item when switching categories
+      if (activeCategory === index) {
+        setActiveCategory(null);
+        setActiveItem(null);
+      } else {
+        setActiveCategory(index);
+        setActiveItem(null); // Reset active item when switching categories
+      }
     }
   };
 
@@ -122,7 +133,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                 <div>
                   <button
                     className="w-full rounded-md p-2 text-left text-slate-700 hover:bg-slate-100"
-                    onClick={() => toggleCategory(index)}
+                    onClick={() => toggleCategory(index, menu.type)}
                   >
                     {menu.title}
                   </button>
@@ -144,7 +155,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                                     <Link
                                       href={{
                                         pathname: '/search',
-                                        query: { productCategoryId: item.id },
+                                        query: { category: item.id },
                                       }}
                                       onClick={closeMenu}
                                     >

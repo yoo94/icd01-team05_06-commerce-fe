@@ -30,7 +30,7 @@ interface AuthStore {
   setSaveId: (save: boolean) => void;
   setLoginState: (state: boolean) => void;
   checkLoginState: () => void;
-  reset: () => void;
+  resetAuthState: () => void;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -98,9 +98,8 @@ const useAuthStore = create<AuthStore>()(
           const token = getCookie('accessToken');
           set({ isLoggedIn: !!token });
         },
-        reset: () => {
+        resetAuthState: () => {
           set({
-            saveId: false,
             isLoggedIn: false,
           });
         },

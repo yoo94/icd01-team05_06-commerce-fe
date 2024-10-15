@@ -47,7 +47,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
                                         href={{
                                           pathname: '/search',
                                           query: {
-                                            productCategoryId: subItem.id,
+                                            category: subItem.id,
                                           },
                                         }}
                                         passHref
@@ -67,7 +67,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
                                   href={{
                                     pathname: '/search',
                                     query: {
-                                      productCategoryId: item.id,
+                                      category: item.id,
                                     },
                                   }}
                                   passHref
@@ -91,7 +91,7 @@ const HeaderMenubar = ({ mainMenu }: HeaderMenubarProps) => {
                 href={{
                   pathname: '/search',
                   query: {
-                    tag: menu.title,
+                    type: menu.type,
                   },
                 }}
                 passHref

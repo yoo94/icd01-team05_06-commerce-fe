@@ -26,12 +26,15 @@ const Header = async () => {
     },
     {
       title: '베스트 셀러',
+      type: 'BESTSELLER',
     },
     {
       title: '화제의 신간',
+      type: 'HOT_NEW',
     },
     {
       title: '추천 도서',
+      type: 'RECOMMEND',
     },
   ];
 

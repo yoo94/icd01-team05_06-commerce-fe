@@ -8,7 +8,7 @@ export type SearchResultProps = {
 
 const SearchResult = ({ books }: SearchResultProps) => {
   return (
-    <div className="space-y-4">
+    <div className="mb-10 space-y-4">
       {books.map((book) => {
         return <BookCard key={book.id} id={book.id} book={book} />;
       })}

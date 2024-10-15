@@ -17,6 +17,7 @@ import useAuthStore from '@/stores/use-auth-store';
 const UserInfoForm = () => {
   const router = useRouter();
   const { userSession, userInfoData, setUserInfoData, authToken, clearAuthToken } = useUserStore();
+  const { resetAuthState } = useAuthStore();
   const [isPostAddressModalOpen, setIsPostAddressModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -55,8 +56,9 @@ const UserInfoForm = () => {
   const handleDeleteAccount = async () => {
     try {
       await deleteUserAccount();
-      useUserStore.getState().reset();
-      useAuthStore.getState().reset();
+
+      resetAuthState();
+
       router.push('/');
     } catch (error) {
       console.error('Error deleting account:', error);

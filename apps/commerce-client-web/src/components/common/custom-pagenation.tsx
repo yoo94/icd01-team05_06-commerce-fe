@@ -55,9 +55,6 @@ const CustomPagination = ({
     groupSize,
   });
 
-  console.log('currentPage:', currentPage);
-  console.log('totalPage:', totalPage);
-
   return (
     <Pagination>
       <PaginationContent>
