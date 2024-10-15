@@ -52,13 +52,18 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
     setActiveItem(null);
   };
 
-  const toggleCategory = (index: number) => {
-    if (activeCategory === index) {
-      setActiveCategory(null);
-      setActiveItem(null);
+  const toggleCategory = (index: number, type?: string) => {
+    if (type) {
+      closeMenu();
+      router.push(`/search?type=${type}`);
     } else {
-      setActiveCategory(index);
-      setActiveItem(null); // Reset active item when switching categories
+      if (activeCategory === index) {
+        setActiveCategory(null);
+        setActiveItem(null);
+      } else {
+        setActiveCategory(index);
+        setActiveItem(null); // Reset active item when switching categories
+      }
     }
   };
 
@@ -128,7 +133,7 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
                 <div>
                   <button
                     className="w-full rounded-md p-2 text-left text-slate-700 hover:bg-slate-100"
-                    onClick={() => toggleCategory(index)}
+                    onClick={() => toggleCategory(index, menu.type)}
                   >
                     {menu.title}
                   </button>

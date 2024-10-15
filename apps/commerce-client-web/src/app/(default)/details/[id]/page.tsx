@@ -4,6 +4,7 @@ import RefundExchangePolicy from './components/refund-exchage-policy';
 import ReviewSection from './components/review/review-section';
 import { fetchProductById } from '@/app/actions/product-action';
 import ProductSummury from './components/product-summury';
+import MobilePurchaseActions from './components/mobile-purchase-actions';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -27,6 +28,8 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
         <ReviewSection id={book.id} />
         <RefundExchangePolicy />
       </div>
+
+      <MobilePurchaseActions book={book} />
     </div>
   );
 };
