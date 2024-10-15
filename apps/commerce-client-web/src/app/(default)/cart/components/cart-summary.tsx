@@ -19,15 +19,15 @@ const CartSummary = () => {
     const selectedItems = items.filter((item) => checkedItems.includes(item.productId));
 
     const totalItemPriceCalc = selectedItems
-      .reduce((acc, item) => acc + item.price * item.quantity, 0)
+      .reduce((acc, item) => acc + item.price, 0)
       .toLocaleString();
 
     const totalDiscountCalc = selectedItems
-      .reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0)
+      .reduce((acc, item) => acc + item.price - item.discountedPrice, 0)
       .toLocaleString();
 
     const finalPriceCalc = selectedItems
-      .reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0)
+      .reduce((acc, item) => acc + item.discountedPrice, 0)
       .toLocaleString();
 
     setTotalItemPrice(totalItemPriceCalc);

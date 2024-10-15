@@ -22,13 +22,13 @@ interface CartState {
 const useCartStore = create<CartState>((set, get) => {
   return {
     items: [],
-    checkedItems: [],
+    checkedItems: [JSON.parse(sessionStorage.getItem('selectedItems'))],
 
     // 서버에서 장바구니 항목을 가져옴
     fetchItems: async () => {
       try {
         const cartItems = await getCartItems();
-        set({ items: cartItems['products'], checkedItems: [] });
+        set({ items: cartItems['products'] });
       } catch (error) {
         console.error('Failed to fetch items:', error);
       }
