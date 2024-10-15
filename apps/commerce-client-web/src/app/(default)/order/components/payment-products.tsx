@@ -13,8 +13,8 @@ const PaymentProducts = ({ books }: PaymentProductsProps) => {
         <CardTitle className="border-b pb-5 text-base">주문 상품 정보</CardTitle>
       </CardHeader>
       <CardContent>
-        {books?.map((product, index) => (
-          <div key={`${product.id}-${index}`} className="mb-4 flex items-center space-x-4">
+        {books?.map((product) => (
+          <div key={`${product.id}`} className="mb-4 flex items-center space-x-4">
             {/* 상품 이미지 */}
             <Image
               src={product.coverImage}
