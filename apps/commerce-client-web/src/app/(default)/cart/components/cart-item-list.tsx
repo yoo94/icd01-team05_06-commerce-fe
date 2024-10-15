@@ -1,18 +1,43 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import useCartStore from '@/stores/use-cart-store';
-import CartItem from './cart-item';
 import { Checkbox } from '@/components/ui/checkbox';
+import CartItem from './cart-item';
+import useCartStore from '@/stores/use-cart-store';
+import { CheckedState } from '@radix-ui/react-checkbox';
+import { useWithLoading } from '@/components/common/with-loading-spinner';
 
-const CartItemList = ({}) => {
-  const { items, removeAllBook, toggleAllBooks } = useCartStore();
-  const allSelected = items.every((item) => item.selected);
+const CartItemList = () => {
+  const {
+    items,
+    checkedItems,
+    fetchItems,
+    toggleItemSelection,
+    selectAllItems,
+    removeCartItems,
+    updateQuantity,
+  } = useCartStore();
+  const withLoading = useWithLoading();
+
+  useEffect(() => {
+    withLoading(fetchItems);
+  }, [fetchItems]);
+
+  const allSelected = items.length > 0 && checkedItems.length === items.length;
+
+  const toBoolean = (checked: CheckedState): boolean => checked === true;
+
+  const handleClearCart = () => {
+    withLoading(async () => {
+      await Promise.all(items.map((item) => removeCartItems(item.shoppingCartId)));
+    });
+  };
 
   return (
     <div className="flex flex-col gap-y-5 overflow-x-auto">
-      <Button variant="secondary" className="self-end" onClick={removeAllBook}>
+      <Button variant="secondary" className="self-end" onClick={handleClearCart}>
         전체삭제
       </Button>
       <Table className="min-w-full divide-y divide-gray-200">
@@ -21,8 +46,10 @@ const CartItemList = ({}) => {
             <TableHead className="w-10">
               <Checkbox
                 checked={allSelected}
-                onCheckedChange={(checked: boolean) => toggleAllBooks(checked)}
-                className="fill-primary cursor-pointer"
+                onCheckedChange={(checked) =>
+                  withLoading(async () => selectAllItems(toBoolean(checked)))
+                }
+                className="cursor-pointer"
               />
             </TableHead>
             <TableHead className="whitespace-nowrap text-center">상품 정보</TableHead>
@@ -34,7 +61,18 @@ const CartItemList = ({}) => {
         </TableHeader>
         <TableBody>
           {items.map((item) => (
-            <CartItem key={item.id} item={item} />
+            <CartItem
+              key={item.shoppingCartId}
+              item={item}
+              checked={checkedItems.includes(item.productId)}
+              onCheckedChange={(checked) =>
+                withLoading(async () => toggleItemSelection(item.productId, toBoolean(checked)))
+              }
+              onRemoveItem={() => withLoading(() => removeCartItems(item.shoppingCartId))}
+              onChangeQuantity={(shoppingCartId, quantity) =>
+                updateQuantity(shoppingCartId, quantity)
+              }
+            />
           ))}
         </TableBody>
       </Table>

@@ -1,6 +1,7 @@
 interface MenuItem {
   title: string;
   link?: string;
+  id?: number;
   items?: MenuItem[];
 }
 
@@ -12,7 +13,7 @@ interface MenuCategory {
 interface MainMenu {
   title: string;
   categories?: MenuCategory[];
-  link?: string;
+  type?: string;
 }
 
 export type { MenuItem, MenuCategory, MainMenu };

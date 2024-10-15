@@ -1,76 +1,79 @@
-'use client';
-
-import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { usePaymentStore } from '@/stores/use-payment-store';
 
 const PaymentAgreement = () => {
-  const [agreeAll, setAgreeAll] = useState(false);
-  const [agreePersonal, setAgreePersonal] = useState(false);
-  const [agreePurchase, setAgreePurchase] = useState(false);
+  const agreementInfo = usePaymentStore((state) => state.agreementInfo);
+  const setAgreementInfo = usePaymentStore((state) => state.setAgreementInfo);
+  const paymentState = usePaymentStore((state) => state);
 
-  // 전체 동의 클릭 시
-  const handleAgreeAll = () => {
-    const newAgreeState = !agreeAll;
-    setAgreeAll(newAgreeState);
-    setAgreePersonal(newAgreeState);
-    setAgreePurchase(newAgreeState);
+  const handleAgreeAll = (checked: boolean | string) => {
+    const isChecked = checked === true;
+    setAgreementInfo({
+      termsOfService: isChecked,
+      privacyPolicy: isChecked,
+      ageVerification: true, // 항상 true로 고정
+    });
   };
 
-  // 개별 항목 선택 시 전체 동의 상태 업데이트
-  const handleIndividualAgree = (setAgreeFn: (val: boolean) => void, newVal: boolean) => {
-    setAgreeFn(newVal);
+  const handleIndividualAgree = (
+    type: 'termsOfService' | 'privacyPolicy',
+    checked: boolean | string,
+  ) => {
+    const isChecked = checked === true;
+    setAgreementInfo({ ...agreementInfo, [type]: isChecked });
+  };
 
-    // 모든 개별 항목이 선택되었는지 확인 후 전체 동의 상태 업데이트
-    if (newVal === false) {
-      setAgreeAll(false);
-    } else if (newVal === true && agreePersonal && agreePurchase) {
-      setAgreeAll(true);
-    }
+  const allAgreed = agreementInfo.termsOfService && agreementInfo.privacyPolicy;
+  const isButtonDisabled = !allAgreed;
+
+  const handlePayment = () => {
+    console.log('Payment Data:', paymentState);
   };
 
   return (
-    <Card className="bg-primary/10 w-full border shadow-md">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="border-b pb-5 text-base">동의 및 결제하기</CardTitle>
       </CardHeader>
       <CardContent>
-        {/* 전체 동의 */}
         <div className="mb-4 flex items-center">
-          <Checkbox id="agreeAll" checked={agreeAll} onCheckedChange={handleAgreeAll} />
+          <Checkbox
+            id="agreeAll"
+            checked={allAgreed}
+            onCheckedChange={(checked) => handleAgreeAll(checked)}
+          />
           <Label htmlFor="agreeAll" className="ml-2 text-base text-slate-600">
             전체 동의
           </Label>
         </div>
-
-        {/* 개인정보 수집 및 이용 동의 */}
         <div className="mb-2 ml-2 flex items-center">
           <Checkbox
-            id="agreePersonal"
-            checked={agreePersonal}
-            onCheckedChange={(checked: boolean) => handleIndividualAgree(setAgreePersonal, checked)}
+            id="termsOfService"
+            checked={agreementInfo.termsOfService}
+            onCheckedChange={(checked) => handleIndividualAgree('termsOfService', checked)}
           />
-          <Label htmlFor="agreePersonal" className="ml-2 text-sm text-slate-500">
+          <Label htmlFor="termsOfService" className="ml-2 text-sm text-slate-500">
             개인정보 수집 및 이용 동의
           </Label>
         </div>
-
-        {/* 구매조건 확인 및 결제 진행 동의 */}
         <div className="mb-4 ml-2 flex items-center">
           <Checkbox
-            id="agreePurchase"
-            checked={agreePurchase}
-            onCheckedChange={(checked: boolean) => handleIndividualAgree(setAgreePurchase, checked)}
+            id="privacyPolicy"
+            checked={agreementInfo.privacyPolicy}
+            onCheckedChange={(checked) => handleIndividualAgree('privacyPolicy', checked)}
           />
-          <Label htmlFor="agreePurchase" className="ml-2 text-sm text-slate-500">
+          <Label htmlFor="privacyPolicy" className="ml-2 text-sm text-slate-500">
             구매조건 확인 및 결제 진행에 동의
           </Label>
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full text-white">결제하기</Button>
+        <Button className="w-full" disabled={isButtonDisabled} onClick={handlePayment}>
+          결제하기
+        </Button>
       </CardFooter>
     </Card>
   );

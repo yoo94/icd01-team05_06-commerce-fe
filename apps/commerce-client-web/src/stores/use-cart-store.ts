@@ -1,78 +1,102 @@
+import create from 'zustand';
 import { CartItem } from '@/types/cart-types';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { Product } from '@/types/product-types';
+import {
+  getCartItems,
+  removeFromCart,
+  updateCartItemQuantity,
+  addToCart,
+} from '@/app/actions/cart-action';
 
-export interface CartState {
+interface CartState {
   items: CartItem[];
-  addBook: (book: Product, quantity?: number) => void;
-  removeBook: (id: number) => void;
-  removeAllBook: () => void;
-  updateBookQuantity: (id: number, selectNum: number) => void;
-  updateBookSelection: (id: number, selected: boolean) => void;
-  toggleAllBooks: (selected: boolean) => void;
-  getSelectedBook: () => CartItem[];
+  checkedItems: number[];
+  fetchItems: () => Promise<void>;
+  addItemToCart: (productId: number, quantity: number) => Promise<void>;
+  updateQuantity: (shoppingCartId: number, quantity: number) => Promise<void>;
+  toggleItemSelection: (itemId: number, isChecked: boolean) => void;
+  selectAllItems: (isChecked: boolean) => void;
+  removeCartItems: (shoppingCartId: number) => Promise<void>;
+  getSelectedBook: () => CartItem[]; // 선택된 책들을 반환하는 메서드
 }
 
-const useCartStore = create<CartState>()(
-  persist(
-    (set, get) => ({
-      items: [],
-      addBook: (book: Product, quantity: number = 1) =>
-        set((state) => {
-          // Check if the book already exists in the cart
-          if (!book || !book.id || !quantity) {
-            return state;
-          }
-          const existingBook = state.items.find((item) => item.id === book.id);
-          if (existingBook) {
-            // Increment the quantity if the book exists
-            return {
-              items: state.items.map((item) =>
-                item.id === book.id ? { ...item, selectNum: item.selectNum + quantity } : item,
-              ),
-            };
-          } else {
-            // Add a new book to the cart
-            return {
-              items: [
-                ...state.items,
-                {
-                  ...book,
-                  selectNum: quantity,
-                  selected: true,
-                  shippingInfo: '무료',
-                } as CartItem, // Ensure the new item is typed as CartItem
-              ],
-            };
-          }
-        }),
-      removeBook: (id: number) =>
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        })),
-      removeAllBook: () => set(() => ({ items: [] })),
-      updateBookQuantity: (id: number, selectNum: number) =>
-        set((state) => ({
-          items: state.items.map((item) => (item.id === id ? { ...item, selectNum } : item)),
-        })),
-      updateBookSelection: (id: number, selected: boolean) =>
-        set((state) => ({
-          items: state.items.map((item) => (item.id === id ? { ...item, selected } : item)),
-        })),
-      toggleAllBooks: (selected: boolean) =>
-        set((state) => ({
-          items: state.items.map((item) => ({ ...item, selected })),
-        })),
-      getSelectedBook: () => {
-        const state = get();
-        return state.items.filter((item) => item.selected);
-      },
-    }),
-    {
-      name: 'cart-storage', // This is the name of the localStorage key
+const useCartStore = create<CartState>((set, get) => {
+  return {
+    items: [],
+    checkedItems: [],
+
+    // 서버에서 장바구니 항목을 가져옴
+    fetchItems: async () => {
+      try {
+        const cartItems = await getCartItems();
+        set({ items: cartItems['products'], checkedItems: [] });
+      } catch (error) {
+        console.error('Failed to fetch items:', error);
+      }
     },
-  ),
-);
+
+    // 장바구니에 상품 추가
+    addItemToCart: async (productId, quantity) => {
+      try {
+        await addToCart(productId, quantity);
+      } catch (error) {
+        console.error('Failed to add item to cart:', error);
+      }
+    },
+
+    // 수량 업데이트 메서드
+    updateQuantity: async (shoppingCartId, quantity) => {
+      try {
+        await updateCartItemQuantity(shoppingCartId, quantity);
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.shoppingCartId === shoppingCartId ? { ...item, quantity } : item,
+          ),
+        }));
+      } catch (error) {
+        console.error('Failed to update quantity:', error);
+      }
+    },
+
+    // 개별 항목 선택 상태 변경
+    toggleItemSelection: (itemId, isChecked) => {
+      set((state) => ({
+        checkedItems: isChecked
+          ? [...state.checkedItems, itemId]
+          : state.checkedItems.filter((id) => id !== itemId),
+      }));
+    },
+
+    // 전체 선택/해제 메서드
+    selectAllItems: (isChecked) => {
+      set((state) => ({
+        checkedItems: isChecked ? state.items.map((item) => item.productId) : [],
+      }));
+    },
+
+    // 개별 장바구니 항목 삭제 메서드
+    removeCartItems: async (shoppingCartId) => {
+      try {
+        await removeFromCart(shoppingCartId);
+        set((state) => ({
+          items: state.items.filter((item) => item.shoppingCartId !== shoppingCartId),
+          checkedItems: state.checkedItems.filter(
+            (id) =>
+              !state.items.some(
+                (item) => item.shoppingCartId === shoppingCartId && item.productId === id,
+              ),
+          ),
+        }));
+      } catch (error) {
+        console.error('Failed to remove cart item:', error);
+      }
+    },
+
+    // 선택된 책들을 반환하는 메서드
+    getSelectedBook: () => {
+      const { items, checkedItems } = get();
+      return items.filter((item) => checkedItems.includes(item.productId));
+    },
+  };
+});
 
 export default useCartStore;

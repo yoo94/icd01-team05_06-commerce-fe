@@ -18,14 +18,6 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      {
-        source: '/external-auth/:path*',
-        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_AUTH_URL}/:path*`,
-      },
-      {
-        source: '/products/:path*',
-        destination: `${process.env.NEXT_PUBLIC_EXTERNAL_AUTH_URL}/:path*`,
-      },
     ];
   },
   experimental: {

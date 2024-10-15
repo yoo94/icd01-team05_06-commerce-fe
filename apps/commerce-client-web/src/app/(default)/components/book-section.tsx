@@ -11,16 +11,15 @@ import {
 } from '@/components/ui/carousel'; // Import Carousel components from shadcn/ui
 import Image from 'next/image';
 import Link from 'next/link';
-import { Book } from '@/types/book-types';
+import { SimplifiedProduct } from '@/types/product-types';
 
 interface BookSectionProps {
   title: string;
-  books: Book[];
+  books: SimplifiedProduct[];
 }
 
 const BookSection = ({ title, books }: BookSectionProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
-
   const [itemsPerView, setItemsPerView] = useState(5);
 
   const isMdScreen = useMediaQuery({ query: '(max-width: 768px)' });
@@ -58,14 +57,8 @@ const BookSection = ({ title, books }: BookSectionProps) => {
                         className="rounded-lg"
                       />
                     </Link>
-                    {book.category.subCategory?.subCategory && (
-                      <p className="mt-4 text-xs text-gray-500">
-                        {book.category.subCategory.subCategory.name} &gt;
-                        {book.category.subCategory.name} &gt; {book.category.name}
-                      </p>
-                    )}
+                    <p className="mt-4 text-xs text-gray-500">{book.categoryTitle}</p>
                     <p className="mt-1 text-sm font-semibold">
-                      {' '}
                       {book.title.length > 10 ? `${book.title.slice(0, 12)}...` : book.title}
                     </p>
                     <p className="mt-2 text-xs text-gray-500">

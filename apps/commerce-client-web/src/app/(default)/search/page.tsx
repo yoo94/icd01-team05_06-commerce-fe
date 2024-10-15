@@ -1,9 +1,7 @@
 import FilterComponent from './components/(filters)/filter-component';
-import SearchResult from './components/(searchResult)/search-result';
-import { filterBooksByCategoryName } from '@/lib/utils';
-import { productApi } from '@/lib/api';
-import { ApiResponse } from '@/types/api-types';
+import { fetchProducts } from '@/app/actions/product-action';
 import { ProductsResponse } from '@/types/product-types';
+import ProductList from './components/(searchResult)/product-list';
 
 interface SearchPageProps {
   searchParams: {
@@ -11,76 +9,36 @@ interface SearchPageProps {
     price?: string;
     publisher?: string;
     category?: string;
-    tag?: string;
+    type?: string;
+    page?: string;
+    size?: string;
   };
 }
 
-const defaultPage = 1;
-const defaultSize = 20;
-
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const booksData = await productApi
-    .get(`products?page=${defaultPage}&size=${defaultSize}`)
-    .json<ApiResponse<ProductsResponse>>();
+  const page = parseInt(searchParams.page || '1', 10);
+  const size = parseInt(searchParams.size || '20', 10);
 
-  // Apply filters based on search parameters
-  const searchWord = searchParams.word ?? '';
-  const priceRange = searchParams.price ?? '';
-  const selectedPublisher = searchParams.publisher ?? '';
-  const selectedCategory = searchParams.category ?? '';
-  // const selectedTag = searchParams.tag ?? '';
+  const booksData: ProductsResponse | null = await fetchProducts({
+    page,
+    size,
+    productCategoryId: searchParams.category ? parseInt(searchParams.category, 10) : undefined,
+    homeProductType: searchParams.type,
+    searchWord: searchParams.word,
+  });
 
-  let filteredBooks = booksData.data.products;
-
-  // Filter by search word
-  if (searchWord) {
-    filteredBooks = filteredBooks.filter((book) =>
-      book.title.toLowerCase().includes(searchWord.toLowerCase()),
-    );
-  }
-
-  // Filter by price range
-  if (priceRange) {
-    const [minPrice, maxPrice] = priceRange.split('-').map(Number);
-    filteredBooks = filteredBooks.filter((book) => {
-      const { discountedPrice } = book;
-      return discountedPrice >= minPrice && discountedPrice <= maxPrice;
-    });
-  }
-
-  // Filter by publisher
-  if (selectedPublisher) {
-    const publishers = selectedPublisher.split(',');
-    filteredBooks = filteredBooks.filter((book) => publishers.includes(book.publisher));
-  }
-
-  // Filter by category
-  if (selectedCategory) {
-    const selectedCategories = selectedCategory.split(',')[0];
-
-    filteredBooks = filterBooksByCategoryName(filteredBooks, selectedCategories);
-  }
-
-  // TODO: Product에는 tag가 없음
-  // Filter by tag
-  // if (selectedTag) {
-  //   const tags = selectedTag.split(',');
-  //   filteredBooks = filteredBooks.filter((book) => tags.some((tag) => book.tags.includes(tag)));
-  // }
+  const filteredBooks = booksData?.products ?? [];
+  const pagination = booksData?.pagination;
 
   return (
     <div className="flex">
-      {/* Sidebar with filters */}
       <div className="hidden w-1/5 p-4 lg:block">
         <FilterComponent books={filteredBooks} />
       </div>
 
-      {/* Main content area */}
       <div className="w-full p-4 lg:w-4/5">
         <h1 className="mb-4 text-xl font-bold">상품 목록</h1>
-
-        {/* Render the search results */}
-        <SearchResult books={filteredBooks} />
+        <ProductList books={filteredBooks} pagination={pagination} />
       </div>
     </div>
   );
