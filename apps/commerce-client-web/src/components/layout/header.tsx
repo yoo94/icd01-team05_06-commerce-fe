@@ -9,24 +9,20 @@ import TopBar from './top-bar';
 import SearchBar from './search-bar';
 import { transformServerCategories } from '@/lib/utils';
 import { MainMenu, MenuCategory } from '@/types/menu-types';
+import { fetchCategories } from '@/app/actions/product-action';
 import { Category } from '@/types/category-types';
-import { productApi } from '@/lib/api';
-import { ApiResponse } from '@/types/api-types';
 
 const Header = async () => {
-  const serverData = await productApi.get('categories').json<ApiResponse<Category>>();
+  // Fetch categories from the server
+  const categories: Category[] = await fetchCategories();
 
-  // 서버로부터 카테고리 데이터를 받아오지 못한 경우
-  if (!serverData.success || !serverData.data) {
-    return null;
-  }
-
-  const categories: MenuCategory[] = transformServerCategories(serverData.data);
+  // Transform the categories into a structure usable for the menu
+  const menuCategories: MenuCategory[] = transformServerCategories(categories);
 
   const mainMenu: MainMenu[] = [
     {
       title: '전체 카테고리',
-      categories: categories,
+      categories: menuCategories, // Add transformed categories to the main menu
     },
     {
       title: '베스트 셀러',

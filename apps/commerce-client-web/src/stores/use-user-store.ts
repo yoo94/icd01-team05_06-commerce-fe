@@ -14,7 +14,7 @@ export interface UserInfoFormData {
 interface UserState {
   userSession: UserSession | null;
   userInfoData: UserInfoFormData;
-  authToken: string;
+  authToken: string | null;
   setUserSession: (session: UserSession) => void;
   setUserInfoData: (data: Partial<UserInfoFormData>) => void;
   setAuthToken: (token: string) => void;
@@ -36,12 +36,9 @@ export const useUserStore = create<UserState>()(
         streetAddress: '',
         detailAddress: '',
       },
-      authToken: '',
+      authToken: null,
 
-      // Function to set user session
       setUserSession: (session: UserSession) => set({ userSession: session }),
-
-      // Function to set user info data
       setUserInfoData: (data) =>
         set((state) => ({
           userInfoData: {
@@ -49,14 +46,9 @@ export const useUserStore = create<UserState>()(
             ...data,
           },
         })),
-
-      // Function to set auth token
       setAuthToken: (token: string) => set({ authToken: token }),
 
-      // Function to clear user session
       clearUserSession: () => set({ userSession: null }),
-
-      // Function to clear user info data
       clearUserInfoData: () =>
         set({
           userInfoData: {
@@ -68,11 +60,8 @@ export const useUserStore = create<UserState>()(
             detailAddress: '',
           },
         }),
-
-      // Function to clear auth token
       clearAuthToken: () => set({ authToken: '' }),
 
-      // Reset function to clear all state
       reset: () =>
         set({
           userSession: null,
@@ -84,7 +73,7 @@ export const useUserStore = create<UserState>()(
             streetAddress: '',
             detailAddress: '',
           },
-          authToken: '',
+          authToken: null,
         }),
     }),
     {

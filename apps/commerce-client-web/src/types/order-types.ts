@@ -3,13 +3,11 @@ import type { Pagination } from '@/types/pagination-types';
 
 export const OrderStatus = {
   ALL: 'ALL',
-  PENDING: 'PENDING',
-  PROCESSING: 'PROCESSING',
-  SHIPPED: 'SHIPPED',
-  DELIVERED: 'DELIVERED',
+  COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
-  REFUND: 'REFUND',
-  EXCHANGE: 'EXCHANGE',
+  SHIPPING: 'SHIPPING',
+  DELIVERED: 'DELIVERED',
+  REFUNDED: 'REFUNDED',
 } as const;
 
 export type OrderStatus = Enum<typeof OrderStatus>;
@@ -47,4 +45,54 @@ export interface Order {
 export interface OrdersResponse {
   products: Order[];
   paginationInfo: Pagination;
+}
+
+export interface Orderer {
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
+export interface OrderProduct {
+  id: number;
+  title: string;
+  author: string;
+  publisher: string;
+  coverImage: string;
+  quantity: number;
+  price: number;
+  discountedPrice: number;
+}
+
+export interface DeliveryInfo {
+  recipient: string;
+  phoneNumber: string;
+  postalCode: string;
+  streetAddress: string;
+  detailAddress: string;
+  memo: string;
+}
+
+export const PaymentMethod = {
+  CREDIT_CARD: 'CREDIT_CARD',
+} as const;
+
+export type PaymentMethod = Enum<typeof PaymentMethod>;
+
+export interface PaymentInfo {
+  method: PaymentMethod;
+  depositorName: string;
+  price: number;
+  discountedPrice: number;
+}
+
+export interface DetailOrder {
+  id: number;
+  orderNumber: string;
+  orderDate: string;
+  orderer: Orderer;
+  products: OrderProduct[];
+  deliveryInfo: DeliveryInfo;
+  paymentInfo: PaymentInfo;
+  orderStatus: OrderStatus;
 }

@@ -12,7 +12,7 @@ interface PasswordConfirmationFormProps {
 }
 
 const PasswordConfirmationForm = ({ onPasswordVerified }: PasswordConfirmationFormProps) => {
-  const methods = useForm<{ password: string }>(); // Initialize useForm and store it in methods
+  const methods = useForm<{ password: string }>();
   const {
     register,
     handleSubmit,
