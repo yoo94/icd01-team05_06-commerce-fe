@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import Link from 'next/link';
 
 interface OrderTableProps {
   orders: Order[];
@@ -41,7 +42,11 @@ const OrderTable = ({ orders }: OrderTableProps) => {
         <TableBody>
           {orders.map((order) => (
             <TableRow key={order.orderNumber} className="text-center text-xs">
-              <TableCell className="hidden truncate md:table-cell">{order.orderNumber}</TableCell>
+              <TableCell className="hidden truncate md:table-cell">
+                <Link className="text-blue-700" href={`/me/orders/${order.orderNumber}`}>
+                  {order.orderNumber}
+                </Link>
+              </TableCell>
               <TableCell>{formatDate(order.orderDate)}</TableCell>
               <TableCell className="truncate">{order.content}</TableCell>
               <TableCell className="truncate">{order.price.toLocaleString()}원</TableCell>
