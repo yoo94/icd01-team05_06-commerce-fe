@@ -9,7 +9,7 @@ import OrderPaymentMethod from '@/app/(default)/order/components/payment-method'
 import PaymentAgreement from '@/app/(default)/order/components/payment-agreement';
 import { useWithLoading } from '@/components/common/with-loading-spinner';
 import { usePaymentStore } from '@/stores/use-payment-store';
-import { searchBooks } from '@/app/actions/order-action';
+import { fetchProductById } from '@/app/actions/product-action';
 
 const PaymentPage = () => {
   const { fetchItems, items } = useCartStore();
@@ -32,7 +32,7 @@ const PaymentPage = () => {
         const fetchSelectedBooks = async () => {
           const books = await Promise.all(
             selectedIds.map(async (productId: number) => {
-              const book = await searchBooks(productId);
+              const book = await fetchProductById(productId);
               const bookWithQuantity = {
                 ...book,
                 quantity: 1,
