@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import StarRating from '@/components/common/star-rating';
 import RefundExchangePolicy from './components/refund-exchage-policy';
-import { productApi } from '@/lib/api';
-import { ApiResponse } from '@/types/api-types';
-import { Product } from '@/types/product-types';
+
 import ReviewSection from './components/review/review-section';
+import { fetchProductById } from '@/app/actions/product-action';
+import DetailButtonActions from './components/detail-button-actions';
 
 interface BookDetailsPageProps {
   params: { id: string };
@@ -19,24 +19,18 @@ interface BookDetailsPageProps {
 const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
   const bookId = parseInt(params.id, 10);
 
-  // Fetch Book Data from the API
-  const response = await productApi(`books/${bookId}`).json<ApiResponse<Product>>();
-  const book = response.data;
-
-  if (!book) {
-    return <div>책 정보를 찾을 수 없습니다.</div>;
-  }
+  const book = await fetchProductById(bookId);
 
   const originalPrice = parseAndRoundPrice(book.price);
   const discountedPrice = parseAndRoundPrice(book.discountedPrice);
-  const discountRate = calculationDiscountRate(book.price, book.price - book.discountedPrice);
+  const discountRate = calculationDiscountRate(book.price, book.discountedPrice);
 
   return (
     <div className="mx-auto max-w-5xl p-4">
       <Breadcrumb category={book.category} />
       <div className="flex">
         {/* Book Image Section */}
-        <div className="w-1/3">
+        <div className="flex w-1/3 flex-col gap-y-4">
           <div className="relative h-48 md:h-80">
             <Image
               src={book.coverImage}
@@ -104,7 +98,9 @@ const BookDetailsPage = async ({ params }: BookDetailsPageProps) => {
         </div>
 
         {/* Cart Actions Section */}
-        <div className="ml-6 w-1/4">{/*<DetailButtonActions book={book} />*/}</div>
+        <div className="ml-6 w-1/4">
+          <DetailButtonActions book={book} />
+        </div>
       </div>
 
       {/* Bottom Section */}

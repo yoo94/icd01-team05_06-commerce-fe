@@ -1,7 +1,12 @@
 import { externalApi } from '@/lib/api';
 import { ApiResponse } from '@/types/api-types';
 import { Category } from '@/types/category-types';
-import { FetchProductsParams, HomePageData, ProductsResponse } from '@/types/product-types';
+import {
+  FetchProductsParams,
+  HomePageData,
+  Product,
+  ProductsResponse,
+} from '@/types/product-types';
 
 export const fetchHomePageBooks = async (): Promise<HomePageData> => {
   const response = await externalApi
@@ -65,6 +70,18 @@ export const fetchProducts = async ({
 
   if (!response.success || !response.data) {
     throw new Error(response.error?.message);
+  }
+
+  return response.data;
+};
+
+export const fetchProductById = async (productId: number): Promise<Product> => {
+  const response = await externalApi
+    .get(`product/v1/products/${productId}`)
+    .json<ApiResponse<Product>>();
+
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to fetch product details');
   }
 
   return response.data;
