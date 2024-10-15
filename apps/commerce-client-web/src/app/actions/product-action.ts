@@ -66,8 +66,6 @@ export const fetchProducts = async ({
     .get(`product/v1/products?${queryParams.toString()}`)
     .json<ApiResponse<ProductsResponse>>();
 
-  console.log(response);
-
   if (!response.success || !response.data) {
     throw new Error(response.error?.message);
   }
