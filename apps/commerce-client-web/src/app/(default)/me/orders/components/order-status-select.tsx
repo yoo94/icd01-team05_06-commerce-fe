@@ -1,6 +1,6 @@
 'use client';
 
-import { OrderStatus } from '@/types/order-types';
+import { orderStatusLabels } from '@/lib/labels';
 import { useOrdersStore } from '@/stores/use-orders-store';
 import {
   Select,
@@ -14,15 +14,6 @@ import {
 const OrderStatusSelect = () => {
   const { orderStatus, changeOrderStatus } = useOrdersStore();
 
-  const orderStatusTitles: Record<OrderStatus, string> = {
-    [OrderStatus.ALL]: '전체',
-    [OrderStatus.COMPLETED]: '주문 완료',
-    [OrderStatus.CANCELLED]: '주문 취소',
-    [OrderStatus.SHIPPING]: '배송중',
-    [OrderStatus.DELIVERED]: '배송 완료',
-    [OrderStatus.REFUNDED]: '환불',
-  };
-
   return (
     <Select value={orderStatus} onValueChange={changeOrderStatus}>
       <SelectTrigger className="md:w-[120px]">
@@ -30,7 +21,7 @@ const OrderStatusSelect = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {Object.entries(orderStatusTitles).map(([key, label]) => (
+          {Object.entries(orderStatusLabels).map(([key, label]) => (
             <SelectItem key={key} value={key}>
               {label}
             </SelectItem>
