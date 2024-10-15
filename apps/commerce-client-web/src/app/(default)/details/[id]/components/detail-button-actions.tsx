@@ -41,10 +41,10 @@ const DetailButtonActions = ({ book }: CartActionsProps) => {
           +
         </button>
       </div>
-      {/* AddToCartButton에 로컬 상태 quantity를 전달 */}
-      <AddToCartButton book={book} quantity={quantity} />
-      <PaymentAddButton text={'바로구매'} book={book} />
-      {/* <Button className="mt-2.5 w-full">바로구매</Button> */}
+      <div className="flex flex-col gap-y-2">
+        <AddToCartButton book={book} quantity={quantity} />
+        <PaymentAddButton text={'바로구매'} book={book} />
+      </div>
     </div>
   );
 };

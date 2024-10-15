@@ -25,7 +25,7 @@ const NewReviewForm = ({ onSubmit }: NewReviewFormProps) => {
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 border-y py-4">
       <h2 className="mb-4 text-lg font-semibold">리뷰 작성하기</h2>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-4">

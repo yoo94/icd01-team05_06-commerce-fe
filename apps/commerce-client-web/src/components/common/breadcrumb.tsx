@@ -1,20 +1,20 @@
-import { BookCategory } from '@/types/book-types';
+import { ProductCategory } from '@/types/product-types';
 import Link from 'next/link';
 
 interface BreadcrumbProps {
-  category: BookCategory;
+  category: ProductCategory;
 }
 
 const Breadcrumb = ({ category }: BreadcrumbProps) => {
   // Helper function to extract all category levels
-  const getCategoryPath = (category: BookCategory): BookCategory[] => {
-    const path: BookCategory[] = [];
-    let currentCategory: BookCategory | undefined = category;
+  const getCategoryPath = (category: ProductCategory): ProductCategory[] => {
+    const path: ProductCategory[] = [];
+    let currentCategory: ProductCategory | undefined = category;
 
     // Traverse through the category hierarchy to build the path
     while (currentCategory) {
       path.unshift(currentCategory);
-      currentCategory = currentCategory.subCategory;
+      currentCategory = currentCategory.parentCategory;
     }
 
     return path;
