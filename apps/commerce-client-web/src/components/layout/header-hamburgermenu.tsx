@@ -7,6 +7,7 @@ import Link from 'next/link';
 import useAuthStore from '@/stores/use-auth-store';
 import { logout } from '@/app/actions/auth-action';
 import { usePathname, useRouter } from 'next/navigation';
+import { useUserStore } from '@/stores/use-user-store';
 
 interface HamburgerMenuProps {
   mainMenu: MainMenu[];
@@ -15,7 +16,8 @@ interface HamburgerMenuProps {
 const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isLoggedIn, setLoginState } = useAuthStore();
+  const { isLoggedIn, resetAuthState } = useAuthStore();
+  const { resetUserState } = useUserStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
@@ -28,8 +30,12 @@ const HamburgerMenu = ({ mainMenu }: HamburgerMenuProps) => {
   const handleLogout = async () => {
     try {
       await logout();
+
+      resetAuthState();
+      resetUserState();
+
       router.push('/');
-      setLoginState(false);
+
       closeMenu();
     } catch (error) {
       console.error('Error during logout:', error);

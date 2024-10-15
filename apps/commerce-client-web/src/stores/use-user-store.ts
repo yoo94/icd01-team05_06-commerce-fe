@@ -21,7 +21,7 @@ interface UserState {
   clearUserSession: () => void;
   clearUserInfoData: () => void;
   clearAuthToken: () => void;
-  reset: () => void; // Add reset function to clear all user data
+  resetUserState: () => void; // Add reset function to clear all user data
 }
 
 export const useUserStore = create<UserState>()(
@@ -62,7 +62,7 @@ export const useUserStore = create<UserState>()(
         }),
       clearAuthToken: () => set({ authToken: '' }),
 
-      reset: () =>
+      resetUserState: () =>
         set({
           userSession: null,
           userInfoData: {
