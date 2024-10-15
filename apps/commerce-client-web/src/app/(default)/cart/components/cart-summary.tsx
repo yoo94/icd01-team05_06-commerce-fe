@@ -18,34 +18,16 @@ const CartSummary = () => {
   useEffect(() => {
     const selectedItems = items.filter((item) => checkedItems.includes(item.productId));
 
-    const safeParseNumber = (value: number | string | undefined) => {
-      const parsedValue = Number(value);
-      return isNaN(parsedValue) ? 0 : parsedValue;
-    };
-
     const totalItemPriceCalc = selectedItems
-      .reduce((acc, item) => acc + safeParseNumber(item.price) * item.quantity, 0)
+      .reduce((acc, item) => acc + item.price * item.quantity, 0)
       .toLocaleString();
 
     const totalDiscountCalc = selectedItems
-      .reduce(
-        (acc, item) =>
-          acc +
-          safeParseNumber(safeParseNumber(item.price) - safeParseNumber(item.discountedPrice)) *
-            item.quantity,
-        0,
-      )
+      .reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0)
       .toLocaleString();
 
     const finalPriceCalc = selectedItems
-      .reduce(
-        (acc, item) =>
-          acc +
-          (safeParseNumber(item.price) -
-            safeParseNumber(item.price - safeParseNumber(item.discountedPrice))) *
-            item.quantity,
-        0,
-      )
+      .reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0)
       .toLocaleString();
 
     setTotalItemPrice(totalItemPriceCalc);

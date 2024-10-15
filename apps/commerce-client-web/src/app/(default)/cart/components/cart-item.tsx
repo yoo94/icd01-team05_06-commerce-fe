@@ -24,21 +24,16 @@ const CartItem: React.FC<CartItemProps> = ({
 }) => {
   const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
   const [totalPrice, setTotalPrice] = useState(
-    (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString(),
+    (item.discountedPrice * item.quantity).toLocaleString(),
   );
-
-  const safeParseNumber = (value: number | string) => {
-    const parsedValue = Number(value);
-    return isNaN(parsedValue) ? 0 : parsedValue;
-  };
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
     if (value < 1) value = 1;
 
     setInputQuantity(value);
-    setTotalPrice((safeParseNumber(item.discountedPrice) * value).toLocaleString()); // 즉시 가격 계산
-    onChangeQuantity(item.shoppingCartId, value); // 변경된 수량 전달
+    setTotalPrice((item.discountedPrice * value).toLocaleString());
+    onChangeQuantity(item.shoppingCartId, value);
   };
 
   return (
