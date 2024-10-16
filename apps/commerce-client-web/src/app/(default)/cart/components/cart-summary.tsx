@@ -39,17 +39,13 @@ const CartSummary = () => {
     if (Number(finalPrice.replace(/,/g, '')) === 0) {
       setShowAlertDialog(true);
     } else {
-      const products = checkedItems.map((productId) => ({
-        productId,
-        quantity: 1, // 여기에 각 상품의 수량을 지정
-      }));
+      const selectedItems = items.filter((item) => checkedItems.includes(item.productId));
 
-      const orderData = JSON.stringify(products);
+      const queryString = selectedItems
+        .map((item) => `productId=${item.productId}&quantity=${item.quantity}`)
+        .join('&');
 
-      router.push({
-        pathname: '/order',
-        query: { orderData }, // 문자열로 변환된 JSON을 쿼리로 전달
-      });
+      router.push(`/order?${queryString}`);
     }
   };
 

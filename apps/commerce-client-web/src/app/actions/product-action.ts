@@ -5,6 +5,7 @@ import {
   FetchProductsParams,
   HomePageData,
   Product,
+  ProductsOrderResponse,
   ProductsResponse,
 } from '@/types/product-types';
 import { getHeadersWithToken } from '@/app/actions/utils/action-helper';
@@ -84,23 +85,19 @@ export const fetchProductById = async (productId: number): Promise<Product> => {
 
 export const getProductForOrder = async (orderData: {
   products: { productId: number; quantity: number }[];
-}): Promise<ProductsResponse> => {
-  // 인증 토큰을 포함한 헤더 가져오기
+}): Promise<ProductsOrderResponse> => {
   const headers = await getHeadersWithToken();
 
   if (!headers) {
     throw new Error('No token found');
   }
-
-  // 주문 전 상품 조회 API 요청
   const response = await api
     .post('product/v1/products/order/before', {
-      json: orderData,
+      body: JSON.stringify(orderData),
       headers,
     })
-    .json<ApiResponse<ProductsResponse>>();
+    .json<ApiResponse<ProductsOrderResponse>>();
 
-  // 응답 검증
   if (!response.success || !response.data) {
     throw new Error(response.error?.message || 'Failed to fetch products before order');
   }
