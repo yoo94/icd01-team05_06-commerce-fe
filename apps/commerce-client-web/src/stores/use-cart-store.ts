@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { CartItem } from '@/types/cart-types';
 import {
   getCartItems,
@@ -19,9 +19,13 @@ interface CartState {
 }
 
 const useCartStore = create<CartState>((set, _get) => {
+  const initialCheckedItems =
+    typeof window !== 'undefined'
+      ? JSON.parse(sessionStorage.getItem('selectedItems') || '[]')
+      : [];
   return {
     items: [],
-    checkedItems: JSON.parse(sessionStorage.getItem('selectedItems') || '[]'),
+    checkedItems: initialCheckedItems,
 
     // 서버에서 장바구니 항목을 가져옴
     fetchItems: async () => {
