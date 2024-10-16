@@ -7,6 +7,7 @@ import {
   Product,
   ProductsResponse,
 } from '@/types/product-types';
+import { getHeadersWithToken } from '@/app/actions/utils/action-helper';
 
 export const fetchHomePageBooks = async (): Promise<HomePageData> => {
   const response = await api.get('product/v1/home/products ').json<ApiResponse<HomePageData>>();
@@ -76,6 +77,32 @@ export const fetchProductById = async (productId: number): Promise<Product> => {
 
   if (!response.success || !response.data) {
     throw new Error(response.error?.message || 'Failed to fetch product details');
+  }
+
+  return response.data;
+};
+
+export const getProductForOrder = async (orderData: {
+  products: { productId: number; quantity: number }[];
+}): Promise<ProductsResponse> => {
+  // 인증 토큰을 포함한 헤더 가져오기
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+
+  // 주문 전 상품 조회 API 요청
+  const response = await api
+    .post('product/v1/products/order/before', {
+      json: orderData,
+      headers,
+    })
+    .json<ApiResponse<ProductsResponse>>();
+
+  // 응답 검증
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to fetch products before order');
   }
 
   return response.data;

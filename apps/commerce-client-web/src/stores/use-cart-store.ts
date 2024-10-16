@@ -16,13 +16,12 @@ interface CartState {
   toggleItemSelection: (itemId: number, isChecked: boolean) => void;
   selectAllItems: (isChecked: boolean) => void;
   removeCartItems: (shoppingCartId: number) => Promise<void>;
-  getSelectedBook: () => CartItem[]; // 선택된 책들을 반환하는 메서드
 }
 
-const useCartStore = create<CartState>((set, get) => {
+const useCartStore = create<CartState>((set, _get) => {
   return {
     items: [],
-    checkedItems: [JSON.parse(sessionStorage.getItem('selectedItems'))],
+    checkedItems: JSON.parse(sessionStorage.getItem('selectedItems') || '[]'),
 
     // 서버에서 장바구니 항목을 가져옴
     fetchItems: async () => {
@@ -89,12 +88,6 @@ const useCartStore = create<CartState>((set, get) => {
       } catch (error) {
         console.error('Failed to remove cart item:', error);
       }
-    },
-
-    // 선택된 책들을 반환하는 메서드
-    getSelectedBook: () => {
-      const { items, checkedItems } = get();
-      return items.filter((item) => checkedItems.includes(item.productId));
     },
   };
 });

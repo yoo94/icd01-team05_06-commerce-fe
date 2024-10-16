@@ -39,8 +39,17 @@ const CartSummary = () => {
     if (Number(finalPrice.replace(/,/g, '')) === 0) {
       setShowAlertDialog(true);
     } else {
-      sessionStorage.setItem('selectedItems', JSON.stringify(checkedItems));
-      router.push('/order');
+      const products = checkedItems.map((productId) => ({
+        productId,
+        quantity: 1, // 여기에 각 상품의 수량을 지정
+      }));
+
+      const orderData = JSON.stringify(products);
+
+      router.push({
+        pathname: '/order',
+        query: { orderData }, // 문자열로 변환된 JSON을 쿼리로 전달
+      });
     }
   };
 

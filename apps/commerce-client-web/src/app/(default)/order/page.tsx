@@ -12,22 +12,15 @@ import { usePaymentStore } from '@/stores/use-payment-store';
 import { fetchProductById } from '@/app/actions/product-action';
 
 const PaymentPage = () => {
-  const { fetchItems, items } = useCartStore();
+  const { items, checkedItems } = useCartStore();
   const { setSelectedBooks, selectedBooks } = usePaymentStore();
   const withLoading = useWithLoading();
 
   useEffect(() => {
     withLoading(async () => {
-      await fetchItems();
-    });
-  }, []);
-
-  useEffect(() => {
-    withLoading(async () => {
       setSelectedBooks([]);
-      const storedSelectedItems = sessionStorage.getItem('selectedItems');
-      if (storedSelectedItems) {
-        const selectedIds = JSON.parse(storedSelectedItems);
+      if (checkedItems) {
+        const selectedIds = checkedItems;
 
         const fetchSelectedBooks = async () => {
           const books = await Promise.all(
