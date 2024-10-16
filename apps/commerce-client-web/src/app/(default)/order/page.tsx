@@ -7,17 +7,20 @@ import OrderPaymentMethod from '@/app/(default)/order/components/payment-method'
 import PaymentAgreement from '@/app/(default)/order/components/payment-agreement';
 
 interface OrderPageProps {
-  searchParams: { productId: string[]; quantity: string[] };
+  searchParams: { productId: string | string[]; quantity: string | string[] };
 }
 
+const toArray = (value: string | string[]): string[] => (Array.isArray(value) ? value : [value]);
+
 const PaymentPage = async ({ searchParams }: OrderPageProps) => {
-  // URL 쿼리 파라미터에서 상품 ID와 수량을 받아 API 요청 준비
-  const products = searchParams.productId.map((id, index) => ({
+  const productIds = toArray(searchParams.productId);
+  const quantities = toArray(searchParams.quantity);
+
+  const products = productIds.map((id, index) => ({
     productId: parseInt(id),
-    quantity: parseInt(searchParams.quantity[index]),
+    quantity: parseInt(quantities[index] || '1'),
   }));
 
-  // 서버에서 API 호출
   const productResponse = await getProductForOrder({ products });
 
   return (
