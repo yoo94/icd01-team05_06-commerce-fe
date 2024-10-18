@@ -1,5 +1,4 @@
-'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -22,17 +21,9 @@ const CartItem: React.FC<CartItemProps> = ({
   onChangeQuantity,
   onRemoveItem,
 }) => {
-  const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
-  const [totalPrice, setTotalPrice] = useState(
-    (item.discountedPrice * item.quantity).toLocaleString(),
-  );
-
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
     if (value < 1) value = 1;
-
-    setInputQuantity(value);
-    setTotalPrice((item.discountedPrice * value).toLocaleString());
     onChangeQuantity(item.shoppingCartId, value);
   };
 
@@ -54,13 +45,15 @@ const CartItem: React.FC<CartItemProps> = ({
       <TableCell className="text-left">
         <Input
           type="number"
-          value={inputQuantity}
+          value={item.quantity}
           min={1}
           className="w-20 rounded border text-center"
           onChange={handleQuantityChange}
         />
       </TableCell>
-      <TableCell className="w-32 whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>
+      <TableCell className="w-32 whitespace-nowrap text-center font-bold">
+        {item.discountedPrice.toLocaleString()}원
+      </TableCell>
       <TableCell className="text-center">{item.shippingInfo || '무료'}</TableCell>
       <TableCell className="text-center">
         <Button

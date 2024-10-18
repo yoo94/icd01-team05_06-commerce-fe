@@ -16,10 +16,10 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const router = useRouter();
   const { addItemToCart } = useCartStore();
   const [showDialog, setShowDialog] = useState(false);
+  const queryString = `productId=${book?.id}&quantity=${1}`;
 
-  const buyOnlyOneBook = (book: Product) => {
-    sessionStorage.setItem('selectedItems', JSON.stringify([book.id]));
-    router.push('/order');
+  const buyOnlyOneBook = () => {
+    router.push(`/order?${queryString}`);
   };
 
   const goPayment = (e: { stopPropagation: () => void }) => {
@@ -31,15 +31,19 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
     }
 
     const currentPath = window.location.pathname;
-    const selectedProducts = JSON.parse(sessionStorage.getItem('selectedItems') || '[]');
+    /**
+     * todo
+     * 장바구니 상품조회를 여기에하면 너무 많은 리소스를 차지해서 추후에 다시 구현해보겠습니다.
+     */
+    const selectedProducts = [];
 
     if (currentPath === '/cart' && selectedProducts.length > 0) {
-      router.push('/order');
+      router.push(`/order?${queryString}`);
     } else if (book) {
       if (selectedProducts.length > 0) {
         setShowDialog(true);
       } else {
-        buyOnlyOneBook(book);
+        buyOnlyOneBook();
       }
     } else {
       alert('상품을 선택해주세요.');
@@ -56,7 +60,7 @@ const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const handleDialogBuyJustOne = () => {
     setShowDialog(false);
     if (!book || !book.id) return;
-    buyOnlyOneBook(book);
+    buyOnlyOneBook();
   };
 
   const handleDialogCancel = () => {

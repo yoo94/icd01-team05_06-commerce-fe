@@ -23,7 +23,7 @@ const CartItemList = () => {
 
   useEffect(() => {
     withLoading(fetchItems);
-  }, [fetchItems]);
+  }, [fetchItems, updateQuantity]);
 
   const allSelected = items.length > 0 && checkedItems.length === items.length;
 
@@ -34,7 +34,11 @@ const CartItemList = () => {
       await Promise.all(items.map((item) => removeCartItems(item.shoppingCartId)));
     });
   };
-
+  const handleChangeQuantity = async (shoppingCartId: number, quantity: number) => {
+    // 수량 업데이트 로직 후 fetchItems 호출
+    await updateQuantity(shoppingCartId, quantity);
+    withLoading(fetchItems); // 수량 변경 후 아이템들을 다시 가져옴
+  };
   return (
     <div className="flex flex-col gap-y-5 overflow-x-auto">
       <Button variant="secondary" className="self-end" onClick={handleClearCart}>
@@ -69,9 +73,7 @@ const CartItemList = () => {
                 withLoading(async () => toggleItemSelection(item.productId, toBoolean(checked)))
               }
               onRemoveItem={() => withLoading(() => removeCartItems(item.shoppingCartId))}
-              onChangeQuantity={(shoppingCartId, quantity) =>
-                updateQuantity(shoppingCartId, quantity)
-              }
+              onChangeQuantity={handleChangeQuantity}
             />
           ))}
         </TableBody>

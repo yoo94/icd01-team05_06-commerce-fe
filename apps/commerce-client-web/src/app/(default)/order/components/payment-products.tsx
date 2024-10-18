@@ -29,9 +29,7 @@ const PaymentProducts = ({ books }: PaymentProductsProps) => {
             <div className="flex grow items-center justify-between gap-x-4">
               <p className="flex-1 text-sm font-extralight">{product.title}</p>
               <p className="text-sm">{product.quantity}개</p>
-              <p className="font-bold">
-                {Number(product.discountedPrice * product.quantity).toLocaleString()}원
-              </p>
+              <p className="font-bold">{product.discountedPrice.toLocaleString()}원</p>
             </div>
           </div>
         ))}

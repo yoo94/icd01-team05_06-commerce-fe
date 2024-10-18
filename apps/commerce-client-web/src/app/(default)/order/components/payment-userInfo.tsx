@@ -1,3 +1,4 @@
+'use client';
 import { getUserInfo } from '@/app/actions/auth-action';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,21 +13,19 @@ const PaymentUserInfo = () => {
   const setUserInfo = usePaymentStore((state) => state.setUserInfo);
 
   useEffect(() => {
-    if (authToken) {
-      const fetchUserInfo = async () => {
-        try {
-          const fetchedUserInfo = await getUserInfo();
-          setUserInfo({
-            name: fetchedUserInfo.name,
-            phone: fetchedUserInfo.phone,
-            email: fetchedUserInfo.email,
-          });
-        } catch (error) {
-          console.error('Error fetching user info:', error);
-        }
-      };
-      fetchUserInfo();
-    }
+    const fetchUserInfo = async () => {
+      try {
+        const fetchedUserInfo = await getUserInfo();
+        setUserInfo({
+          name: fetchedUserInfo.name,
+          phone: fetchedUserInfo.phone,
+          email: fetchedUserInfo.email,
+        });
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo();
   }, [authToken, setUserInfo]);
 
   const onUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {

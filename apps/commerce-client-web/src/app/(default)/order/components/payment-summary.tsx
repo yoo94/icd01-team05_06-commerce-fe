@@ -7,24 +7,14 @@ interface PaymentSummaryProps {
 }
 
 const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
-  const originalPrice = books
-    .reduce((acc, book) => acc + Number(book.price) * book.quantity, 0)
-    .toLocaleString();
+  const originalPrice = books.reduce((acc, book) => acc + book.price, 0).toLocaleString();
 
   const discount = books
-    .reduce(
-      (acc, book) => acc + (Number(book.price - book.discountedPrice) || 0) * book.quantity,
-      0,
-    )
+    .reduce((acc, book) => acc + (book.price - book.discountedPrice || 0), 0)
     .toLocaleString();
 
   const totalPrice = books
-    .reduce(
-      (acc, book) =>
-        acc +
-        (Number(book.price) - (Number(book.price - book.discountedPrice) || 0)) * book.quantity,
-      0,
-    )
+    .reduce((acc, book) => acc + (book.price - (book.price - book.discountedPrice || 0)), 0)
     .toLocaleString();
 
   const totalAmount = (Number(totalPrice.replace(/,/g, '')) + shippingCost).toLocaleString();

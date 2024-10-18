@@ -1,65 +1,34 @@
-'use client';
-import { useEffect } from 'react';
-import useCartStore from '@/stores/use-cart-store';
+import { getProductForOrder } from '@/app/actions/product-action';
 import PaymentProducts from '@/app/(default)/order/components/payment-products';
 import PaymentSummary from '@/app/(default)/order/components/payment-summary';
 import PaymentUserInfo from '@/app/(default)/order/components/payment-userInfo';
 import OrderShippingInfo from '@/app/(default)/order/components/payment-shippinginfo';
 import OrderPaymentMethod from '@/app/(default)/order/components/payment-method';
 import PaymentAgreement from '@/app/(default)/order/components/payment-agreement';
-import { useWithLoading } from '@/components/common/with-loading-spinner';
-import { usePaymentStore } from '@/stores/use-payment-store';
-import { fetchProductById } from '@/app/actions/product-action';
 
-const PaymentPage = () => {
-  const { fetchItems, items } = useCartStore();
-  const { setSelectedBooks, selectedBooks } = usePaymentStore();
-  const withLoading = useWithLoading();
+interface OrderPageProps {
+  searchParams: { productId: string | string[]; quantity: string | string[] };
+}
 
-  useEffect(() => {
-    withLoading(async () => {
-      await fetchItems();
-    });
-  }, []);
+const toArray = (value: string | string[]): string[] => (Array.isArray(value) ? value : [value]);
 
-  useEffect(() => {
-    withLoading(async () => {
-      setSelectedBooks([]);
-      const storedSelectedItems = sessionStorage.getItem('selectedItems');
-      if (storedSelectedItems) {
-        const selectedIds = JSON.parse(storedSelectedItems);
+const PaymentPage = async ({ searchParams }: OrderPageProps) => {
+  const productIds = toArray(searchParams.productId);
+  const quantities = toArray(searchParams.quantity);
 
-        const fetchSelectedBooks = async () => {
-          const books = await Promise.all(
-            selectedIds.map(async (productId: number) => {
-              const book = await fetchProductById(productId);
-              const bookWithQuantity = {
-                ...book,
-                quantity: 1,
-              };
-              const matchingItem = items.find((item) => item.productId === book.id);
-              if (matchingItem) {
-                bookWithQuantity.quantity = matchingItem.quantity;
-              }
-              return bookWithQuantity;
-            }),
-          );
+  const products = productIds.map((id, index) => ({
+    productId: parseInt(id),
+    quantity: parseInt(quantities[index] || '1'),
+  }));
 
-          const validBooks = books.filter((book) => book !== null);
-          setSelectedBooks(validBooks);
-        };
-
-        fetchSelectedBooks();
-      }
-    });
-  }, [items, setSelectedBooks]);
+  const productResponse = await getProductForOrder({ products });
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-8 text-left text-xl font-semibold">결제 정보</h1>
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-        <PaymentProducts books={selectedBooks} />
-        <PaymentSummary books={selectedBooks} />
+        <PaymentProducts books={productResponse.products} />
+        <PaymentSummary books={productResponse.products} />
         <PaymentUserInfo />
         <OrderShippingInfo />
         <OrderPaymentMethod />
