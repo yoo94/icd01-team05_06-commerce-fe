@@ -47,11 +47,3 @@ export interface HomePageData {
   recommend: SimplifiedProduct[];
   bestseller: SimplifiedProduct[];
 }
-
-export interface FetchProductsParams {
-  homeProductType?: string;
-  productCategoryId?: number;
-  searchWord?: string;
-  page: number;
-  size: number;
-}

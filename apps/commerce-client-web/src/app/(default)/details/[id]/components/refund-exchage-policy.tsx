@@ -4,25 +4,29 @@ const RefundExchangePolicy = () => {
       <h2 className="mb-4 text-lg font-semibold">배송/반품/교환 안내</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 border text-sm">
-          <thead className="bg-slate-50">
+          <thead className="hidden bg-slate-50 md:table-header-group">
             <tr>
               <th className="px-6 py-3 text-center text-slate-500">항목</th>
               <th className="px-6 py-3 text-center text-slate-500">내용</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 bg-white">
-            <tr>
-              <td className="px-6 py-4 font-semibold">반품/교환 방법</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                반품/교환 방법
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 마이페이지 &gt; 반품/교환 신청 및 조회, 1:1 문의, 고객만족센터(1544-3800),
                 중고샵(1566-4295)
                 <br />
                 판매자 배송 상품은 판매자와 반품/교환이 협의된 상품에 한해 가능합니다.
               </td>
             </tr>
-            <tr>
-              <td className="px-6 py-4 font-semibold">반품/교환 가능기간</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                반품/교환 가능기간
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 출고 완료 후 10일 이내의 주문 상품
                 <br />
                 디지털 콘텐츠인 eBook의 경우 구매 후 7일 이내의 상품
@@ -32,9 +36,11 @@ const RefundExchangePolicy = () => {
                 모바일 쿠폰의 경우 유효기간(발행 후 1년) 내 등록하지 않은 상품
               </td>
             </tr>
-            <tr>
-              <td className="px-6 py-4 font-semibold">반품/교환 비용</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                반품/교환 비용
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 고객의 단순변심 및 착오구매일 경우 상품 반송비용은 고객 부담임
                 <br />
                 직수입양서/직수입일서중 일부는 변심 또는 착오로 취소시 해외주문취소수수료 20%를
@@ -53,9 +59,11 @@ const RefundExchangePolicy = () => {
                 경우 상품의 반송비용은 박스 당 부과됩니다.
               </td>
             </tr>
-            <tr>
-              <td className="px-6 py-4 font-semibold">반품/교환 불가사유</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                반품/교환 불가사유
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 소비자의 책임 있는 사유로 상품 등이 손실 또는 훼손된 경우
                 <br />
                 소비자의 사용, 포장 개봉에 의해 상품 등의 가치가 현저히 감소한 경우 : 예) 화장품,
@@ -83,16 +91,20 @@ const RefundExchangePolicy = () => {
                 해당되는 경우
               </td>
             </tr>
-            <tr>
-              <td className="px-6 py-4 font-semibold">소비자 피해보상</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                소비자 피해보상
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 상품의 불량에 의한 반품, 교환, A/S, 환불, 품질보증 및 피해보상 등에 관한 사항은
                 소비자분쟁해결기준(공정거래위원회 고시)에 준하여 처리됨
               </td>
             </tr>
-            <tr>
-              <td className="px-6 py-4 font-semibold">환불 지연에 따른 배상</td>
-              <td className="px-6 py-4 text-xs font-extralight leading-5">
+            <tr className="block md:table-row">
+              <td className="block px-6 py-4 font-semibold md:table-cell md:px-6 md:py-4">
+                환불 지연에 따른 배상
+              </td>
+              <td className="block px-6 py-4 text-xs font-extralight leading-5 md:table-cell md:px-6 md:py-4">
                 대금 환불 및 환불 지연에 따른 배상금 지급 조건, 절차 등은 전자상거래 등에서의 소비자
                 보호에 관한 법률에 따라 처리
               </td>
