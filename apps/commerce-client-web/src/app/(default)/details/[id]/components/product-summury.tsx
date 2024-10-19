@@ -29,7 +29,11 @@ const ProductSummury = ({ book }: ProductSummuryProps) => {
         </div>
 
         {/* 미리보기 버튼 - 작은 화면에서 숨기기 */}
-        <Button asChild variant="outline" className="hidden w-full border-slate-300 md:block">
+        <Button
+          asChild
+          variant="outline"
+          className="hidden w-full border-slate-300 text-center md:block"
+        >
           <Link href={book.previewLink} target="_blank">
             미리보기
           </Link>
@@ -73,7 +77,7 @@ const ProductSummury = ({ book }: ProductSummuryProps) => {
         </div>
 
         {/* 배송 정보 섹션 */}
-        <div className="grid w-full grid-cols-1 gap-y-2 border-t py-4 text-sm md:grid-cols-[120px_1fr]">
+        <div className="grid w-full grid-cols-[120px_1fr] gap-y-2 border-t py-4 text-sm">
           <div className="font-extralight text-slate-500">배송안내</div>
           <div className="text-left text-sm font-extralight text-slate-500">
             주문 후 2-3일 이내 도착

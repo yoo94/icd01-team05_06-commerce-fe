@@ -2,7 +2,6 @@ import { api } from '@/lib/api';
 import { ApiResponse } from '@/types/api-types';
 import { Category } from '@/types/category-types';
 import {
-  FetchProductsParams,
   HomePageData,
   Product,
   ProductsOrderResponse,
@@ -38,32 +37,9 @@ export const fetchCategories = async (): Promise<Category[]> => {
   return response.data.childCategories;
 };
 
-export const fetchProducts = async ({
-  homeProductType,
-  productCategoryId,
-  searchWord,
-  page,
-  size,
-}: FetchProductsParams) => {
-  const queryParams = new URLSearchParams({
-    page: page.toString(),
-    size: size.toString(),
-  });
-
-  if (productCategoryId) {
-    queryParams.set('productCategoryId', productCategoryId.toString());
-  }
-
-  if (searchWord) {
-    queryParams.set('searchWord', searchWord);
-  }
-
-  if (homeProductType) {
-    queryParams.set('homeProductType', homeProductType);
-  }
-
+export const fetchProducts = async (queryParams: string) => {
   const response = await api
-    .get(`product/v1/products?${queryParams.toString()}`)
+    .get(`product/v1/products?${queryParams}`)
     .json<ApiResponse<ProductsResponse>>();
 
   if (!response.success || !response.data) {

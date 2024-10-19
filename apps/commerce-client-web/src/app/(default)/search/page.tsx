@@ -2,33 +2,19 @@ import FilterComponent from './components/(filters)/filter-component';
 import { fetchProducts } from '@/app/actions/product-action';
 import { ProductsResponse } from '@/types/product-types';
 import ProductList from './components/(searchResult)/product-list';
+import { extractSearchParams, ProductsSearchParams } from '@/lib/product-params';
 
 interface SearchPageProps {
-  searchParams: {
-    word?: string;
-    price?: string;
-    publisher?: string;
-    category?: string;
-    type?: string;
-    page?: string;
-    size?: string;
-  };
+  searchParams: ProductsSearchParams;
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const page = parseInt(searchParams.page || '1', 10);
-  const size = parseInt(searchParams.size || '20', 10);
+  const queryParams = extractSearchParams({ ...searchParams });
 
-  const booksData: ProductsResponse | null = await fetchProducts({
-    page,
-    size,
-    productCategoryId: searchParams.category ? parseInt(searchParams.category, 10) : undefined,
-    homeProductType: searchParams.type,
-    searchWord: searchParams.word,
-  });
+  const productsData: ProductsResponse | null = await fetchProducts(queryParams);
 
-  const filteredBooks = booksData?.products ?? [];
-  const pagination = booksData?.pagination;
+  const filteredBooks = productsData?.products ?? [];
+  const pagination = productsData?.pagination;
 
   return (
     <div className="flex">
