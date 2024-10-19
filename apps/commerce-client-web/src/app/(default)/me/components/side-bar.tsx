@@ -16,7 +16,7 @@ const menuItems = [
 
 const sideBarButtons = [
   { title: '나의 1:1 문의 내역', route: '/inquiries' },
-  { title: '나의 리뷰', route: '/reviews' },
+  { title: '나의 리뷰', route: '/me/reviews' },
 ];
 
 const SideBar = () => {
