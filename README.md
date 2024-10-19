@@ -1,7 +1,7 @@
 # icd01-team05_06-commerce-fe
 
 ## 개요
-<div style="flex">
+<div style="display: flex; flex-direction: row;">
   <img width="33%" alt="image" src="https://github.com/user-attachments/assets/1e3727e7-698b-4ecc-a37d-61c30801a58d">
   <img width="33%" alt="image" src="https://github.com/user-attachments/assets/d19a37bb-f69f-4e70-976b-52454f2cfa6e">
   <img width="33%" alt="image" src="https://github.com/user-attachments/assets/24642082-c83c-428f-a4b4-a3c585e304c3">
