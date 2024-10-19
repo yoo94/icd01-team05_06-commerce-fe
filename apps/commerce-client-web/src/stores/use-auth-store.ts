@@ -33,7 +33,7 @@ interface AuthStore {
   resetAuthState: () => void;
 }
 
-const useAuthStore = create<AuthStore>()(
+export const useAuthStore = create<AuthStore>()(
   devtools(
     persist(
       (set) => ({
@@ -112,5 +112,3 @@ const useAuthStore = create<AuthStore>()(
     ),
   ),
 );
-
-export default useAuthStore;

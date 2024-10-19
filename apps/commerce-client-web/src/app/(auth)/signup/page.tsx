@@ -16,7 +16,7 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import Link from 'next/link';
-import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
+import { useAuthStore, LoginFormData } from '@/stores/use-auth-store';
 import { login, signUp } from '@/app/actions/auth-action';
 
 const steps = ['약관동의', '정보입력', '가입완료'];

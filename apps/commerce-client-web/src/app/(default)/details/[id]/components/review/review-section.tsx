@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import PreviousReviews from './previous-reviews';
 import NewReviewForm from './new-review-form';
 import { Review } from '@/types/review-types';
-import useAuthStore from '@/stores/use-auth-store'; // Import your auth store
+import { useAuthStore } from '@/stores/use-auth-store'; // Import your auth store
 import { fetchProductReviews } from '@/services/review-api';
 
 interface ReviewSectionProps {
