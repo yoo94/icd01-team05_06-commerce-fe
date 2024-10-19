@@ -1,4 +1,5 @@
 import { Pagination } from '@/types/pagination-types';
+import { CartItem } from './cart-types';
 
 export interface ProductCategory {
   id: number;
@@ -46,4 +47,16 @@ export interface HomePageData {
   hotNew: SimplifiedProduct[];
   recommend: SimplifiedProduct[];
   bestseller: SimplifiedProduct[];
+}
+
+export interface FetchProductsParams {
+  homeProductType?: string;
+  productCategoryId?: number;
+  searchWord?: string;
+  page: number;
+  size: number;
+}
+
+export interface ProductsOrderResponse {
+  products: CartItem[];
 }

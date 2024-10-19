@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { CartItem } from '@/types/cart-types';
 import {
   getCartItems,
@@ -16,19 +16,22 @@ interface CartState {
   toggleItemSelection: (itemId: number, isChecked: boolean) => void;
   selectAllItems: (isChecked: boolean) => void;
   removeCartItems: (shoppingCartId: number) => Promise<void>;
-  getSelectedBook: () => CartItem[]; // 선택된 책들을 반환하는 메서드
 }
 
-const useCartStore = create<CartState>((set, get) => {
+const useCartStore = create<CartState>((set, _get) => {
+  const initialCheckedItems =
+    typeof window !== 'undefined'
+      ? JSON.parse(sessionStorage.getItem('selectedItems') || '[]')
+      : [];
   return {
     items: [],
-    checkedItems: [],
+    checkedItems: initialCheckedItems,
 
     // 서버에서 장바구니 항목을 가져옴
     fetchItems: async () => {
       try {
         const cartItems = await getCartItems();
-        set({ items: cartItems['products'], checkedItems: [] });
+        set({ items: cartItems['products'] });
       } catch (error) {
         console.error('Failed to fetch items:', error);
       }
@@ -89,12 +92,6 @@ const useCartStore = create<CartState>((set, get) => {
       } catch (error) {
         console.error('Failed to remove cart item:', error);
       }
-    },
-
-    // 선택된 책들을 반환하는 메서드
-    getSelectedBook: () => {
-      const { items, checkedItems } = get();
-      return items.filter((item) => checkedItems.includes(item.productId));
     },
   };
 });
