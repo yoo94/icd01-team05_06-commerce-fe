@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
+import StarRating from '@/components/common/star-rating';
 
 const Page = async () => {
   const { reviews } = await getMyReviews();
@@ -29,13 +30,15 @@ const Page = async () => {
             {reviews.map((review) => (
               <TableRow key={review.reviewId} className="text-center text-xs">
                 <TableCell className="hidden truncate md:table-cell">{review.createdAt}</TableCell>
-                <TableCell>
+                <TableCell className="truncate">
                   <Link className="text-blue-700" href={`/details/${review.productId}`}>
                     {review.productTitle}
                   </Link>
                 </TableCell>
                 <TableCell className="truncate">{review.content}</TableCell>
-                <TableCell className="truncate">{review.score}</TableCell>
+                <TableCell className="truncate">
+                  <StarRating rating={review.score} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
