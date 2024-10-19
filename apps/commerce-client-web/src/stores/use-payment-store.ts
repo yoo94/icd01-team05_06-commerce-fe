@@ -40,6 +40,7 @@ interface PaymentState {
     privacyPolicy: boolean;
     ageVerification: boolean;
   }) => void;
+  resetState: () => void;
 }
 
 export const usePaymentStore = create<PaymentState>((set) => ({
@@ -67,4 +68,24 @@ export const usePaymentStore = create<PaymentState>((set) => ({
   setUserInfo: (userInfo) => set({ userInfo }),
   setShippingInfo: (shippingInfo) => set({ shippingInfo }),
   setAgreementInfo: (agreementInfo) => set({ agreementInfo }),
+  resetState: () =>
+    set({
+      depositorName: '',
+      paymentMethod: '',
+      orderBooks: [],
+      userInfo: { name: '', phone: '', email: '' },
+      shippingInfo: {
+        recipient: '',
+        phone: '',
+        address: '',
+        detailAddress: '',
+        postalCode: '',
+        memo: '',
+      },
+      agreementInfo: {
+        termsOfService: false,
+        privacyPolicy: false,
+        ageVerification: false,
+      },
+    }),
 }));

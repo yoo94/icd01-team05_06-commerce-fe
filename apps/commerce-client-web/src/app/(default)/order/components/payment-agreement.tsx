@@ -25,6 +25,7 @@ const PaymentAgreement = () => {
     depositorName,
     agreementInfo,
     setAgreementInfo,
+    resetState,
   } = usePaymentStore((state) => state);
 
   const allAgreed = agreementInfo.termsOfService && agreementInfo.privacyPolicy;
@@ -100,6 +101,7 @@ const PaymentAgreement = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    resetState();
     router.push('/'); // 홈으로 이동
   };
 
