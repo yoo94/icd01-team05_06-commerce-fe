@@ -6,6 +6,7 @@ import type {
   DateRange,
   DetailOrder,
   OrdersResponse,
+  CreatedOrdersResponse,
   OrderStatus,
   SortBy,
 } from '@/types/order-types';
@@ -51,22 +52,37 @@ interface GetOrdersParams {
   orderEndDate?: string;
 }
 
-export const createOrder = async (orderData: CreateOrderRequest): Promise<OrdersResponse> => {
+export const createOrder = async (
+  orderData: CreateOrderRequest,
+): Promise<CreatedOrdersResponse> => {
   const headers = await getHeadersWithToken();
 
   if (!headers) {
     throw new Error('No token found');
   }
-  const response = await api
-    .post('order/v1/orders', {
+  try {
+    const response = await api.post('order/v1/orders', {
       json: orderData,
       headers,
-    })
-    .json<ApiResponse<OrdersResponse>>();
-  if (!response.success || !response.data) {
-    throw new Error(response.error?.message || 'Failed to create order');
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('API Error Response:', errorData);
+      throw new Error(`API Error: ${response.statusText}`);
+    }
+
+    const responseData: ApiResponse<CreatedOrdersResponse> = await response.json();
+
+    if (!responseData.success || !responseData.data) {
+      throw new Error(responseData.error?.message || 'Failed to create order');
+    }
+
+    return responseData.data;
+  } catch (error) {
+    console.error('createOrder failed:', error);
+    throw new Error('Failed to create order. Please try again later.');
   }
-  return response.data;
 };
 
 export const getOrders = async (params: GetOrdersParams): Promise<OrdersResponse> => {

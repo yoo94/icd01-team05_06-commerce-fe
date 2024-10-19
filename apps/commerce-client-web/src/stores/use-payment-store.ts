@@ -4,7 +4,7 @@ import { CartItem } from '@/types/cart-types';
 interface PaymentState {
   depositorName: string; // Add depositorName field
   paymentMethod: string;
-  selectedBooks: CartItem[];
+  orderBooks: CartItem[];
   userInfo: {
     name: string;
     phone: string;
@@ -25,7 +25,7 @@ interface PaymentState {
   };
   setPaymentMethod: (method: string) => void;
   setDepositorName: (name: string) => void; // Setter for depositorName
-  setSelectedBooks: (books: CartItem[]) => void;
+  setOrderBooks: (books: CartItem[]) => void;
   setUserInfo: (userInfo: { name: string; phone: string; email: string }) => void;
   setShippingInfo: (shippingInfo: {
     recipient: string;
@@ -45,7 +45,7 @@ interface PaymentState {
 export const usePaymentStore = create<PaymentState>((set) => ({
   depositorName: '', // Initialize depositorName
   paymentMethod: '',
-  selectedBooks: [],
+  orderBooks: [],
   userInfo: { name: '', phone: '', email: '' },
   shippingInfo: {
     recipient: '',
@@ -63,7 +63,7 @@ export const usePaymentStore = create<PaymentState>((set) => ({
 
   setDepositorName: (name) => set({ depositorName: name }), // Setter for depositorName
   setPaymentMethod: (method) => set({ paymentMethod: method }),
-  setSelectedBooks: (books) => set({ selectedBooks: books }),
+  setOrderBooks: (books) => set({ orderBooks: books }),
   setUserInfo: (userInfo) => set({ userInfo }),
   setShippingInfo: (shippingInfo) => set({ shippingInfo }),
   setAgreementInfo: (agreementInfo) => set({ agreementInfo }),

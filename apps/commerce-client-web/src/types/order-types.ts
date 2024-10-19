@@ -64,6 +64,15 @@ export interface OrderProduct {
   discountedPrice: number;
 }
 
+export interface CreatedOrdersResponse {
+  id: number;
+  orderNumber: string;
+  orderStatus: string;
+  orderDate: string;
+  products: OrderProduct[];
+  error: string | null;
+}
+
 export interface DeliveryInfo {
   recipient: string;
   phoneNumber: string;

@@ -47,7 +47,8 @@ const PaymentMethod = () => {
           />
           <Label htmlFor="bankTransfer">무통장입금</Label>
         </div>
-        <div className="mb-4 flex items-center">
+        {/* 신용카드 결제 기능은 나중에 활성화 */}
+        {/* <div className="mb-4 flex items-center">
           <input
             type="radio"
             id="creditCard"
@@ -58,12 +59,12 @@ const PaymentMethod = () => {
             className="mr-2"
           />
           <Label htmlFor="creditCard">신용카드</Label>
-        </div>
+        </div> */}
         {paymentMethod === 'BANK_TRANSFER' && (
           <>
             <div className="w-full">
               <Label className="mb-1 block text-xs text-slate-500">은행</Label>
-              <Select onValueChange={(value) => handleMethodChange(value)}>
+              <Select>
                 <SelectTrigger id="bankSelect">
                   <SelectValue placeholder="은행을 선택하세요" />
                 </SelectTrigger>
