@@ -1,9 +1,9 @@
 'use server';
 
-import { externalApi } from '@/lib/api';
 import type { ApiResponse } from '@/types/api-types';
 import { MyReviewResponse } from '@/types/my-review-type';
 import { getHeadersWithToken } from './utils/action-helper';
+import { api } from '@/lib/api';
 
 export const getMyReviews = async (): Promise<MyReviewResponse> => {
   const headers = await getHeadersWithToken();
@@ -12,7 +12,7 @@ export const getMyReviews = async (): Promise<MyReviewResponse> => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .get('product/v1/reviews/me', { headers })
     .json<ApiResponse<MyReviewResponse>>();
 

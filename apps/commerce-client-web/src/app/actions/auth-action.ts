@@ -59,10 +59,7 @@ export const logout = async () => {
   if (!response.success) {
     throw new Error(response.error?.message);
   }
-
-  // Clear cookies on logout
   removeTokenInfo();
-
   redirect('/');
 };
 
