@@ -10,6 +10,7 @@ import { usePaymentStore } from '@/stores/use-payment-store';
 import { createOrder } from '@/app/actions/order-action';
 import { useWithLoadingAsync } from '@/components/common/with-loading-spinner';
 import Modal from '@/components/common/modal';
+import { CreatedOrdersResponse } from '@/types/order-types';
 
 const PaymentAgreement = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const PaymentAgreement = () => {
     agreementInfo,
     setAgreementInfo,
     resetState,
+    validate,
   } = usePaymentStore((state) => state);
 
   const allAgreed = agreementInfo.termsOfService && agreementInfo.privacyPolicy;
@@ -48,7 +50,9 @@ const PaymentAgreement = () => {
     setAgreementInfo({ ...agreementInfo, [type]: isChecked });
   };
 
-  const handleOrderCreation = async () => {
+  const handleOrderCreation = async (): Promise<CreatedOrdersResponse | false> => {
+    if (!validate()) return false;
+
     const orderData = {
       products: orderBooks.map((book) => ({
         id: book.productId,
@@ -69,10 +73,11 @@ const PaymentAgreement = () => {
       },
       paymentInfo: {
         method: paymentMethod,
-        depositorName: depositorName,
+        depositorName: depositorName || userInfo.name,
       },
       agreementInfo,
     };
+
     return await createOrder(orderData);
   };
 
@@ -81,15 +86,20 @@ const PaymentAgreement = () => {
   const handlePayment = async () => {
     try {
       const response = await wrappedOrderCreation();
+
+      if (!response) {
+        return;
+      }
+
       if (response.orderStatus === 'COMPLETED') {
-        setOrderNumber(response.orderNumber); // 주문 번호 저장
+        setOrderNumber(response.orderNumber);
         setOrderedBooks(
-          orderBooks.map((book) => ({
-            title: book.title,
-            quantity: book.quantity,
+          response.products.map((product) => ({
+            title: product.title,
+            quantity: product.quantity,
           })),
-        ); // 주문한 책 정보 저장
-        setIsModalOpen(true); // 모달 열기
+        );
+        setIsModalOpen(true);
       } else {
         throw new Error(response.error || 'Unknown error occurred');
       }
@@ -98,7 +108,6 @@ const PaymentAgreement = () => {
       alert('주문 생성에 실패했습니다. 다시 시도해 주세요.');
     }
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     resetState();
@@ -128,7 +137,7 @@ const PaymentAgreement = () => {
             onCheckedChange={(checked) => handleIndividualAgree('termsOfService', checked)}
           />
           <Label htmlFor="termsOfService" className="ml-2 text-sm text-slate-500">
-            개인정보 수집 및 이용 동의
+            개인정보 수집 및 이용 동의 (필수)
           </Label>
         </div>
         <div className="mb-4 ml-2 flex items-center">
@@ -138,7 +147,7 @@ const PaymentAgreement = () => {
             onCheckedChange={(checked) => handleIndividualAgree('privacyPolicy', checked)}
           />
           <Label htmlFor="privacyPolicy" className="ml-2 text-sm text-slate-500">
-            구매조건 확인 및 결제 진행에 동의
+            구매조건 확인 및 결제 진행에 동의 (필수)
           </Label>
         </div>
       </CardContent>
