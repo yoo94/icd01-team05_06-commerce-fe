@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Table, TableHeader, TableBody, TableRow, TableHead } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import CartItem from './cart-item';
+
 import useCartStore from '@/stores/use-cart-store';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useWithLoading } from '@/components/common/with-loading-spinner';
+import CartActionButtons from './cart-action-buttons';
+import CartItemsTable from './cart-item-table';
+import CartMobileItem from './cart-mobile-item';
+import CartEmptyState from './cart-empty-state';
 
 const CartItemList = () => {
   const {
@@ -26,7 +27,6 @@ const CartItemList = () => {
   }, [fetchItems, updateQuantity]);
 
   const allSelected = items.length > 0 && checkedItems.length === items.length;
-
   const toBoolean = (checked: CheckedState): boolean => checked === true;
 
   const handleClearCart = () => {
@@ -34,50 +34,50 @@ const CartItemList = () => {
       await Promise.all(items.map((item) => removeCartItems(item.shoppingCartId)));
     });
   };
+
   const handleChangeQuantity = async (shoppingCartId: number, quantity: number) => {
-    // 수량 업데이트 로직 후 fetchItems 호출
     await updateQuantity(shoppingCartId, quantity);
-    withLoading(fetchItems); // 수량 변경 후 아이템들을 다시 가져옴
+    withLoading(fetchItems);
   };
+
   return (
-    <div className="flex flex-col gap-y-5 overflow-x-auto">
-      <Button variant="secondary" className="self-end" onClick={handleClearCart}>
-        전체삭제
-      </Button>
-      <Table className="min-w-full divide-y divide-gray-200">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-10">
-              <Checkbox
-                checked={allSelected}
-                onCheckedChange={(checked) =>
-                  withLoading(async () => selectAllItems(toBoolean(checked)))
-                }
-                className="cursor-pointer"
+    <div className="flex w-full flex-col gap-y-5">
+      {items.length === 0 ? (
+        <CartEmptyState />
+      ) : (
+        <>
+          <CartActionButtons
+            allSelected={allSelected}
+            onSelectAll={(checked) => withLoading(async () => selectAllItems(toBoolean(checked)))}
+            onClearCart={handleClearCart}
+          />
+
+          {/* Desktop Design */}
+          <CartItemsTable
+            items={items}
+            checkedItems={checkedItems}
+            onToggleItem={toggleItemSelection}
+            onRemoveItem={removeCartItems}
+            onChangeQuantity={handleChangeQuantity}
+            withLoading={withLoading}
+          />
+
+          {/* Mobile Design */}
+          <div className="flex flex-col space-y-4 md:hidden">
+            {items.map((item) => (
+              <CartMobileItem
+                key={item.shoppingCartId}
+                item={item}
+                checkedItems={checkedItems}
+                onToggleItem={(productId, checked) => toggleItemSelection(productId, checked)}
+                onRemoveItem={removeCartItems}
+                onChangeQuantity={handleChangeQuantity}
+                withLoading={withLoading}
               />
-            </TableHead>
-            <TableHead className="whitespace-nowrap text-center">상품 정보</TableHead>
-            <TableHead className="whitespace-nowrap text-center">수량</TableHead>
-            <TableHead className="whitespace-nowrap text-center">주문 금액</TableHead>
-            <TableHead className="whitespace-nowrap text-center">배송 정보</TableHead>
-            <TableHead className="whitespace-nowrap text-center">삭제</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map((item) => (
-            <CartItem
-              key={item.shoppingCartId}
-              item={item}
-              checked={checkedItems.includes(item.productId)}
-              onCheckedChange={(checked) =>
-                withLoading(async () => toggleItemSelection(item.productId, toBoolean(checked)))
-              }
-              onRemoveItem={() => withLoading(() => removeCartItems(item.shoppingCartId))}
-              onChangeQuantity={handleChangeQuantity}
-            />
-          ))}
-        </TableBody>
-      </Table>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -24,7 +24,7 @@ const PaymentPage = async ({ searchParams }: OrderPageProps) => {
   const productResponse = await getProductForOrder({ products });
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="p-4 sm:p-0">
       <h1 className="mb-8 text-left text-xl font-semibold">결제 정보</h1>
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         <PaymentProducts books={productResponse.products} />

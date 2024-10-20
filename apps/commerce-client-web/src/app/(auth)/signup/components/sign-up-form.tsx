@@ -2,7 +2,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '@/schemas/auth-schema';
 import PostAddressModal, { PostAddress } from '@/components/common/post-address-modal';
-import useAuthStore, { SignupFormData } from '@/stores/use-auth-store';
+import { useAuthStore, SignupFormData } from '@/stores/use-auth-store';
 
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';

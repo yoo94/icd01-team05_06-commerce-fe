@@ -1,10 +1,10 @@
 'use client';
 
-import useAuthStore from '@/stores/use-auth-store';
 import NavLinks from '@/components/common/nav-links';
 import { logout } from '@/app/actions/auth-action';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/use-user-store';
+import { useAuthStore } from '@/stores/use-auth-store';
 
 const TopBar = () => {
   const router = useRouter();
