@@ -11,3 +11,16 @@ export const useWithLoading = () => {
     }
   };
 };
+
+export const useWithLoadingAsync = <T>(asyncFn: () => Promise<T>) => {
+  const { setLoading } = useLoading();
+
+  return async () => {
+    setLoading(true);
+    try {
+      return await asyncFn();
+    } finally {
+      setLoading(false);
+    }
+  };
+};

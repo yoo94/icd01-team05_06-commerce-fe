@@ -20,6 +20,7 @@ const PaymentShippingInfo = () => {
   };
 
   const handleCompletePostcode = (data: { zonecode: string; address: string }) => {
+    setIsModalOpen(false);
     setShippingInfo({
       ...shippingInfo,
       postalCode: data.zonecode,

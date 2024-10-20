@@ -1,4 +1,7 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { useEffect } from 'react'; // useEffect import
+import { usePaymentStore } from '@/stores/use-payment-store';
 import { CartItem } from '@/types/cart-types';
 import Image from 'next/image';
 
@@ -7,6 +10,12 @@ interface PaymentProductsProps {
 }
 
 const PaymentProducts = ({ books }: PaymentProductsProps) => {
+  const { setOrderBooks } = usePaymentStore();
+
+  useEffect(() => {
+    setOrderBooks(books);
+  }, [books, setOrderBooks]);
+
   return (
     <Card className="w-full">
       <CardHeader>

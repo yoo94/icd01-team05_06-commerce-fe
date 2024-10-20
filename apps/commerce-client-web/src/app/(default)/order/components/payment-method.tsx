@@ -12,14 +12,14 @@ import { Label } from '@/components/ui/label';
 import { usePaymentStore } from '@/stores/use-payment-store'; // 전역 상태 관리
 
 const PaymentMethod = () => {
-  const { paymentMethod, depositorName, setPaymentMethod, setDepositorName } = usePaymentStore(
-    (state) => ({
+  const { paymentMethod, depositorName, setPaymentMethod, setDepositorName, setBank } =
+    usePaymentStore((state) => ({
       paymentMethod: state.paymentMethod,
       depositorName: state.depositorName,
       setPaymentMethod: state.setPaymentMethod,
       setDepositorName: state.setDepositorName,
-    }),
-  );
+      setBank: state.setBank,
+    }));
 
   const handleMethodChange = (method: string) => {
     setPaymentMethod(method);
@@ -28,13 +28,16 @@ const PaymentMethod = () => {
   const handleDepositorNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDepositorName(e.target.value);
   };
-
+  const handleBankSelect = (bank: string) => {
+    setBank(bank);
+  };
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="border-b pb-5 text-base">결제수단</CardTitle>
       </CardHeader>
       <CardContent>
+        {/* 신용카드 결제 기능은 나중에 활성화 */}
         <div className="mb-4 flex items-center">
           <input
             type="radio"
@@ -63,7 +66,7 @@ const PaymentMethod = () => {
           <>
             <div className="w-full">
               <Label className="mb-1 block text-xs text-slate-500">은행</Label>
-              <Select onValueChange={(value) => handleMethodChange(value)}>
+              <Select onValueChange={handleBankSelect}>
                 <SelectTrigger id="bankSelect">
                   <SelectValue placeholder="은행을 선택하세요" />
                 </SelectTrigger>

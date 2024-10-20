@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,9 +8,9 @@ import Image from 'next/image';
 
 interface CartItemProps {
   item: CartItemType;
-  checked: boolean; // 개별 체크박스의 선택 상태
-  onCheckedChange: (checked: boolean) => void; // 체크박스 변경 핸들러
-  onChangeQuantity: (shoppingCartId: number, value: number) => void; // 수량 변경 핸들러
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  onChangeQuantity: (shoppingCartId: number, value: number) => void;
   onRemoveItem: (shoppingCartId: number) => void;
 }
 
@@ -21,10 +21,19 @@ const CartItem: React.FC<CartItemProps> = ({
   onChangeQuantity,
   onRemoveItem,
 }) => {
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [inputValue, setInputValue] = useState(item.quantity);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
     if (value < 1) value = 1;
-    onChangeQuantity(item.shoppingCartId, value);
+    if (value > 99) value = 99; // max 값 제한
+    setInputValue(value);
+  };
+
+  const handleBlur = () => {
+    if (inputValue !== item.quantity) {
+      onChangeQuantity(item.shoppingCartId, inputValue);
+    }
   };
 
   return (
@@ -45,10 +54,12 @@ const CartItem: React.FC<CartItemProps> = ({
       <TableCell className="text-left">
         <Input
           type="number"
-          value={item.quantity}
+          value={inputValue}
           min={1}
+          max={99}
           className="w-20 rounded border text-center"
-          onChange={handleQuantityChange}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
         />
       </TableCell>
       <TableCell className="w-32 whitespace-nowrap text-center font-bold">
