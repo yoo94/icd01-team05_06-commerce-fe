@@ -23,10 +23,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
+
 import { useRouter } from 'next/navigation';
 import { getUserInfo, login } from '@/app/actions/auth-action';
 import { useUserStore } from '@/stores/use-user-store';
+import { LoginFormData, useAuthStore } from '@/stores/use-auth-store';
 
 const LoginForm = () => {
   const router = useRouter();
