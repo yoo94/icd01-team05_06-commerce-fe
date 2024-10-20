@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FormItem, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -23,13 +23,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import useAuthStore, { LoginFormData } from '@/stores/use-auth-store';
+
 import { useRouter } from 'next/navigation';
-import { login } from '@/app/actions/auth-action';
+import { getUserInfo, login } from '@/app/actions/auth-action';
+import { useUserStore } from '@/stores/use-user-store';
+import { LoginFormData, useAuthStore } from '@/stores/use-auth-store';
 
 const LoginForm = () => {
   const router = useRouter();
   const { loginData, setLoginData, setSaveId, saveId, setLoginState } = useAuthStore();
+  const { setUserSession } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -40,12 +43,28 @@ const LoginForm = () => {
 
   const { reset } = methods;
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('savedEmail');
+    if (savedEmail) {
+      setLoginData({ email: savedEmail });
+      methods.setValue('email', savedEmail); // Update the form field
+    }
+  }, [setLoginData, methods]);
+
   const handleFinish = useCallback(
     async (value: LoginFormData) => {
       setIsLoading(true);
       setLoginData(value);
       try {
         await login(value);
+
+        const userInfo = await getUserInfo();
+        setUserSession({
+          id: userInfo.id,
+          name: userInfo.name,
+          email: userInfo.email,
+        });
+
         setLoginState(true);
         setLoginData({ email: '', password: '' });
         router.push('/');

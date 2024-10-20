@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import useCartStore from '@/stores/use-cart-store';
 import { useRouter } from 'next/navigation';
 import AlertDialogComponent from '@/components/common/alert-dialog';
-import { Product } from '@/types/product-types'; // 경고 다이얼로그
+import { Product } from '@/types/product-types';
 
 interface PaymentForOrderButtonProps {
   text: string;
@@ -14,59 +14,57 @@ interface PaymentForOrderButtonProps {
 
 const PaymentAddButton = ({ text, book }: PaymentForOrderButtonProps) => {
   const router = useRouter();
-  const getSelectedProduct = useCartStore((state) => state.getSelectedBook);
-  const addBook = useCartStore((state) => state.addBook);
+  const { addItemToCart } = useCartStore();
   const [showDialog, setShowDialog] = useState(false);
+  const queryString = `productId=${book?.id}&quantity=${1}`;
+
+  const buyOnlyOneBook = () => {
+    router.push(`/order?${queryString}`);
+  };
 
   const goPayment = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
 
-    // TODO: 품절 여부 조건 재확인 필요
-    // 품절된 상품인지 확인
     if (book && book.discountedPrice < 1) {
       alert('품절상품입니다');
       return;
     }
 
     const currentPath = window.location.pathname;
-    const selectedProducts = getSelectedProduct();
+    /**
+     * todo
+     * 장바구니 상품조회를 여기에하면 너무 많은 리소스를 차지해서 추후에 다시 구현해보겠습니다.
+     */
+    const selectedProducts = [];
 
-    // 장바구니에서 구매하는 경우
     if (currentPath === '/cart' && selectedProducts.length > 0) {
-      router.push('/order');
-    }
-    // 책이 있는 경우 다이얼로그를 띄움
-    else if (book) {
+      router.push(`/order?${queryString}`);
+    } else if (book) {
       if (selectedProducts.length > 0) {
-        setShowDialog(true); // 다이얼로그 띄우기
+        setShowDialog(true);
       } else {
-        router.push(`/order?productId=${book.id}`); // 바로 구매
+        buyOnlyOneBook();
       }
-    }
-    // 상품이 없는 경우
-    else {
+    } else {
       alert('상품을 선택해주세요.');
     }
   };
 
-  // 장바구니 상품과 함께 구매
   const handleDialogConfirm = () => {
-    setShowDialog(false); // 다이얼로그 닫기
+    setShowDialog(false);
     if (!book) return;
-    addBook(book); // 선택한 책을 장바구니에 추가
-    router.push('/cart'); // 결제 페이지로 이동
+    addItemToCart(book.id, 1);
+    router.push('/cart');
   };
 
-  // 선택한 상품만 바로 구매
   const handleDialogBuyJustOne = () => {
-    setShowDialog(false); // 다이얼로그 닫기
+    setShowDialog(false);
     if (!book || !book.id) return;
-    router.push(`/order?productId=${book.id}`); // 해당 책만 결제
+    buyOnlyOneBook();
   };
 
-  // 취소 동작, 다이얼로그만 닫고 페이지 이동 없음
   const handleDialogCancel = () => {
-    setShowDialog(false); // 다이얼로그 닫기만 함
+    setShowDialog(false);
   };
   return (
     <>

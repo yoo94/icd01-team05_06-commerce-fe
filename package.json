@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "dev": "pnpm --parallel run dev",
+    "dev:client": "pnpm --filter \"./apps/commerce-client-web\" run dev",
     "build": "pnpm run build:shared && pnpm run build:apps",
     "build:shared": "pnpm --filter @commerce/shared build",
     "build:apps": "pnpm --filter \"./apps/**\" build",

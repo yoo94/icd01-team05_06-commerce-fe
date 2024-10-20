@@ -7,24 +7,14 @@ interface PaymentSummaryProps {
 }
 
 const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
-  const originalPrice = books
-    .reduce((acc, book) => acc + Number(book.price) * book.selectNum, 0)
-    .toLocaleString();
+  const originalPrice = books.reduce((acc, book) => acc + book.price, 0).toLocaleString();
 
   const discount = books
-    .reduce(
-      (acc, book) => acc + (Number(book.price - book.discountedPrice) || 0) * book.selectNum,
-      0,
-    )
+    .reduce((acc, book) => acc + (book.price - book.discountedPrice || 0), 0)
     .toLocaleString();
 
   const totalPrice = books
-    .reduce(
-      (acc, book) =>
-        acc +
-        (Number(book.price) - (Number(book.price - book.discountedPrice) || 0)) * book.selectNum,
-      0,
-    )
+    .reduce((acc, book) => acc + (book.price - (book.price - book.discountedPrice || 0)), 0)
     .toLocaleString();
 
   const totalAmount = (Number(totalPrice.replace(/,/g, '')) + shippingCost).toLocaleString();
@@ -43,9 +33,7 @@ const PaymentSummary = ({ books, shippingCost = 0 }: PaymentSummaryProps) => {
 
           {/* 배송비 */}
           <div className="text-sm font-light">배송비</div>
-          <div className="text-primary text-right">
-            {shippingCost > 0 ? `${shippingCost}원` : '무료배송'}
-          </div>
+          <div className="text-right">{shippingCost > 0 ? `${shippingCost}원` : '무료배송'}</div>
 
           {/* 할인 금액 */}
           <div className="text-sm font-light">할인금액</div>

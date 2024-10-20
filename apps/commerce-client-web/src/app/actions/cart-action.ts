@@ -1,6 +1,6 @@
 'use server';
 
-import { orderApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import { getHeadersWithToken } from '@/app/actions/utils/action-helper';
 import { ApiResponse } from '@/types/api-types';
 import { CartItem } from '@/types/cart-types';
@@ -17,8 +17,8 @@ export const getCartItems = async (): Promise<CartItemsResponse> => {
     }
 
     // 장바구니 목록 조회 API 호출
-    const response = await orderApi
-      .get('shopping-carts', {
+    const response = await api
+      .get('order/v1/shopping-carts', {
         headers,
       })
       .json<ApiResponse<CartItemsResponse>>();
@@ -47,8 +47,8 @@ export const addToCart = async (productId: number, quantity: number): Promise<vo
       throw new Error('No token found');
     }
 
-    const response = await orderApi
-      .post('shopping-carts', {
+    const response = await api
+      .post('order/v1/shopping-carts', {
         body: JSON.stringify({ productId, quantity }),
         headers,
       })
@@ -81,8 +81,8 @@ export const updateCartItemQuantity = async (
       throw new Error('No token found');
     }
 
-    const response = await orderApi
-      .patch(`shopping-carts/${shoppingCartId}`, {
+    const response = await api
+      .patch(`order/v1/shopping-carts/${shoppingCartId}`, {
         body: JSON.stringify({ quantity }),
         headers,
       })
@@ -111,8 +111,8 @@ export const removeFromCart = async (shoppingCartId: number): Promise<void> => {
       throw new Error('No token found');
     }
 
-    const response = await orderApi
-      .delete(`shopping-carts/${shoppingCartId}`, {
+    const response = await api
+      .delete(`order/v1/shopping-carts/${shoppingCartId}`, {
         headers,
       })
       .json<ApiResponse<null>>();
@@ -139,8 +139,8 @@ export const clearCart = async (): Promise<void> => {
       throw new Error('No token found');
     }
 
-    const response = await orderApi
-      .post('shopping-carts/clear', {
+    const response = await api
+      .post('order/v1/shopping-carts/clear', {
         headers,
       })
       .json<ApiResponse<null>>();

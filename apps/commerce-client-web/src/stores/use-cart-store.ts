@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { CartItem } from '@/types/cart-types';
 import {
   getCartItems,
@@ -19,15 +19,19 @@ interface CartState {
 }
 
 const useCartStore = create<CartState>((set, _get) => {
+  const initialCheckedItems =
+    typeof window !== 'undefined'
+      ? JSON.parse(sessionStorage.getItem('selectedItems') || '[]')
+      : [];
   return {
     items: [],
-    checkedItems: [],
+    checkedItems: initialCheckedItems,
 
     // 서버에서 장바구니 항목을 가져옴
     fetchItems: async () => {
       try {
         const cartItems = await getCartItems();
-        set({ items: cartItems['products'], checkedItems: [] });
+        set({ items: cartItems['products'] });
       } catch (error) {
         console.error('Failed to fetch items:', error);
       }

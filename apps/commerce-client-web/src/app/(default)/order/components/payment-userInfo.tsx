@@ -1,19 +1,38 @@
+'use client';
+import { getUserInfo } from '@/app/actions/auth-action';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { usePaymentStore } from '@/stores/use-payment-store';
+import { useUserStore } from '@/stores/use-user-store';
+import { useEffect } from 'react';
 
-const mockUser = {
-  name: '유재석',
-  phnum: '01024129368',
-  email: 'ddd@naver.com',
-};
 const PaymentUserInfo = () => {
-  const [user, setUser] = useState(mockUser);
+  const { authToken } = useUserStore();
+  const userInfo = usePaymentStore((state) => state.userInfo);
+  const setUserInfo = usePaymentStore((state) => state.setUserInfo);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const fetchedUserInfo = await getUserInfo();
+        setUserInfo({
+          name: fetchedUserInfo.name,
+          phone: fetchedUserInfo.phone,
+          email: fetchedUserInfo.email,
+        });
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo();
+  }, [authToken, setUserInfo]);
+
   const onUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    setUserInfo({ ...userInfo, [name]: value });
   };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -27,7 +46,7 @@ const PaymentUserInfo = () => {
               type="text"
               placeholder="이름"
               name="name"
-              value={user.name}
+              value={userInfo.name}
               onChange={onUserChange}
             />
           </div>
@@ -36,8 +55,8 @@ const PaymentUserInfo = () => {
             <Input
               type="text"
               placeholder="연락처"
-              name="phnum"
-              value={user.phnum}
+              name="phone"
+              value={userInfo.phone}
               onChange={onUserChange}
             />
           </div>
@@ -47,7 +66,7 @@ const PaymentUserInfo = () => {
               type="email"
               placeholder="이메일"
               name="email"
-              value={user.email}
+              value={userInfo.email}
               onChange={onUserChange}
             />
           </div>

@@ -5,12 +5,11 @@ import AddToCartButton from '@/app/(default)/cart/components/cart-add-button';
 import PaymentAddButton from '@/app/(default)/order/components/payment-add-button';
 import { Product } from '@/types/product-types';
 
-interface CartActionsProps {
+interface MobilePurchaseActionsProps {
   book: Product;
 }
 
-const DetailButtonActions = ({ book }: CartActionsProps) => {
-  // 수량을 로컬 상태로 관리
+const MobilePurchaseActions = ({ book }: MobilePurchaseActionsProps) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleIncreaseQuantity = () => {
@@ -24,8 +23,8 @@ const DetailButtonActions = ({ book }: CartActionsProps) => {
   };
 
   return (
-    <div className="rounded-lg border p-4 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-between border bg-white p-4 md:hidden">
+      <div className="flex items-center">
         <button
           className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
           onClick={handleDecreaseQuantity}
@@ -33,7 +32,7 @@ const DetailButtonActions = ({ book }: CartActionsProps) => {
         >
           -
         </button>
-        <span>{quantity}</span>
+        <span className="mx-4">{quantity}</span>
         <button
           className="rounded-lg border border-gray-300 px-3 py-1 text-lg hover:bg-gray-200"
           onClick={handleIncreaseQuantity}
@@ -41,12 +40,12 @@ const DetailButtonActions = ({ book }: CartActionsProps) => {
           +
         </button>
       </div>
-      {/* AddToCartButton에 로컬 상태 quantity를 전달 */}
-      <AddToCartButton book={book} quantity={quantity} />
-      <PaymentAddButton text={'바로구매'} book={book} />
-      {/* <Button className="mt-2.5 w-full">바로구매</Button> */}
+      <div className="flex gap-x-4">
+        <AddToCartButton book={book} quantity={quantity} />
+        <PaymentAddButton text="바로구매" book={book} />
+      </div>
     </div>
   );
 };
 
-export default DetailButtonActions;
+export default MobilePurchaseActions;

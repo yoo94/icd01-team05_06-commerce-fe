@@ -1,6 +1,6 @@
 'use server';
 
-import { externalApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import { LoginFormData, SignupFormData } from '@/stores/use-auth-store';
 import { ApiResponse } from '@/types/api-types';
 import { AuthToken, TokenInfo, TokenResponse, UserInfo } from '@/types/auth-types';
@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 import { UserInfoFormData } from '@/stores/use-user-store';
 
 export const login = async (formData: LoginFormData) => {
-  const response = await externalApi
+  const response = await api
     .post('auth/v1/login', {
       body: JSON.stringify(formData),
       headers: {
@@ -29,7 +29,7 @@ export const login = async (formData: LoginFormData) => {
 };
 
 export const signUp = async (formData: SignupFormData) => {
-  const response = await externalApi
+  const response = await api
     .post('auth/v1/sign-up', {
       body: JSON.stringify(formData),
       headers: {
@@ -50,7 +50,7 @@ export const logout = async () => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .post('auth/v1/logout', {
       headers,
     })
@@ -59,10 +59,7 @@ export const logout = async () => {
   if (!response.success) {
     throw new Error(response.error?.message);
   }
-
-  // Clear cookies on logout
   removeTokenInfo();
-
   redirect('/');
 };
 
@@ -73,7 +70,7 @@ export const getUserInfo = async (): Promise<UserInfo> => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .get('auth/v1/info', {
       headers,
     })
@@ -103,7 +100,7 @@ export const updateUserInfo = async (
     delete filteredUserInfo.password;
   }
 
-  const response = await externalApi
+  const response = await api
     .put('auth/v1/update', {
       body: JSON.stringify(filteredUserInfo), // Send filtered userInfo
       headers: {
@@ -123,7 +120,7 @@ export const updateUserInfo = async (
 
 export const refreshAccessToken = async (refreshToken: string): Promise<TokenInfo> => {
   try {
-    const response = await externalApi
+    const response = await api
       .post('auth/v1/refresh', {
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +148,7 @@ export const verifyPassword = async (password: string): Promise<AuthToken> => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .post('auth/v1/password-verify', {
       body: JSON.stringify({ password }),
       headers: {
@@ -175,7 +172,7 @@ export const deleteUserAccount = async () => {
     throw new Error('No token found');
   }
 
-  const response = await externalApi
+  const response = await api
     .delete('auth/v1/withdrawal', {
       headers,
     })

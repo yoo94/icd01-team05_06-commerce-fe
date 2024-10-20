@@ -8,9 +8,9 @@ import Image from 'next/image';
 
 interface CartItemProps {
   item: CartItemType;
-  checked: boolean; // 개별 체크박스의 선택 상태
-  onCheckedChange: (checked: boolean) => void; // 체크박스 변경 핸들러
-  onChangeQuantity: (shoppingCartId: number, value: number) => void; // 수량 변경 핸들러
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  onChangeQuantity: (shoppingCartId: number, value: number) => void;
   onRemoveItem: (shoppingCartId: number) => void;
 }
 
@@ -21,19 +21,18 @@ const CartItem: React.FC<CartItemProps> = ({
   onChangeQuantity,
   onRemoveItem,
 }) => {
-  const [inputQuantity, setInputQuantity] = useState(item.quantity); // 로컬 상태로 수량 관리
-  const totalPrice = (parseInt(String(item.discountedPrice)) * item.quantity).toLocaleString();
+  const [inputValue, setInputValue] = useState(item.quantity);
 
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = Number(event.target.value);
     if (value < 1) value = 1;
-
-    setInputQuantity(value);
+    if (value > 99) value = 99; // max 값 제한
+    setInputValue(value);
   };
 
-  const handleQuantityUpdate = () => {
-    if (inputQuantity !== item.quantity) {
-      onChangeQuantity(item.shoppingCartId, inputQuantity);
+  const handleBlur = () => {
+    if (inputValue !== item.quantity) {
+      onChangeQuantity(item.shoppingCartId, inputValue);
     }
   };
 
@@ -55,19 +54,17 @@ const CartItem: React.FC<CartItemProps> = ({
       <TableCell className="text-left">
         <Input
           type="number"
-          value={inputQuantity}
+          value={inputValue}
           min={1}
+          max={99}
           className="w-20 rounded border text-center"
-          onChange={handleQuantityChange}
-          onBlur={handleQuantityUpdate}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              handleQuantityUpdate();
-            }
-          }}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
         />
       </TableCell>
-      <TableCell className="w-32 whitespace-nowrap text-center font-bold">{totalPrice}원</TableCell>
+      <TableCell className="w-32 whitespace-nowrap text-center font-bold">
+        {item.discountedPrice.toLocaleString()}원
+      </TableCell>
       <TableCell className="text-center">{item.shippingInfo || '무료'}</TableCell>
       <TableCell className="text-center">
         <Button

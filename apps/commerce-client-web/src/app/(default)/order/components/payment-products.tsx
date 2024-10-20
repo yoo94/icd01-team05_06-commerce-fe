@@ -1,4 +1,7 @@
+'use client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { useEffect } from 'react'; // useEffect import
+import { usePaymentStore } from '@/stores/use-payment-store';
 import { CartItem } from '@/types/cart-types';
 import Image from 'next/image';
 
@@ -7,6 +10,12 @@ interface PaymentProductsProps {
 }
 
 const PaymentProducts = ({ books }: PaymentProductsProps) => {
+  const { setOrderBooks } = usePaymentStore();
+
+  useEffect(() => {
+    setOrderBooks(books);
+  }, [books, setOrderBooks]);
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -14,23 +23,34 @@ const PaymentProducts = ({ books }: PaymentProductsProps) => {
       </CardHeader>
       <CardContent>
         {books?.map((product) => (
-          <div key={product.id} className="mb-4 flex items-center space-x-4">
-            {/* 상품 이미지 */}
+          <div
+            key={`${product.id}`}
+            className="mb-4 flex items-center space-x-4 md:flex-row md:items-center md:space-x-4"
+          >
+            {/* Desktop Image */}
             <Image
               src={product.coverImage}
               alt={product.title}
               width={80}
               height={50}
-              className="rounded"
+              className="hidden rounded md:block"
+              style={{ width: 'auto', height: 'auto' }} // Maintain image aspect ratio
             />
 
-            {/* 상품 정보 */}
-            <div className="flex grow items-center justify-between gap-x-4">
-              <p className="flex-1 text-sm font-extralight">{product.title}</p>{' '}
-              {/* 텍스트 오버플로우 */}
-              <p className="text-sm">{product.selectNum}개</p>
-              <p className="font-bold">{Number(product.price).toLocaleString()}원</p>{' '}
-              {/* 가격에 toLocaleString 적용 */}
+            {/* Mobile Image */}
+            <Image
+              src={product.coverImage}
+              alt={product.title}
+              width={100}
+              height={70}
+              className="block w-full rounded md:hidden"
+            />
+
+            {/* Product Information */}
+            <div className="flex flex-col md:grow md:flex-row md:items-center md:justify-between md:gap-x-4">
+              <p className="text-sm font-extralight md:flex-1">{product.title}</p>
+              <p className="mt-2 text-sm md:mt-0">{product.quantity}개</p>
+              <p className="mt-1 font-bold md:mt-0">{product.discountedPrice.toLocaleString()}원</p>
             </div>
           </div>
         ))}

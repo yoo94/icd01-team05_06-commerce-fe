@@ -2,7 +2,6 @@ import { Category } from '@/types/category-types';
 import { MenuCategory } from '@/types/menu-types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Product, ProductCategory } from '@/types/product-types';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,26 +33,4 @@ const transformServerCategories = (data: Category[]): MenuCategory[] => {
   }));
 };
 
-const hasCategoryName = (category: ProductCategory, nameToFind: string): boolean => {
-  if (category.name === nameToFind) return true;
-
-  // TODO: ProductCategory에는 subCategory가 없음
-  // if (category.subCategory) {
-  //   return hasCategoryName(category.subCategory, nameToFind);
-  // }
-
-  return false;
-};
-
-const filterBooksByCategoryName = (books: Product[], categoryName: string): Product[] => {
-  return books.filter((book) => hasCategoryName(book.category, categoryName));
-};
-
-export {
-  cn,
-  parseAndRoundPrice,
-  calculationDiscountRate,
-  transformServerCategories,
-  hasCategoryName,
-  filterBooksByCategoryName,
-};
+export { cn, parseAndRoundPrice, calculationDiscountRate, transformServerCategories };

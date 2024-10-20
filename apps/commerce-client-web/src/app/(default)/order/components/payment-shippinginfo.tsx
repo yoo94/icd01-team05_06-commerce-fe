@@ -1,71 +1,31 @@
 'use client';
-import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import Modal from '@/components/common/modal';
+import { usePaymentStore } from '@/stores/use-payment-store';
 import DaumPostcode from 'react-daum-postcode';
-
-interface PaymentPostAddressModalProps {
-  zonecode?: string;
-  address: string;
-}
-const mockOrder = {
-  name: '패스트파이브',
-  phnum: '01024129368',
-  address: '서울',
-  detailAddress: '강남구',
-  memo: '놓고 가주세여',
-  zonecode: '',
-};
-const PaymentPostAddressModal = ({
-  isOpen,
-  onClose,
-  onComplete,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onComplete: (data: PaymentPostAddressModalProps) => void;
-}) => {
-  return (
-    <Modal open={isOpen} onClose={onClose}>
-      <DaumPostcode
-        onComplete={(data) => {
-          onComplete(data);
-          onClose();
-        }}
-      />
-    </Modal>
-  );
-};
+import { useState } from 'react';
+import Modal from '@/components/common/modal';
 
 const PaymentShippingInfo = () => {
+  const shippingInfo = usePaymentStore((state) => state.shippingInfo);
+  const setShippingInfo = usePaymentStore((state) => state.setShippingInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [order, setOrder] = useState(mockOrder);
-  const onOrderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+  const onShippingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setOrder((prev) => ({ ...prev, [name]: value }));
+    setShippingInfo({ ...shippingInfo, [name]: value });
   };
-  // 우편번호 및 주소 데이터 업데이트 함수
-  const handleCompletePostcode = (data: PaymentPostAddressModalProps) => {
-    const { zonecode, address } = data;
 
-    // 우편번호와 주소를 각각 필드에 업데이트
-    onOrderChange({
-      target: {
-        name: 'zonecode',
-        value: zonecode,
-      },
-    } as React.ChangeEvent<HTMLInputElement>);
-
-    onOrderChange({
-      target: {
-        name: 'address',
-        value: address,
-      },
-    } as React.ChangeEvent<HTMLInputElement>);
+  const handleCompletePostcode = (data: { zonecode: string; address: string }) => {
+    setIsModalOpen(false);
+    setShippingInfo({
+      ...shippingInfo,
+      postalCode: data.zonecode,
+      address: data.address,
+    });
   };
 
   return (
@@ -75,7 +35,17 @@ const PaymentShippingInfo = () => {
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex items-center">
-          <Checkbox id="sameAsOrderer" />
+          <Checkbox
+            id="sameAsOrderer"
+            onCheckedChange={(checked) => {
+              if (checked) {
+                const { name, phone } = usePaymentStore.getState().userInfo;
+                setShippingInfo({ ...shippingInfo, recipient: name, phone });
+              } else {
+                setShippingInfo({ ...shippingInfo, recipient: '', phone: '' });
+              }
+            }}
+          />
           <Label htmlFor="sameAsOrderer" className="ml-2">
             주문자 정보와 동일
           </Label>
@@ -86,19 +56,19 @@ const PaymentShippingInfo = () => {
             <Input
               type="text"
               placeholder="수령인"
-              name="name"
-              value={order.name}
-              onChange={onOrderChange}
+              name="recipient"
+              value={shippingInfo.recipient}
+              onChange={onShippingChange}
             />
           </div>
           <div>
             <Label className="mb-1 block text-xs text-slate-500">연락처</Label>
             <Input
-              type="text"
+              type="tel"
               placeholder="연락처"
-              name="phnum"
-              value={order.phnum}
-              onChange={onOrderChange}
+              name="phone"
+              value={shippingInfo.phone}
+              onChange={onShippingChange}
             />
           </div>
           <div>
@@ -107,10 +77,10 @@ const PaymentShippingInfo = () => {
               className="cursor-pointer"
               type="text"
               placeholder="우편번호"
-              name="zonecode" // 우편번호 필드
-              value={order.zonecode} // 우편번호 값 반영
-              readOnly={true}
-              onClick={() => setIsModalOpen(true)} // 클릭 시 모달 열기
+              name="postalCode"
+              value={shippingInfo.postalCode}
+              readOnly
+              onClick={() => setIsModalOpen(true)}
             />
           </div>
           <div>
@@ -119,9 +89,8 @@ const PaymentShippingInfo = () => {
               type="text"
               placeholder="주소"
               name="address"
-              value={order.address} // 주소 값 반영
-              onChange={onOrderChange}
-              readOnly={true}
+              value={shippingInfo.address}
+              readOnly
             />
           </div>
           <div>
@@ -130,8 +99,8 @@ const PaymentShippingInfo = () => {
               type="text"
               placeholder="상세주소"
               name="detailAddress"
-              value={order.detailAddress}
-              onChange={onOrderChange}
+              value={shippingInfo.detailAddress}
+              onChange={onShippingChange}
             />
           </div>
           <div>
@@ -139,17 +108,15 @@ const PaymentShippingInfo = () => {
             <Textarea
               placeholder="배송 메모를 입력하세요."
               name="memo"
-              value={order.memo}
-              onChange={onOrderChange}
+              value={shippingInfo.memo}
+              onChange={onShippingChange}
             />
           </div>
         </div>
       </CardContent>
-      <PaymentPostAddressModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onComplete={handleCompletePostcode}
-      />
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <DaumPostcode onComplete={handleCompletePostcode} />
+      </Modal>
     </Card>
   );
 };

@@ -12,11 +12,13 @@ import { InputField } from '@/components/common/input-field'; // Use the InputFi
 import { InfoIcon } from 'lucide-react';
 import DeleteAccountDialog from './delete-account-dialog';
 import { useRouter } from 'next/navigation';
-import useAuthStore from '@/stores/use-auth-store';
+import { useAuthStore } from '@/stores/use-auth-store';
 
 const UserInfoForm = () => {
   const router = useRouter();
-  const { userSession, userInfoData, setUserInfoData, authToken, clearAuthToken } = useUserStore();
+  const { userSession, userInfoData, setUserInfoData, authToken, clearAuthToken, resetUserState } =
+    useUserStore();
+  const { resetAuthState } = useAuthStore();
   const [isPostAddressModalOpen, setIsPostAddressModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -55,8 +57,10 @@ const UserInfoForm = () => {
   const handleDeleteAccount = async () => {
     try {
       await deleteUserAccount();
-      useUserStore.getState().reset();
-      useAuthStore.getState().reset();
+
+      resetAuthState();
+      resetUserState();
+
       router.push('/');
     } catch (error) {
       console.error('Error deleting account:', error);

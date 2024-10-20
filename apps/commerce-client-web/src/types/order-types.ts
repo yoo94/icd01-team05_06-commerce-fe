@@ -46,3 +46,62 @@ export interface OrdersResponse {
   products: Order[];
   paginationInfo: Pagination;
 }
+
+export interface Orderer {
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
+export interface OrderProduct {
+  id: number;
+  title: string;
+  author: string;
+  publisher: string;
+  coverImage: string;
+  quantity: number;
+  price: number;
+  discountedPrice: number;
+}
+
+export interface CreatedOrdersResponse {
+  id: number;
+  orderNumber: string;
+  orderStatus: string;
+  orderDate: string;
+  products: OrderProduct[];
+  error: string | null;
+}
+
+export interface DeliveryInfo {
+  recipient: string;
+  phoneNumber: string;
+  postalCode: string;
+  streetAddress: string;
+  detailAddress: string;
+  memo: string;
+}
+
+export const PaymentMethod = {
+  CREDIT_CARD: 'CREDIT_CARD',
+} as const;
+
+export type PaymentMethod = Enum<typeof PaymentMethod>;
+
+export interface PaymentInfo {
+  method: PaymentMethod;
+  depositorName: string;
+  price: number;
+  discountedPrice: number;
+}
+
+export interface DetailOrder {
+  id: number;
+  orderNumber: string;
+  orderDate: string;
+  orderer: Orderer;
+  products: OrderProduct[];
+  deliveryInfo: DeliveryInfo;
+  paymentInfo: PaymentInfo;
+  orderStatus: OrderStatus;
+}

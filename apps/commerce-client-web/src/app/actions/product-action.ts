@@ -1,12 +1,16 @@
-import { externalApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import { ApiResponse } from '@/types/api-types';
 import { Category } from '@/types/category-types';
-import { FetchProductsParams, HomePageData, ProductsResponse } from '@/types/product-types';
+import {
+  HomePageData,
+  Product,
+  ProductsOrderResponse,
+  ProductsResponse,
+} from '@/types/product-types';
+import { getHeadersWithToken } from '@/app/actions/utils/action-helper';
 
 export const fetchHomePageBooks = async (): Promise<HomePageData> => {
-  const response = await externalApi
-    .get('product/v1/home/products ')
-    .json<ApiResponse<HomePageData>>();
+  const response = await api.get('product/v1/home/products ').json<ApiResponse<HomePageData>>();
 
   if (!response.success || !response.data) {
     throw new Error('Invalid response format');
@@ -20,7 +24,7 @@ export const fetchHomePageBooks = async (): Promise<HomePageData> => {
 };
 
 export const fetchCategories = async (): Promise<Category[]> => {
-  const response = await externalApi.get('product/v1/categories').json<ApiResponse<Category>>();
+  const response = await api.get('product/v1/categories').json<ApiResponse<Category>>();
 
   if (!response.success || !response.data) {
     throw new Error('Failed to fetch categories');
@@ -33,33 +37,45 @@ export const fetchCategories = async (): Promise<Category[]> => {
   return response.data.childCategories;
 };
 
-export const fetchProducts = async ({
-  productCategoryId,
-  searchWord,
-  page,
-  size,
-}: FetchProductsParams) => {
-  const queryParams = new URLSearchParams({
-    page: page.toString(),
-    size: size.toString(),
-  });
-
-  if (productCategoryId) {
-    queryParams.set('productCategoryId', productCategoryId.toString());
-  }
-
-  if (searchWord) {
-    queryParams.set('searchWord', searchWord);
-  }
-
-  const response = await externalApi
-    .get(`product/v1/products?${queryParams.toString()}`)
+export const fetchProducts = async (queryParams: string) => {
+  const response = await api
+    .get(`product/v1/products?${queryParams}`)
     .json<ApiResponse<ProductsResponse>>();
-
-  console.log(response);
 
   if (!response.success || !response.data) {
     throw new Error(response.error?.message);
+  }
+
+  return response.data;
+};
+
+export const fetchProductById = async (productId: number): Promise<Product> => {
+  const response = await api.get(`product/v1/products/${productId}`).json<ApiResponse<Product>>();
+
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to fetch product details');
+  }
+
+  return response.data;
+};
+
+export const getProductForOrder = async (orderData: {
+  products: { productId: number; quantity: number }[];
+}): Promise<ProductsOrderResponse> => {
+  const headers = await getHeadersWithToken();
+
+  if (!headers) {
+    throw new Error('No token found');
+  }
+  const response = await api
+    .post('product/v1/products/order/before', {
+      body: JSON.stringify(orderData),
+      headers,
+    })
+    .json<ApiResponse<ProductsOrderResponse>>();
+
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to fetch products before order');
   }
 
   return response.data;
