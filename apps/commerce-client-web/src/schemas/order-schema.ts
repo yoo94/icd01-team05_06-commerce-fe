@@ -48,7 +48,7 @@ export const PaymentSchema = z
       if (!data.bank) {
         ctx.addIssue({
           code: 'custom',
-          path: ['bankTransfer'],
+          path: ['paymentMethod'],
           message: '무통장 입금 시 은행을 선택하세요.',
         });
       }
