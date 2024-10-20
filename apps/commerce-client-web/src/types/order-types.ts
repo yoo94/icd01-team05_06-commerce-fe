@@ -54,6 +54,7 @@ export interface Orderer {
 }
 
 export interface OrderProduct {
+  name: string;
   id: number;
   title: string;
   author: string;
