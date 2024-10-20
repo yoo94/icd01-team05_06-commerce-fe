@@ -95,7 +95,7 @@ const PaymentAgreement = () => {
         setOrderNumber(response.orderNumber);
         setOrderedBooks(
           response.products.map((product) => ({
-            title: product.title,
+            title: product.name,
             quantity: product.quantity,
           })),
         );
